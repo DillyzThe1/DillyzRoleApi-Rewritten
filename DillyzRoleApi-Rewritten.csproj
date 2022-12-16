@@ -68,10 +68,7 @@
     </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>echo %25AmongUs%25
-echo %25AmongUsModDir%25
-echo %25AmongUsModDir%25\BepInEx\plugins
-xcopy ".\DillyzRoleApi-Rewritten.dll" "%25AmongUsModDir%25\BepInEx\plugins\"
+    <PostBuildEvent>xcopy ".\DillyzRoleApi-Rewritten.dll" "%25AmongUsModDir%25\BepInEx\plugins\"
 "%25AmongUsModDir%25/Among Us.exe"</PostBuildEvent>
   </PropertyGroup>
 </Project>
