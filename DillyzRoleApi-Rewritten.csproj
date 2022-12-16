@@ -7,8 +7,8 @@
     <ProjectGuid>{69A1015D-DE1A-4A8E-8D49-F6DCBE97B435}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DillzyRoleApi_Rewritten</RootNamespace>
-    <AssemblyName>DillzyRoleApi-Rewritten</AssemblyName>
+    <RootNamespace>DillyzRoleApi_Rewritten</RootNamespace>
+    <AssemblyName>DillyzRoleApi-Rewritten</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -63,4 +63,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>echo %25AmongUsModDir%25\BepInEx\plugins
+echo ${workspaceFolder}\bin\Debug\DillyzRoleApi-Rewritten.dll</PreBuildEvent>
+  </PropertyGroup>
 </Project>

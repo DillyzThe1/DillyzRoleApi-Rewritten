@@ -4,7 +4,7 @@ using BepInEx.IL2CPP;
 using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 
-namespace DillzyRoleApi_Rewritten
+namespace DillyzRoleApi_Rewritten
 {
     [BepInPlugin(HarmonyMain.MOD_ID, HarmonyMain.MOD_NAME, HarmonyMain.MOD_VERSION)]
     [BepInProcess("Among Us.exe")]
