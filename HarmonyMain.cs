@@ -13,7 +13,7 @@ namespace DillyzRoleApi_Rewritten
         public const string MOD_NAME = "DillyzRoleApi Rewritten", MOD_VERSION = "0.1.0", MOD_ID = "8ac3dbff-b06b-434b-8783-e0a43e7eeb53";
         public override void Load()
         {
-            Log.LogInfo($"{HarmonyMain.MOD_NAME} v{HarmonyMain.MOD_VERSION} loaded.");
+            Log.LogInfo($"{HarmonyMain.MOD_NAME} v{HarmonyMain.MOD_VERSION} loaded. Hooray!");
 
             #region ---------- Enable Harmony Patching ----------
             var harmony = new Harmony(HarmonyMain.MOD_ID);
