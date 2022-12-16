@@ -535,6 +535,6 @@
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>xcopy ".\DillyzRoleApi-Rewritten.dll" "%25AmongUsModDir%25\BepInEx\plugins\" /y
-"%25AmongUsModDir%25/Among Us.exe"</PostBuildEvent>
+start "Among Us" "%25AmongUsModDir%25/Among Us.exe"</PostBuildEvent>
   </PropertyGroup>
 </Project>
