@@ -69,7 +69,7 @@ namespace DillyzRoleApi_Rewritten
             // vs woudn't let me use turnary operators this time >:/
             if (showEjectText)
             {
-                ejectionText += $"The <{DillyzUtil.colorToHex(this.roleColor)}>{name}.</color>";
+                ejectionText += $"The {name}.";
                 //ejectionText_bad += $"The <${DillyzUtil.colorToHex(this.roleColor)}>{name}.</color>";
             }
             else
