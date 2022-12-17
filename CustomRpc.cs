@@ -25,11 +25,12 @@ namespace DillyzRoleApi_Rewritten
                     CustomRole.setRoleName(playerId, roleName);
                     break;
                 case (byte)CustomRpc.ResetRoles:
-                    foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+                    /*foreach (PlayerControl player in PlayerControl.AllPlayerControls)
                     {
                         HarmonyMain.Instance.Log.LogInfo("Taking away " + player.name + "'s role!");
                         CustomRole.setRoleName(player.PlayerId, "");
-                    }
+                    }*/
+                    CustomRole.roleNameMap.Clear();
                     break;
                 case (byte)CustomRpc.JesterWin:
                     GameOverPatch.SetAllToWin("Jester", false);

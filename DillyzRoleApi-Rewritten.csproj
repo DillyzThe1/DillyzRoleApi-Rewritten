@@ -31,6 +31,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="CustomPalette.cs" />
     <Compile Include="CustomRole.cs" />
     <Compile Include="CustomRpc.cs" />
     <Compile Include="DillyzUtil.cs" />

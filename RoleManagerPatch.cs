@@ -22,11 +22,12 @@ namespace DillyzRoleApi_Rewritten
                 // send reset roles packet
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.ResetRoles, Hazel.SendOption.None, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
-                foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+                /*foreach (PlayerControl player in PlayerControl.AllPlayerControls)
                 {
                     HarmonyMain.Instance.Log.LogInfo("Taking away " + player.name + "'s role!");
                     CustomRole.setRoleName(player.PlayerId, "");
-                }
+                }*/
+                CustomRole.roleNameMap.Clear();
 
                 // rng
                 Random roleRNG = new Random();
@@ -49,7 +50,7 @@ namespace DillyzRoleApi_Rewritten
                     // THIS IS THE CHUNK FOR EACH TIME IT LANDS A NEW SPOT!!!
 
                     if (availablePlayers.Count == 0)
-                        return;
+                        continue;
                     int roleIndex = roleRNG.Next(0, availablePlayers.Count);
                     PlayerControl selectedPlayer = availablePlayers[roleIndex];
                     availablePlayers.Remove(selectedPlayer);

@@ -15,7 +15,7 @@ namespace DillyzRoleApi_Rewritten
             if (player == null)
                 return "Crewmate";
 
-            if (CustomRole.getRoleName(player.PlayerId) != "")
+            if (CustomRole.getRoleName(player.PlayerId) != "" && CustomRole.getRoleName(player.PlayerId) != null)
                 return CustomRole.getRoleName(player.PlayerId);
 
             switch (player.Data.RoleType)

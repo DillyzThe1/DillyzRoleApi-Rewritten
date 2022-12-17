@@ -54,8 +54,8 @@ namespace DillyzRoleApi_Rewritten
                 HarmonyMain.Instance.Log.LogInfo(DillyzUtil.getRoleName(PlayerControl.LocalPlayer) + " playuer");
                 wincolor = CustomRole.getByName("Jester").roleColor;
                 hexthing = DillyzUtil.colorToHex(wincolor);
-                didwin = DillyzUtil.getRoleName(PlayerControl.LocalPlayer) == "Jester";
-                if (didwin)
+                HarmonyMain.Instance.Log.LogInfo("goofy " + DillyzUtil.getRoleName(PlayerControl.LocalPlayer));
+                if (PlayerControl.LocalPlayer.Data.Role.IsImpostor)
                     __instance.WinText.text = $"<{hexthing}>Victory</color>";
                 else
                     __instance.WinText.text = $"<{hexthing}>Defeat</color>";
@@ -93,10 +93,10 @@ namespace DillyzRoleApi_Rewritten
                 {
                     if (__instance.name == "WinText")
                     {
-                        if (didwin)
+                        if (PlayerControl.LocalPlayer.Data.Role.IsImpostor)
                             __instance.text = $"<{hexthing}>Victory</color>";
                         else
-                            __instance.text = $"<{hexthing}>Defeat</color>";
+                            __instance.text = $"<{hexthing}>Defeat Reference</color>";
                     }
                     __instance.material.color = wincolor;
                 }
@@ -119,13 +119,7 @@ namespace DillyzRoleApi_Rewritten
                 GameOverPatch.hexthing = "#000000";
 
                 // ahhhh go away
-                try
-                {
-                    foreach (byte pId in CustomRole.roleNameMap.Keys)
-                        CustomRole.roleNameMap[pId] = "";
-                } catch (Exception e) { 
-                    HarmonyMain.Instance.Log.LogError("GOOFY GOOFY GOOBER GOOBER YEAHHHH " + e); 
-                }
+                CustomRole.roleNameMap.Clear();
             }
         }
     }

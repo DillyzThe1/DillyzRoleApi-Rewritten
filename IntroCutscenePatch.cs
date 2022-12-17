@@ -20,9 +20,9 @@ namespace DillyzRoleApi_Rewritten
             if (role == null)
             {
                 if (DillyzUtil.roleSide(PlayerControl.LocalPlayer) == CustomRoleSide.Crewmate)
-                    colorHex = DillyzUtil.colorToHex(Palette.CrewmateBlue);
+                    colorHex = DillyzUtil.colorToHex(CustomPalette.CrewmateBlue);
                 else
-                    colorHex = DillyzUtil.colorToHex(Palette.ImpostorRed);
+                    colorHex = DillyzUtil.colorToHex(CustomPalette.ImpostorRed);
 
                 HarmonyMain.Instance.Log.LogInfo((DillyzUtil.roleSide(PlayerControl.LocalPlayer) == CustomRoleSide.Crewmate) + " " + colorHex);
                 return;
