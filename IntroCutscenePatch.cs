@@ -11,35 +11,16 @@ namespace DillyzRoleApi_Rewritten
     [HarmonyPatch(typeof(IntroCutscene._ShowRole_d__35), nameof(IntroCutscene._ShowRole_d__35.MoveNext))]
     class IntroCutscenePatch
     {
-        static void Postfix(IntroCutscene._ShowRole_d__35 __instance) {
-            // RESEARCH
-            /*HarmonyMain.Instance.Log.LogInfo("YOOO I'M THE " + __instance.__4__this.TeamTitle.text);
-            HarmonyMain.Instance.Log.LogInfo("2 THE " + __instance.__4__this.RoleText.text);
-            HarmonyMain.Instance.Log.LogInfo("3 THE " + __instance.__4__this.RoleBlurbText.text);
-            HarmonyMain.Instance.Log.LogInfo("4 THE " + __instance.__4__this.BackgroundBar.material.color);
-            HarmonyMain.Instance.Log.LogInfo("5 THE " + __instance.__4__this.ImpostorName.text);
-            HarmonyMain.Instance.Log.LogInfo("6 THE " + __instance.__4__this.ImpostorText.text);
-            HarmonyMain.Instance.Log.LogInfo("7 THE " + __instance.__4__this.ImpostorTitle.text);
-            HarmonyMain.Instance.Log.LogInfo("8 THE " + __instance.__4__this.YouAreText.text);
+        public static void Postfix(IntroCutscene._ShowRole_d__35 __instance) {
+            CustomRole role = CustomRole.getByName(DillyzUtil.roleName(PlayerControl.LocalPlayer));
 
-            __instance.__4__this.TeamTitle.text = "team title";
-            __instance.__4__this.RoleText.text = "role text";
-            __instance.__4__this.RoleBlurbText.text = "role blurb text";
-            __instance.__4__this.BackgroundBar.material.color = new Color(255, 0, 0);
-            __instance.__4__this.ImpostorName.text = "impostor name";
-            __instance.__4__this.ImpostorText.text = "impostor text";
-            __instance.__4__this.ImpostorTitle.text = "impostor title";
-            __instance.__4__this.YouAreText.text = "You're*";
+            if (role == null)
+                return;
 
-            __instance.__4__this.YouAreText.color = new Color(255, 0, 0);
-            __instance.__4__this.YouAreText.material.color = new Color(255, 0, 0);*/
-
-            Color suposedRoleColor = new Color(255, 125, 0);
-
-            __instance.__4__this.RoleText.text = "Role Text";
-            __instance.__4__this.RoleBlurbText.text = "You are role text. That's it. That's your purpose.";
-            __instance.__4__this.RoleText.material.color = suposedRoleColor;
-            __instance.__4__this.YouAreText.material.color = suposedRoleColor;
+            __instance.__4__this.RoleText.text = role.name;
+            __instance.__4__this.RoleBlurbText.text = role.subtext;
+            __instance.__4__this.RoleText.material.color = role.roleColor;
+            __instance.__4__this.YouAreText.material.color = role.roleColor;
         }
     }
 }

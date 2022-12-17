@@ -3,6 +3,7 @@ using System.Reflection;
 using BepInEx;
 using BepInEx.IL2CPP;
 using HarmonyLib;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace DillyzRoleApi_Rewritten
@@ -31,6 +32,12 @@ namespace DillyzRoleApi_Rewritten
                 if (scene.name == "MainMenu") // :happyspongebob:
                     ModManager.Instance.ShowModStamp();
             }));
+
+            #if DEBUG
+            // Change to LoneWolf in the future.
+            CustomRole.createRole("Jester", "Get voted out to win. You're a real trickster!", true, new Color(90, 50, 200), false, 
+                                                                                            CustomRoleSide.Crewmate, false, false);
+            #endif
         }
     }
 }
