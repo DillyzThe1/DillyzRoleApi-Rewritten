@@ -12,6 +12,9 @@ namespace DillyzRoleApi_Rewritten
     {
         public static String getRoleName(PlayerControl player)
         {
+            if (player == null)
+                return "Crewmate";
+
             if (CustomRole.getRoleName(player.PlayerId) != "")
                 return CustomRole.getRoleName(player.PlayerId);
 
