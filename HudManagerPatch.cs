@@ -14,6 +14,7 @@ namespace DillyzRoleApi_Rewritten
     {
         public static void Postfix(HudManager __instance)
         {
+            // colorization
             CustomRole localRole = CustomRole.getByName(DillyzUtil.getRoleName(PlayerControl.LocalPlayer));
             foreach (PlayerControl player in PlayerControl.AllPlayerControls)
             {
@@ -35,6 +36,14 @@ namespace DillyzRoleApi_Rewritten
                     HudManagerPatch.displayColor(__instance, player, theRole.roleColor);
                 else
                     HudManagerPatch.displayColor(__instance, player, CustomPalette.White);
+            }
+
+            // task list
+            if (localRole != null && !PlayerControl.LocalPlayer.Data.IsDead)
+            {
+                string intendedString = $"\n\n<{DillyzUtil.colorToHex(localRole.roleColor)}>You're a {localRole.name}. {localRole.subtext}</color>";
+                if (!__instance.TaskPanel.taskText.text.Contains(intendedString))
+                    __instance.TaskPanel.taskText.text += intendedString;
             }
         }
 
