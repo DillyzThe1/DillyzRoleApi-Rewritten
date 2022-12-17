@@ -9,11 +9,6 @@ namespace DillyzRoleApi_Rewritten
 {
     class DillyzUtil
     {
-        [Obsolete("Due to adding a set function, roleName() is now getRoleName().")]
-        public static String roleName(PlayerControl player) {
-            return getRoleName(player);
-        }
-
         public static String getRoleName(PlayerControl player)
         {
             if (CustomRole.getRoleName(player.PlayerId) != "")
