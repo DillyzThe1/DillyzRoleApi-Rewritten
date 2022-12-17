@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using HarmonyLib;
 
 namespace DillyzRoleApi_Rewritten {
+    [Obsolete("I screwed up. Please use the CustomRole data stuff instead! (You will get null if you use this)")]
     class CustomPlayerData {
         public static List<CustomPlayerData> allPlayerData => new List<CustomPlayerData>();
         public static void create(PlayerControl baseControl) => allPlayerData.Add(new CustomPlayerData(baseControl));
@@ -34,20 +35,4 @@ namespace DillyzRoleApi_Rewritten {
             this.id = baseControl.PlayerId;
         }
     }
-
-    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Start))]
-    class PlayerControl_StartPatch {
-        public static void Postfix(PlayerControl __instance) {
-            CustomPlayerData.create(__instance);
-        }
-    }
-
-    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.OnDestroy))]
-    class PlayerControl_DestroyPatch {
-        public static void Prefix(PlayerControl __instance) {
-            CustomPlayerData.destroy(__instance);
-        }
-    }
-
-
 }

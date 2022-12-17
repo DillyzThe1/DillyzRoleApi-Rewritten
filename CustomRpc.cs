@@ -21,11 +21,11 @@ namespace DillyzRoleApi_Rewritten
                 case (byte)CustomRpc.SetRole:
                     byte playerId = reader.ReadByte();
                     string roleName = reader.ReadString();
-                    CustomPlayerData.findByPlayerControl(DillyzUtil.findPlayerControl(playerId)).roleName = roleName;
+                    CustomRole.setRoleName(playerId, roleName);
                     break;
                 case (byte)CustomRpc.ResetRoles:
                     foreach (PlayerControl player in PlayerControl.AllPlayerControls)
-                        CustomPlayerData.findByPlayerControl(player).roleName = null;
+                        CustomRole.setRoleName(player.PlayerId, "");
                     break;
             }
         }

@@ -19,6 +19,8 @@ namespace DillyzRoleApi_Rewritten
 
         public static HarmonyMain Instance;
 
+        public const bool DILLYZ_DEBUG = true;
+
         public override void Load()
         {
             Instance = this;
@@ -33,11 +35,15 @@ namespace DillyzRoleApi_Rewritten
                     ModManager.Instance.ShowModStamp();
             }));
 
-            #if DEBUG
-            // Change to LoneWolf in the future.
-            CustomRole.createRole("Jester", "Get voted out to win. You're a real trickster!", true, new Color(90, 50, 200), false, 
-                                                                                            CustomRoleSide.Crewmate, false, false);
-            #endif
-        }
+            if (DILLYZ_DEBUG)
+            {
+                // Change to LoneWolf in the future.
+                Log.LogInfo("Adding a Jester!");
+                CustomRole.createRole("Jester", "Get voted out to win.", true, new Color(90, 50, 200), false,
+                                                                                                CustomRoleSide.Crewmate, false, false);
+                foreach (CustomRole role in CustomRole.allRoles)
+                    Log.LogInfo(role.ToString());
+            }
+         }
     }
 }

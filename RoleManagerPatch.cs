@@ -23,9 +23,11 @@ namespace DillyzRoleApi_Rewritten
             // rng
             Random roleRNG = new Random();
 
+            HarmonyMain.Instance.Log.LogInfo($"Right now, we've got {CustomRole.allRoles.Count} roles to assign.");
             // assign roles
             foreach (CustomRole role in CustomRole.allRoles)
             {
+                HarmonyMain.Instance.Log.LogInfo($"Let's check out {role.name}.");
                 List<PlayerControl> availablePlayers = PlayerControl.AllPlayerControls.ToArray().ToList();
                 availablePlayers.RemoveAll(x => !DillyzUtil.templateRole(x));
 
@@ -43,6 +45,10 @@ namespace DillyzRoleApi_Rewritten
                 int roleIndex = roleRNG.Next(0, availablePlayers.Count);
                 PlayerControl selectedPlayer = availablePlayers[roleIndex];
                 availablePlayers.Remove(selectedPlayer);
+                CustomRole.setRoleName(selectedPlayer.PlayerId, role.name);
+
+                HarmonyMain.Instance.Log.LogInfo($"Hey! {selectedPlayer.name} is now the {role.name} of the game!");
+
                 // send role packet
                 writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.SetRole, Hazel.SendOption.None, -1);
                 writer.Write(selectedPlayer.PlayerId);

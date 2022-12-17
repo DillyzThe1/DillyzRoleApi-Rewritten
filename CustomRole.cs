@@ -12,18 +12,19 @@ namespace DillyzRoleApi_Rewritten
 {
     class CustomRole
     {
-        public static List<CustomRole> allRoles => new List<CustomRole>();
+        public static List<CustomRole> allRoles = new List<CustomRole>();
         public static void appendRole(CustomRole yourRole) => allRoles.Add(yourRole);
-        public static void createRole(String name, String subtext, bool nameColor, Color roleColor, bool canSeeTeam, CustomRoleSide side,
+        public static CustomRole createRole(String name, String subtext, bool nameColor, Color roleColor, bool canSeeTeam, CustomRoleSide side,
                     bool canVent, bool canKill) {
-
             foreach (CustomRole role in allRoles)
                 if (role.name == name)
                 {
                     HarmonyMain.Instance.Log.LogError($"Role by name \"{role.name}\" already exists!");
-                    return;
+                    return role;
                 }
-            CustomRole.appendRole(new CustomRole(name, subtext, nameColor, roleColor, canSeeTeam, side, canVent, canKill));
+            CustomRole rolee = new CustomRole(name, subtext, nameColor, roleColor, canSeeTeam, side, canVent, canKill);
+            CustomRole.appendRole(rolee);
+            return rolee;
         }
         public static CustomRole getByName(String name)
         {
@@ -32,6 +33,11 @@ namespace DillyzRoleApi_Rewritten
                     return role;
             return null;
         }
+
+        // player id to role name
+        public static Dictionary<byte, string> roleNameMap = new Dictionary<byte, string>();
+        public static string getRoleName(byte playerId) => roleNameMap.ContainsKey(playerId) ? roleNameMap[playerId] : "";
+        public static void setRoleName(byte playerId, string roleName) => roleNameMap[playerId] = roleName;
 
         public String name = "Role Text";                       // Your role's name.
         public String subtext;                                  // The text that appears under.
@@ -52,7 +58,13 @@ namespace DillyzRoleApi_Rewritten
             this.side = side;
             this.canVent = canVent;
             this.canKill = canKill;
-        }   
+        }
+
+        public override string ToString() {
+            return $"DillyzRoleApi_Rewritten.CustomRole [name: {this.name}, subtext: {this.subtext}, nameColorChanges: {this.nameColorChanges}, " +
+                   $"roleColor: [{this.roleColor.r}, {this.roleColor.g}, {this.roleColor.b}, teamCanSeeYou: {this.teamCanSeeYou}, side: {this.side}, " +
+                   $"canVent: {canVent}, canKill: {canKill}]";
+        }
     }
 
     internal enum CustomRoleSide { 
