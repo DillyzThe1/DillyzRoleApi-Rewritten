@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Hazel;
 using UnityEngine;
 
 // the idea here is that you'll instiate this class for your own purposes
@@ -83,6 +84,25 @@ namespace DillyzRoleApi_Rewritten
             return $"DillyzRoleApi_Rewritten.CustomRole [name: {this.name}, subtext: {this.subtext}, nameColorChanges: {this.nameColorChanges}, " +
                    $"roleColor: [{this.roleColor.r}, {this.roleColor.g}, {this.roleColor.b}, teamCanSeeYou: {this.teamCanSeeYou}, side: {this.side}, " +
                    $"canVent: {canVent}, canKill: {canKill}]";
+        }
+
+        public void WinGame(PlayerControl cause) {
+            if (this.side == CustomRoleSide.Crewmate)
+            {
+                GameManager.Instance.RpcEndGame(GameOverReason.HumansByTask, false);
+                return;
+            }
+            if (this.side == CustomRoleSide.Impostor)
+            {
+                GameManager.Instance.RpcEndGame(GameOverReason.ImpostorByKill, false);
+                return;
+            }
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.CustomRoleWin, Hazel.SendOption.None, -1);
+            writer.Write(this.name);
+            writer.Write(cause.PlayerId);
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+            GameOverPatch.SetAllToWin(this.name, cause, true);
+            GameManager.Instance.RpcEndGame(GameOverReason.ImpostorByKill, false);
         }
     }
 

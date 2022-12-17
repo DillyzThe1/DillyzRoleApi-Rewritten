@@ -16,15 +16,25 @@ namespace DillyzRoleApi_Rewritten
         public static string winningRole = "Jester";
         public static List<byte> customWinners = new List<byte>();
 
-        public static void SetAllToWin(String roleToWin, bool rpc)
+        public static void SetAllToWin(String roleToWin, PlayerControl causedBy, bool rpc)
         {
+            CustomRole top10Role = CustomRole.getByName(roleToWin);
+
+            if (top10Role.side == CustomRoleSide.Crewmate || top10Role.side == CustomRoleSide.Impostor)
+                return;
+
             customWin = true;
             winningRole = roleToWin;
             customWinners.Clear();
             HarmonyMain.Instance.Log.LogInfo("KILL EM FOR " + roleToWin);
             foreach (PlayerControl player in PlayerControl.AllPlayerControls)
             {
-                if (DillyzUtil.getRoleName(DillyzUtil.findPlayerControl(player.PlayerId)) != roleToWin)
+                string rolename = DillyzUtil.getRoleName(player);
+                CustomRoleSide roleside = DillyzUtil.roleSide(player);
+                /*if (roleside == top10Role.side && !(top10Role.side == CustomRoleSide.Independent || top10Role.side == CustomRoleSide.LoneWolf))
+                    return;*/
+
+                if ((top10Role.side == CustomRoleSide.Independent && rolename != roleToWin) || (top10Role.side == CustomRoleSide.LoneWolf && player != causedBy))
                 {
                     HarmonyMain.Instance.Log.LogInfo(player.name + " is now marked as Crewmate!");
                     player.Data.RoleType = AmongUs.GameOptions.RoleTypes.Crewmate;
@@ -33,8 +43,6 @@ namespace DillyzRoleApi_Rewritten
 
                     if (rpc)
                         player.RpcSetRole(AmongUs.GameOptions.RoleTypes.Crewmate);
-
-                    customWinners.Add(player.PlayerId);
                 }
                 else
                 {
@@ -45,6 +53,8 @@ namespace DillyzRoleApi_Rewritten
 
                     if (rpc)
                         player.RpcSetRole(AmongUs.GameOptions.RoleTypes.Impostor);
+
+                    customWinners.Add(player.PlayerId);
                 }
             }
             CustomRole.roleNameMap.Clear();

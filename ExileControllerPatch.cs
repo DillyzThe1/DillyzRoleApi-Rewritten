@@ -29,12 +29,7 @@ namespace DillyzRoleApi_Rewritten
         public static void Prefix(PlayerControl __instance)
         {
             if (DillyzUtil.getRoleName(__instance) == "Jester")
-            {
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.JesterWin, Hazel.SendOption.None, -1);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
-                GameOverPatch.SetAllToWin("Jester", true);
-                GameManager.Instance.RpcEndGame(GameOverReason.ImpostorByKill, false);
-            }
+                CustomRole.getByName("Jester").WinGame(__instance);
         }
     }
 }

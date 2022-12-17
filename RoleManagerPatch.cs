@@ -40,7 +40,6 @@ namespace DillyzRoleApi_Rewritten
                     List<PlayerControl> availablePlayers = PlayerControl.AllPlayerControls.ToArray().ToList();
                     availablePlayers.RemoveAll(x => !DillyzUtil.templateRole(x));
 
-                    // TODO: ACTAULLY MAKE THE TEAM REVEAL SCREEN WORK RIGHT!!!!!!!
                     if (role.side == CustomRoleSide.Independent || role.side == CustomRoleSide.LoneWolf)
                         availablePlayers.RemoveAll(x => DillyzUtil.roleSide(x) == CustomRoleSide.Impostor);
                     else

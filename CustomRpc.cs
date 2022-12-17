@@ -12,7 +12,7 @@ namespace DillyzRoleApi_Rewritten
     {
         SetRole = 100,      // Takes two arguments: PlayerId (byte) & RoleName (string). Sets the role of the player.
         ResetRoles = 101,   // Takes no arguments. Resets all player roles.
-        JesterWin = 102,    // The default jester role's winnning RPC. All jester stuff will move to a standalone mod in the future.
+        CustomRoleWin = 102,    // The default jester role's winnning RPC. All jester stuff will move to a standalone mod in the future.
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRpc))]
@@ -32,8 +32,8 @@ namespace DillyzRoleApi_Rewritten
                     }*/
                     CustomRole.roleNameMap.Clear();
                     break;
-                case (byte)CustomRpc.JesterWin:
-                    GameOverPatch.SetAllToWin("Jester", false);
+                case (byte)CustomRpc.CustomRoleWin:
+                    GameOverPatch.SetAllToWin(reader.ReadString(), DillyzUtil.findPlayerControl(reader.ReadByte()), false);
                     break;
             }
         }
