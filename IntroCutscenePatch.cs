@@ -12,7 +12,8 @@ namespace DillyzRoleApi_Rewritten
     class IntroCutscenePatch
     {
         static void Postfix(IntroCutscene._ShowRole_d__35 __instance) {
-            HarmonyMain.Instance.Log.LogInfo("YOOO I'M THE " + __instance.__4__this.TeamTitle.text);
+            // RESEARCH
+            /*HarmonyMain.Instance.Log.LogInfo("YOOO I'M THE " + __instance.__4__this.TeamTitle.text);
             HarmonyMain.Instance.Log.LogInfo("2 THE " + __instance.__4__this.RoleText.text);
             HarmonyMain.Instance.Log.LogInfo("3 THE " + __instance.__4__this.RoleBlurbText.text);
             HarmonyMain.Instance.Log.LogInfo("4 THE " + __instance.__4__this.BackgroundBar.material.color);
@@ -29,6 +30,16 @@ namespace DillyzRoleApi_Rewritten
             __instance.__4__this.ImpostorText.text = "impostor text";
             __instance.__4__this.ImpostorTitle.text = "impostor title";
             __instance.__4__this.YouAreText.text = "You're*";
+
+            __instance.__4__this.YouAreText.color = new Color(255, 0, 0);
+            __instance.__4__this.YouAreText.material.color = new Color(255, 0, 0);*/
+
+            Color suposedRoleColor = new Color(255, 125, 0);
+
+            __instance.__4__this.RoleText.text = "Role Text";
+            __instance.__4__this.RoleBlurbText.text = "You are role text. That's it. That's your purpose.";
+            __instance.__4__this.RoleText.material.color = suposedRoleColor;
+            __instance.__4__this.YouAreText.material.color = suposedRoleColor;
         }
     }
 }

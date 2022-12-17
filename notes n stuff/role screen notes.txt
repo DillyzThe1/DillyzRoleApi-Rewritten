@@ -1,6 +1,7 @@
 judging by the "your role is role text" image, i've concluded a few things:
 
-- TeamTitle, BackgroundBar, ImpostorName, ImpostorText, ImpostorTitle, & YouAreText are all useless in the role system (judging from experience, they're for the team stuff)
+- TeamTitle, BackgroundBar, ImpostorName, ImpostorText, & ImpostorTitle are all useless in the role system (judging from experience, they're for the team stuff)
 - RoleText is the text pertaining to your role (duh). Such as "Engineer", "Scientist", or "Shapeshifter".
 - RoleBlurbText is the text pertaining to one's description, such as "You're an Engineer you idiot, YOU'VE PLAYED THIS GAME BEFORE. STOP READING."
 - It is unknown how to change the "your role is" text, which may cause a problem for color. I must look into it.
+- YouAreText is the "Your role is" text, however, it seems to update AFTER IntroCutscene._ShowRole_d__35.MoveNext (postfix) is called. Luckily, material.color's properties aren't.
