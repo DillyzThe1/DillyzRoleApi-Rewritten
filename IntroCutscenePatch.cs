@@ -12,7 +12,7 @@ namespace DillyzRoleApi_Rewritten
     [HarmonyPatch(typeof(IntroCutscene._ShowRole_d__35), nameof(IntroCutscene._ShowRole_d__35.MoveNext))]
     class IntroCutscenePatch
     {
-        public static string colorHex = "#FF00000";
+        public static string colorHex = "#FF0000";
         public static void Postfix(IntroCutscene._ShowRole_d__35 __instance) {
             CustomRole role = CustomRole.getByName(DillyzUtil.getRoleName(PlayerControl.LocalPlayer));
             if (role == null)
