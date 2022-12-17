@@ -57,6 +57,72 @@ namespace DillyzRoleApi_Rewritten
         }
     }
 
+
+
+    //[HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.BeginImpostor))]
+    class IntroCutscenePatch_BeginImpostor
+    {
+        public static bool Prefix(IntroCutscene __instance, Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam)
+        {
+            HarmonyMain.Instance.Log.LogInfo("Flabbergasted Impostor");
+            IntroCutscenePatch_BeginImpostor.calcTeam();
+            __instance.ShowTeam(IntroCutscenePatch_BeginImpostor.playersToShow, 3);
+            return false;
+        }
+
+        public static Il2CppSystem.Collections.Generic.List<PlayerControl> playersToShow;
+        public static void calcTeam() {
+            List<PlayerControl> playersToShowww = PlayerControl.AllPlayerControls.ToArray().ToList();
+
+            CustomRoleSide rs = DillyzUtil.roleSide(PlayerControl.LocalPlayer);
+
+            switch (rs)
+            {
+                case CustomRoleSide.Impostor:
+                    playersToShowww.RemoveAll(x => DillyzUtil.roleSide(x) != CustomRoleSide.Impostor);
+                    break;
+                case CustomRoleSide.Independent:
+                    playersToShowww.RemoveAll(x => DillyzUtil.getRoleName(x) != DillyzUtil.getRoleName(PlayerControl.LocalPlayer));
+                    break;
+                case CustomRoleSide.LoneWolf:
+                    playersToShowww.RemoveAll(x => x != PlayerControl.LocalPlayer);
+                    break;
+            }
+
+            playersToShow = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
+
+            // conversion bc dumb
+            foreach (PlayerControl player in playersToShowww)
+                playersToShow.Add(player);
+        }
+    }
+    /*[HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.BeginCrewmate))]
+    class IntroCutscenePatch_BeginCrewmate
+    {
+        public static bool Prefix(IntroCutscene __instance, Il2CppSystem.Collections.Generic.List<PlayerControl> teamToDisplay)
+        {
+            HarmonyMain.Instance.Log.LogInfo("Flabbergasted Crewmate");
+            __instance.ShowTeam(IntroCutscenePatch_BeginImpostor.playersToShow, 3);
+            return false;
+        }
+        
+    }*/
+    [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.ShowTeam))]
+    class IntroCutscenePatch_ShowTeam
+    {
+        public static void Prefix(IntroCutscene __instance, ref Il2CppSystem.Collections.Generic.List<PlayerControl> teamToShow, float duration)
+        {
+            HarmonyMain.Instance.Log.LogInfo("Flabbergasted Team " + teamToShow.ToString() + " " + duration);
+            foreach (PlayerControl i in teamToShow)
+                HarmonyMain.Instance.Log.LogInfo(i.name + " is FLABBERGASTED right now!");
+
+            IntroCutscenePatch_BeginImpostor.calcTeam();
+
+            teamToShow = IntroCutscenePatch_BeginImpostor.playersToShow;
+        }
+
+    }
+
     // moved 
     /*// force it to update
     [HarmonyPatch(typeof(TextMeshPro), nameof(TextMeshPro.InternalUpdate))]
