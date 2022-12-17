@@ -32,9 +32,9 @@ namespace DillyzRoleApi_Rewritten
             {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.JesterWin, Hazel.SendOption.None, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
-                GameOverPatch.SetAllToWin("Jester");
+                GameOverPatch.SetAllToWin("Jester", true);
                 GameOverPatch.jesterWon = true;
-                //GameManager.Instance.RpcEndGame(GameOverReason.ImpostorByKill, false);
+                GameManager.Instance.RpcEndGame(GameOverReason.ImpostorByKill, false);
             }
         }
     }

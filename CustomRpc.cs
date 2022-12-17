@@ -32,6 +32,7 @@ namespace DillyzRoleApi_Rewritten
                     }
                     break;
                 case (byte)CustomRpc.JesterWin:
+                    GameOverPatch.SetAllToWin("Jester", false);
                     GameOverPatch.jesterWon = true;
                     break;
             }

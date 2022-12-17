@@ -14,7 +14,7 @@ namespace DillyzRoleApi_Rewritten
     {
         public static bool jesterWon = false;
 
-        public static void SetAllToWin(String roleToWin)
+        public static void SetAllToWin(String roleToWin, bool rpc)
         {
             HarmonyMain.Instance.Log.LogInfo("KILL EM FOR " + roleToWin);
             foreach (PlayerControl player in PlayerControl.AllPlayerControls)
@@ -23,15 +23,21 @@ namespace DillyzRoleApi_Rewritten
                 {
                     HarmonyMain.Instance.Log.LogInfo(player.name + " is now marked as Crewmate!");
                     player.Data.RoleType = AmongUs.GameOptions.RoleTypes.Crewmate;
-                    player.Data.Role.Role = AmongUs.GameOptions.RoleTypes.Crewmate;
-                    player.RpcSetRole(AmongUs.GameOptions.RoleTypes.Crewmate);
+                    //player.Data.Role.Role = AmongUs.GameOptions.RoleTypes.Crewmate;
+                    player.Data.Role = new CrewmateRole();
+
+                    if (rpc)
+                        player.RpcSetRole(AmongUs.GameOptions.RoleTypes.Crewmate);
                 }
                 else
                 {
                     HarmonyMain.Instance.Log.LogInfo(player.name + " is now marked as Impostor!");
                     player.Data.RoleType = AmongUs.GameOptions.RoleTypes.Impostor;
-                    player.Data.Role.Role = AmongUs.GameOptions.RoleTypes.Impostor;
-                    player.RpcSetRole(AmongUs.GameOptions.RoleTypes.Impostor);
+                    //player.Data.Role.Role = AmongUs.GameOptions.RoleTypes.Impostor;
+                    player.Data.Role = new ImpostorRole();
+
+                    if (rpc)
+                        player.RpcSetRole(AmongUs.GameOptions.RoleTypes.Impostor);
                 }
             }
         }
