@@ -2,7 +2,6 @@
 using System.Reflection;
 using BepInEx;
 using BepInEx.IL2CPP;
-using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 using UnityEngine.SceneManagement;
 
