@@ -56,6 +56,11 @@ namespace DillyzRoleApi_Rewritten
                     availablePlayers.Remove(selectedPlayer);
                     CustomRole.setRoleName(selectedPlayer.PlayerId, role.name);
 
+                    if (role.switchToImpostor && !selectedPlayer.Data.Role.IsImpostor) {
+                        selectedPlayer.Data.RoleType = AmongUs.GameOptions.RoleTypes.Impostor;
+                        selectedPlayer.Data.Role = new ImpostorRole();
+                    }
+
                     HarmonyMain.Instance.Log.LogInfo($"Hey! {selectedPlayer.name} is now the {role.name} of the game!");
 
                     // send role packet

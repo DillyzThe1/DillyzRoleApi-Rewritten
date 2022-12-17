@@ -50,7 +50,7 @@ namespace DillyzRoleApi_Rewritten
         public bool canVent;                                    // If you can use the vents or not. You're an idiot for reading this text.
         public bool canKill;                                    // Are you seriously this blind?
         public string ejectionText;                             // "DillyzThe1 was The Jester"
-       // public string ejectionText_bad;                         // "DillyzThe1 was not The Jester"
+        public bool switchToImpostor = false;                   // Will switch a crewmate role to an Impostor role.
 
         public CustomRole(String name, String subtext, bool nameColor, bool nameColorPublic, Color roleColor, bool canSeeTeam, 
                             CustomRoleSide side, bool canVent, bool canKill, bool showEjectText) {
