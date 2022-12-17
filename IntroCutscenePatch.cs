@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HarmonyLib;
+using TMPro;
 using UnityEngine;
 
 namespace DillyzRoleApi_Rewritten
@@ -13,16 +14,13 @@ namespace DillyzRoleApi_Rewritten
     {
         public static void Postfix(IntroCutscene._ShowRole_d__35 __instance) {
             CustomRole role = CustomRole.getByName(DillyzUtil.getRoleName(PlayerControl.LocalPlayer));
-
             if (role == null)
                 return;
-
-            HarmonyMain.Instance.Log.LogInfo(role.roleColor);
-            __instance.__4__this.RoleText.text = role.name;
-            __instance.__4__this.RoleBlurbText.text = role.subtext;
-            __instance.__4__this.RoleText.material.color = role.roleColor;
-            __instance.__4__this.RoleBlurbText.material.color = role.roleColor;
-            __instance.__4__this.YouAreText.material.color = role.roleColor;
+            string colorHex = DillyzUtil.colorToHex(role.roleColor);
+            HarmonyMain.Instance.Log.LogInfo(role.roleColor + " " + colorHex);
+            __instance.__4__this.RoleText.text = $"<{colorHex}>{role.name}</color>";
+            __instance.__4__this.RoleBlurbText.text = $"<{colorHex}>{role.subtext}</color>";
+            __instance.__4__this.YouAreText.text = $"<{colorHex}>Your role is</color>";
         }
     }
 }
