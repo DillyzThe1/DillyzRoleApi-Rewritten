@@ -14,7 +14,7 @@ namespace DillyzRoleApi_Rewritten
     {
         public static string colorHex = "#FF0000";
         public static void Postfix(IntroCutscene._ShowRole_d__35 __instance) {
-            GameOverPatch.jesterWon = false;
+            GameOverPatch.customWin = false;
 
             CustomRole role = CustomRole.getByName(DillyzUtil.getRoleName(PlayerControl.LocalPlayer));
             if (role == null)

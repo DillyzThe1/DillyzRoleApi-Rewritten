@@ -42,7 +42,6 @@
     <Compile Include="IntroCutscenePatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CreditsDisplay.cs" />
-    <Compile Include="RoleBehaviourPatch.cs" />
     <Compile Include="RoleManagerPatch.cs" />
   </ItemGroup>
   <ItemGroup>

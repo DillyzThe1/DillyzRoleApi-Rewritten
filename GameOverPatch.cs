@@ -12,10 +12,15 @@ namespace DillyzRoleApi_Rewritten
     [HarmonyPatch(typeof(EndGameManager), nameof(EndGameManager.SetEverythingUp))]
     class GameOverPatch
     {
-        public static bool jesterWon = false;
+        public static bool customWin = false;
+        public static string winningRole = "Jester";
+        public static List<byte> customWinners = new List<byte>();
 
         public static void SetAllToWin(String roleToWin, bool rpc)
         {
+            customWin = true;
+            winningRole = roleToWin;
+            customWinners.Clear();
             HarmonyMain.Instance.Log.LogInfo("KILL EM FOR " + roleToWin);
             foreach (PlayerControl player in PlayerControl.AllPlayerControls)
             {
@@ -28,6 +33,8 @@ namespace DillyzRoleApi_Rewritten
 
                     if (rpc)
                         player.RpcSetRole(AmongUs.GameOptions.RoleTypes.Crewmate);
+
+                    customWinners.Add(player.PlayerId);
                 }
                 else
                 {
@@ -40,22 +47,20 @@ namespace DillyzRoleApi_Rewritten
                         player.RpcSetRole(AmongUs.GameOptions.RoleTypes.Impostor);
                 }
             }
+            CustomRole.roleNameMap.Clear();
         }
 
-        public static string hexthing = "";
         public static bool didwin = false;
-        public static Color wincolor = new Color(255,255,255);
+        public static GameOverReason gameOverReason = GameOverReason.HumansByVote;
 
         public static void Postfix(EndGameManager __instance)
         {
-            if (jesterWon)
+            if (customWin)
             {
                 HarmonyMain.Instance.Log.LogInfo("TOP 10 PEOPLE IN MY BASEMENT!!!");
-                HarmonyMain.Instance.Log.LogInfo(DillyzUtil.getRoleName(PlayerControl.LocalPlayer) + " playuer");
-                wincolor = CustomRole.getByName("Jester").roleColor;
-                hexthing = DillyzUtil.colorToHex(wincolor);
-                HarmonyMain.Instance.Log.LogInfo("goofy " + DillyzUtil.getRoleName(PlayerControl.LocalPlayer));
-                if (PlayerControl.LocalPlayer.Data.Role.IsImpostor)
+                Color wincolor = CustomRole.getByName(winningRole).roleColor;
+                string hexthing = DillyzUtil.colorToHex(wincolor);
+                if (customWinners.Contains(PlayerControl.LocalPlayer.PlayerId))
                     __instance.WinText.text = $"<{hexthing}>Victory</color>";
                 else
                     __instance.WinText.text = $"<{hexthing}>Defeat</color>";
@@ -81,6 +86,14 @@ namespace DillyzRoleApi_Rewritten
                     poolableInstance.transform.Find("Names").gameObject.active = false;
                 }*/
             }
+            /*else
+            {
+                if (gameOverReason == GameOverReason.ImpostorByKill || gameOverReason == GameOverReason.ImpostorBySabotage ||
+                    gameOverReason == GameOverReason.ImpostorByVote || gameOverReason == GameOverReason.ImpostorDisconnect)
+                    hexthing = DillyzUtil.colorToHex(CustomPalette.ImpostorRed);
+                else
+                    hexthing = DillyzUtil.colorToHex(PlayerControl.LocalPlayer.Data.Role.IsImpostor ? CustomPalette.ImpostorRed : CustomPalette.CrewmateBlue);
+            }*/
         }
 
         // force it to update
@@ -89,19 +102,6 @@ namespace DillyzRoleApi_Rewritten
         {
             public static void Postfix(TextMeshPro __instance)
             {
-                if (jesterWon)
-                {
-                    if (__instance.name == "WinText")
-                    {
-                        if (PlayerControl.LocalPlayer.Data.Role.IsImpostor)
-                            __instance.text = $"<{hexthing}>Victory</color>";
-                        else
-                            __instance.text = $"<{hexthing}>Defeat Reference</color>";
-                    }
-                    __instance.material.color = wincolor;
-                }
-
-
                 if (__instance.name == "YouAreText")
                     __instance.text = $"<{IntroCutscenePatch.colorHex}>Your role is</color>";
             }
@@ -114,12 +114,45 @@ namespace DillyzRoleApi_Rewritten
                 HarmonyMain.Instance.Log.LogInfo("GAME STARTS NOW?!?!");
                 // waffle_iron.jpeg
 
-                GameOverPatch.jesterWon = false;
+                GameOverPatch.customWin = false;
                 GameOverPatch.didwin = false;
-                GameOverPatch.hexthing = "#000000";
+                GameOverPatch.winningRole = "";
+                GameOverPatch.customWinners.Clear();
 
                 // ahhhh go away
                 CustomRole.roleNameMap.Clear();
+            }
+        }
+        [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnGameEnd))]
+        class EndGamePatchIdk {
+            public static void Prefix(AmongUsClient __instance, EndGameResult endGameResult) {
+                gameOverReason = endGameResult.GameOverReason;
+
+                 if (customWin)
+                    return;
+
+                bool impsWon = (gameOverReason == GameOverReason.ImpostorByKill || gameOverReason == GameOverReason.ImpostorBySabotage ||
+                    gameOverReason == GameOverReason.ImpostorByVote || gameOverReason == GameOverReason.ImpostorDisconnect);
+
+                foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+                {
+                    CustomRoleSide rs = DillyzUtil.roleSide(DillyzUtil.findPlayerControl(player.PlayerId));
+                    if (rs == CustomRoleSide.Crewmate || rs == CustomRoleSide.Impostor)
+                        continue;
+
+                    if (impsWon)
+                    {
+                        HarmonyMain.Instance.Log.LogInfo(player.name + " is now marked as Crewmate!");
+                        player.Data.RoleType = AmongUs.GameOptions.RoleTypes.Crewmate;
+                        player.Data.Role = new CrewmateRole();
+                    }
+                    else
+                    {
+                        HarmonyMain.Instance.Log.LogInfo(player.name + " is now marked as Impostor!");
+                        player.Data.RoleType = AmongUs.GameOptions.RoleTypes.Impostor;
+                        player.Data.Role = new ImpostorRole();
+                    }
+                }
             }
         }
     }

@@ -39,6 +39,8 @@ namespace DillyzRoleApi_Rewritten
 
         public static CustomRoleSide roleSide(PlayerControl player)
         {
+            if (player == null || player.PlayerId == null || player.Data == null)
+                return CustomRoleSide.Crewmate;
             if (CustomRole.getRoleName(player.PlayerId) != "")
                 return CustomRole.getByName(CustomRole.getRoleName(player.PlayerId)).side;
             if (player.Data.RoleType == RoleTypes.Impostor || player.Data.RoleType == RoleTypes.ImpostorGhost || player.Data.RoleType == RoleTypes.Shapeshifter)
