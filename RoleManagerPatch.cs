@@ -22,11 +22,6 @@ namespace DillyzRoleApi_Rewritten
                 // send reset roles packet
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.ResetRoles, Hazel.SendOption.None, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
-                /*foreach (PlayerControl player in PlayerControl.AllPlayerControls)
-                {
-                    HarmonyMain.Instance.Log.LogInfo("Taking away " + player.name + "'s role!");
-                    CustomRole.setRoleName(player.PlayerId, "");
-                }*/
                 CustomRole.roleNameMap.Clear();
 
                 // rng
@@ -69,7 +64,6 @@ namespace DillyzRoleApi_Rewritten
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
 
                     // END OF CHUNK
-
                 }
             }
         }

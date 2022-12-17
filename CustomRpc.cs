@@ -10,8 +10,8 @@ namespace DillyzRoleApi_Rewritten
 {
     internal enum CustomRpc
     {
-        SetRole = 100,      // Takes two arguments: PlayerId (byte) & RoleName (string). Sets the role of the player.
-        ResetRoles = 101,   // Takes no arguments. Resets all player roles.
+        SetRole = 100,          // Takes two arguments: PlayerId (byte) & RoleName (string). Sets the role of the player.
+        ResetRoles = 101,       // Takes no arguments. Resets all player roles.
         CustomRoleWin = 102,    // The default jester role's winnning RPC. All jester stuff will move to a standalone mod in the future.
     }
 
@@ -25,11 +25,6 @@ namespace DillyzRoleApi_Rewritten
                     CustomRole.setRoleName(playerId, roleName);
                     break;
                 case (byte)CustomRpc.ResetRoles:
-                    /*foreach (PlayerControl player in PlayerControl.AllPlayerControls)
-                    {
-                        HarmonyMain.Instance.Log.LogInfo("Taking away " + player.name + "'s role!");
-                        CustomRole.setRoleName(player.PlayerId, "");
-                    }*/
                     CustomRole.roleNameMap.Clear();
                     break;
                 case (byte)CustomRpc.CustomRoleWin:

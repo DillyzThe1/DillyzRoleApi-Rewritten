@@ -37,7 +37,6 @@ namespace DillyzRoleApi_Rewritten
 
             if (DILLYZ_DEBUG)
             {
-                // Change to LoneWolf in the future.
                 Log.LogInfo("Adding a Jester!");
                 CustomRole.createRole("Jester", "Get voted out to win.", true, false, new Color(90, 50, 200), false,
                                                                         CustomRoleSide.LoneWolf, false, false, true);

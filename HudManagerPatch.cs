@@ -38,15 +38,10 @@ namespace DillyzRoleApi_Rewritten
             }
         }
 
-        public static void displayColor(HudManager __instance, PlayerControl player, Color roleColor)//CustomRole curRole)
-        {
-            /*Color intendedColor = (curRole == null) ?
-                (DillyzUtil.roleSide(player) == CustomRoleSide.Impostor ? Palette.ImpostorRed : Palette.White)  : curRole.roleColor;*/
-
+        public static void displayColor(HudManager __instance, PlayerControl player, Color roleColor) {
             string hex = DillyzUtil.colorToHex(roleColor);
             TextMeshPro tmp = player.gameObject.transform.Find("Names").Find("NameText_TMP").GetComponent<TextMeshPro>();
             tmp.text = $"<{hex}>{player.name}</color>";
-            //tmp.text += $"\n<{hex}>{curRole.name}</color>";
 
             if (MeetingHud.Instance != null)
                 foreach (PlayerVoteArea pva in MeetingHud.Instance.playerStates)

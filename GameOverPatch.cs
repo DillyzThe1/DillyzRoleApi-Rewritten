@@ -31,14 +31,11 @@ namespace DillyzRoleApi_Rewritten
             {
                 string rolename = DillyzUtil.getRoleName(player);
                 CustomRoleSide roleside = DillyzUtil.roleSide(player);
-                /*if (roleside == top10Role.side && !(top10Role.side == CustomRoleSide.Independent || top10Role.side == CustomRoleSide.LoneWolf))
-                    return;*/
 
                 if ((top10Role.side == CustomRoleSide.Independent && rolename != roleToWin) || (top10Role.side == CustomRoleSide.LoneWolf && player != causedBy))
                 {
                     HarmonyMain.Instance.Log.LogInfo(player.name + " is now marked as Crewmate!");
                     player.Data.RoleType = AmongUs.GameOptions.RoleTypes.Crewmate;
-                    //player.Data.Role.Role = AmongUs.GameOptions.RoleTypes.Crewmate;
                     player.Data.Role = new CrewmateRole();
 
                     if (rpc)
@@ -48,7 +45,6 @@ namespace DillyzRoleApi_Rewritten
                 {
                     HarmonyMain.Instance.Log.LogInfo(player.name + " is now marked as Impostor!");
                     player.Data.RoleType = AmongUs.GameOptions.RoleTypes.Impostor;
-                    //player.Data.Role.Role = AmongUs.GameOptions.RoleTypes.Impostor;
                     player.Data.Role = new ImpostorRole();
 
                     if (rpc)
@@ -76,34 +72,7 @@ namespace DillyzRoleApi_Rewritten
                     __instance.WinText.text = $"<{hexthing}>Defeat</color>";
                 __instance.WinText.material.color = wincolor;
                 __instance.BackgroundBar.material.color = wincolor;
-
-                /*List<PoolablePlayer> the = __instance.GetComponentsInChildren<PoolablePlayer>().ToArray().ToList();
-                for (int i = 0; i < the.Count; i++)
-                    GameObject.Destroy(the[i]);
-
-                List<PlayerControl> jestersHaha = PlayerControl.AllPlayerControls.ToArray().ToList();
-                jestersHaha.RemoveAll(x => DillyzUtil.getRoleName(x) != "Jester");
-                foreach (PlayerControl player in jestersHaha)
-                {
-                    PoolablePlayer poolableInstance = new PoolablePlayer();
-                    poolableInstance.SetHat(player.CurrentOutfit.HatId, player.cosmetics.hat.matProperties.ColorId);
-                    poolableInstance.SetBodyColor(player.CurrentOutfit.ColorId);
-                    poolableInstance.SetName(player.name);
-                    poolableInstance.SetVisor(player.CurrentOutfit.VisorId, player.cosmetics.visor.matProperties.ColorId);
-                    poolableInstance.cosmetics.SetSkin(player.CurrentOutfit.SkinId, player.cosmetics.skin.matProperties.ColorId);
-                    poolableInstance.cosmetics.InstantiatePetCopy(player.cosmetics.currentPet, player.CurrentOutfit.ColorId);
-
-                    poolableInstance.transform.Find("Names").gameObject.active = false;
-                }*/
             }
-            /*else
-            {
-                if (gameOverReason == GameOverReason.ImpostorByKill || gameOverReason == GameOverReason.ImpostorBySabotage ||
-                    gameOverReason == GameOverReason.ImpostorByVote || gameOverReason == GameOverReason.ImpostorDisconnect)
-                    hexthing = DillyzUtil.colorToHex(CustomPalette.ImpostorRed);
-                else
-                    hexthing = DillyzUtil.colorToHex(PlayerControl.LocalPlayer.Data.Role.IsImpostor ? CustomPalette.ImpostorRed : CustomPalette.CrewmateBlue);
-            }*/
         }
 
         // force it to update

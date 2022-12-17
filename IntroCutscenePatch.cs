@@ -57,8 +57,6 @@ namespace DillyzRoleApi_Rewritten
         }
     }
 
-
-
     //[HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.BeginImpostor))]
     class IntroCutscenePatch_BeginImpostor
     {
@@ -96,17 +94,7 @@ namespace DillyzRoleApi_Rewritten
                 playersToShow.Add(player);
         }
     }
-    /*[HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.BeginCrewmate))]
-    class IntroCutscenePatch_BeginCrewmate
-    {
-        public static bool Prefix(IntroCutscene __instance, Il2CppSystem.Collections.Generic.List<PlayerControl> teamToDisplay)
-        {
-            HarmonyMain.Instance.Log.LogInfo("Flabbergasted Crewmate");
-            __instance.ShowTeam(IntroCutscenePatch_BeginImpostor.playersToShow, 3);
-            return false;
-        }
-        
-    }*/
+
     [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.ShowTeam))]
     class IntroCutscenePatch_ShowTeam
     {
@@ -122,16 +110,4 @@ namespace DillyzRoleApi_Rewritten
         }
 
     }
-
-    // moved 
-    /*// force it to update
-    [HarmonyPatch(typeof(TextMeshPro), nameof(TextMeshPro.InternalUpdate))]
-    class TMPPROPatch
-    {
-        public static void Postfix(TextMeshPro __instance)
-        {
-            if (__instance.name == "YouAreText")
-                __instance.text = $"<{IntroCutscenePatch.colorHex}>Your role is</color>";
-        }
-    }*/
 }
