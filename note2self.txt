@@ -1,0 +1,4 @@
+bepinex build for unity thing - https://builds.bepinex.dev/projects/bepinex_be/577/BepInEx_UnityIL2CPP_x86_ec79ad0_6.0.0-be.577.zip
+ue issue - https://github.com/sinai-dev/UnityExplorer/issues/192
+au version - 2022.12.14
+to mak a role - extend CustomRole
