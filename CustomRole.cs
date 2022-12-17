@@ -20,6 +20,7 @@ namespace DillyzRoleApi_Rewritten
         public bool commitsTaxFraud { get; set; }    // 192.512.3.62
         public bool canVent { get; set; }            // If you can use the vents or not. You're an idiot for reading this text.
         public bool canKill { get; set; }            // Are you seriously this blind?
+        public bool canDoTasks { get; set; }         // No really, what is wrong with you? Stop reading these texts.
     }
 
     internal enum CustomRoleSide { 
