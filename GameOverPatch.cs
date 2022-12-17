@@ -132,6 +132,8 @@ namespace DillyzRoleApi_Rewritten
                         player.Data.Role = new ImpostorRole();
                     }
                 }
+
+                CustomRole.roleNameMap.Clear();
             }
         }
     }
