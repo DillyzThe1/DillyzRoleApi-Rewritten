@@ -26,14 +26,15 @@ namespace DillyzRoleApi_Rewritten
     class PlayerExilePatch
     {
         public static bool killem = true;
-        public static void Postfix(PlayerControl __instance)
+        public static void Prefix(PlayerControl __instance)
         {
             if (DillyzUtil.getRoleName(__instance) == "Jester")
             {
-                GameOverPatch.jesterWon = true;
-                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.JesterWin, Hazel.SendOption.None, -1);
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.JesterWin, Hazel.SendOption.None, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
-                GameManager.Instance.RpcEndGame(GameOverReason.ImpostorByKill, false);
+                GameOverPatch.SetAllToWin("Jester");
+                GameOverPatch.jesterWon = true;
+                //GameManager.Instance.RpcEndGame(GameOverReason.ImpostorByKill, false);
             }
         }
     }

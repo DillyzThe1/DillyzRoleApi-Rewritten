@@ -18,7 +18,15 @@ namespace DillyzRoleApi_Rewritten
 
             CustomRole role = CustomRole.getByName(DillyzUtil.getRoleName(PlayerControl.LocalPlayer));
             if (role == null)
+            {
+                if (DillyzUtil.roleSide(PlayerControl.LocalPlayer) == CustomRoleSide.Crewmate)
+                    colorHex = DillyzUtil.colorToHex(Palette.CrewmateBlue);
+                else
+                    colorHex = DillyzUtil.colorToHex(Palette.ImpostorRed);
+
+                HarmonyMain.Instance.Log.LogInfo((DillyzUtil.roleSide(PlayerControl.LocalPlayer) == CustomRoleSide.Crewmate) + " " + colorHex);
                 return;
+            }
             colorHex = DillyzUtil.colorToHex(role.roleColor);
             HarmonyMain.Instance.Log.LogInfo(role.roleColor + " " + colorHex);
             __instance.__4__this.RoleText.text = $"<{colorHex}>{role.name}</color>";
@@ -27,7 +35,8 @@ namespace DillyzRoleApi_Rewritten
         }
     }
 
-    // force it to update
+    // moved 
+    /*// force it to update
     [HarmonyPatch(typeof(TextMeshPro), nameof(TextMeshPro.InternalUpdate))]
     class TMPPROPatch
     {
@@ -36,5 +45,5 @@ namespace DillyzRoleApi_Rewritten
             if (__instance.name == "YouAreText")
                 __instance.text = $"<{IntroCutscenePatch.colorHex}>Your role is</color>";
         }
-    }
+    }*/
 }
