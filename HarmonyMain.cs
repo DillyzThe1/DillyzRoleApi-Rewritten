@@ -39,8 +39,8 @@ namespace DillyzRoleApi_Rewritten
             {
                 // Change to LoneWolf in the future.
                 Log.LogInfo("Adding a Jester!");
-                CustomRole.createRole("Jester", "Get voted out to win.", true, new Color(90, 50, 200), false,
-                                                                                                CustomRoleSide.Crewmate, false, false);
+                CustomRole.createRole("Jester", "Get voted out to win.", true, false, new Color(90, 50, 200), false,
+                                                                        CustomRoleSide.Crewmate, false, false, true);
                 foreach (CustomRole role in CustomRole.allRoles)
                     Log.LogInfo(role.ToString());
             }
