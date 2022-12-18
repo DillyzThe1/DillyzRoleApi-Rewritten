@@ -29,20 +29,22 @@ namespace DillyzRoleApi_Rewritten
             CustomRole localRole = (rnnnmn != null && rnnnmn != "") ? CustomRole.getByName(rnnnmn) : null;
             foreach (PlayerControl player in PlayerControl.AllPlayerControls)
             {
+                bool youre = player.PlayerId == PlayerControl.LocalPlayer.PlayerId;
+
                 string rnnnn = DillyzUtil.getRoleName(player);
                 CustomRole theRole = (rnnnn != null && rnnnn != "") ? CustomRole.getByName(rnnnn) : null;
 
                 // if the role is not there or doesn't change color, leave it alone
                 if (theRole == null || !theRole.nameColorChanges)
                 {
-                    if (player.PlayerId == PlayerControl.LocalPlayer.PlayerId)
+                    if (youre)
                         HudManagerPatch.displayColor(__instance, player, DillyzUtil.roleColor(player, true));
                     else
                         HudManagerPatch.displayColor(__instance, player, CustomPalette.White);
                     continue;
                 }
 
-                 if (theRole.nameColorPublic ||  // If the name color was public.
+                 if (theRole.nameColorPublic || youre || // If the name color was public. || if it's you
                     // If it's private but you get it.
                     (theRole.teamCanSeeYou && localRole != null && theRole.name == localRole.name && theRole.side != CustomRoleSide.LoneWolf)) 
                     HudManagerPatch.displayColor(__instance, player, theRole.roleColor);
