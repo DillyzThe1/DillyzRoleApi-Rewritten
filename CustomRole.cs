@@ -16,14 +16,14 @@ namespace DillyzRoleApi_Rewritten
         public static List<CustomRole> allRoles = new List<CustomRole>();
         public static void appendRole(CustomRole yourRole) => allRoles.Add(yourRole);
         public static CustomRole createRole(String name, String subtext, bool nameColor, bool nameColorPublic, Color roleColor, bool canSeeTeam, CustomRoleSide side,
-                    bool canVent, bool canKill, bool showEjectText) {
+                    VentPrivelege ventPrivelege, bool canKill, bool showEjectText) {
             foreach (CustomRole role in allRoles)
                 if (role.name == name)
                 {
                     HarmonyMain.Instance.Log.LogError($"Role by name \"{role.name}\" already exists!");
                     return role;
                 }
-            CustomRole rolee = new CustomRole(name, subtext, nameColor, nameColorPublic, roleColor, canSeeTeam, side, canVent, canKill, showEjectText);
+            CustomRole rolee = new CustomRole(name, subtext, nameColor, nameColorPublic, roleColor, canSeeTeam, side, ventPrivelege, canKill, showEjectText);
             CustomRole.appendRole(rolee);
             return rolee;
         }
@@ -48,14 +48,14 @@ namespace DillyzRoleApi_Rewritten
         public bool teamCanSeeYou;                              // Determines if your team can see you.
         public CustomRoleSide side;                             // Determines who you work with.
         //public bool commitsTaxFraud { get; }                  // 192.512.3.62
-        public bool canVent;                                    // If you can use the vents or not. You're an idiot for reading this text.
+        public VentPrivelege ventPrivelege;                     // Your vent privelege level.
         public bool canKill;                                    // Are you seriously this blind?
         public string ejectionText;                             // "DillyzThe1 was The Jester"
         public bool switchToImpostor = false;                   // Will switch a crewmate role to an Impostor role.
         public string a_or_an = "an";                           // "DillyzThe1 was a Jester" vs "DillyzThe1 was an Jester"
 
         public CustomRole(String name, String subtext, bool nameColor, bool nameColorPublic, Color roleColor, bool canSeeTeam, 
-                            CustomRoleSide side, bool canVent, bool canKill, bool showEjectText) {
+                            CustomRoleSide side, VentPrivelege ventPrivelege, bool canKill, bool showEjectText) {
             this.name = name;
             this.subtext = subtext;
             this.nameColorChanges = nameColor;
@@ -63,7 +63,7 @@ namespace DillyzRoleApi_Rewritten
             this.roleColor = roleColor;
             this.teamCanSeeYou = canSeeTeam;
             this.side = side;
-            this.canVent = canVent;
+            this.ventPrivelege = ventPrivelege;
             this.canKill = canKill;
             this.ejectionText = "[0] was ";
             //this.ejectionText_bad = "[0] was not ";
@@ -84,7 +84,7 @@ namespace DillyzRoleApi_Rewritten
         public override string ToString() {
             return $"DillyzRoleApi_Rewritten.CustomRole [name: {this.name}, subtext: {this.subtext}, nameColorChanges: {this.nameColorChanges}, " +
                    $"roleColor: [{this.roleColor.r}, {this.roleColor.g}, {this.roleColor.b}, teamCanSeeYou: {this.teamCanSeeYou}, side: {this.side}, " +
-                   $"canVent: {canVent}, canKill: {canKill}]";
+                   $"ventPrivelege: {this.ventPrivelege}, canKill: {this.canKill}]";
         }
 
         public void WinGame(PlayerControl cause) {
@@ -112,5 +112,12 @@ namespace DillyzRoleApi_Rewritten
         Crewmate = 1,     // You work alongside the Crewmates.
         Independent = 2,  // You work upon your own team.
         LoneWolf = 3      // You work by yourself.
+    }
+
+    internal enum VentPrivelege
+    {
+        None = 0,     // You possess an inability to use vents.
+        Impostor = 1, // You inheret the venting power of an Impostor.
+        Engineer = 2  // You inheret the venting power of an Engineer.
     }
 }
