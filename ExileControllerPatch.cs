@@ -14,6 +14,8 @@ namespace DillyzRoleApi_Rewritten
     {
         public static void Postfix(GameData.PlayerInfo exiled, ExileController __instance)
         {
+            if (exiled == null)
+                return;
             CustomRole role = CustomRole.getByName(DillyzUtil.getRoleName(DillyzUtil.findPlayerControl(exiled.PlayerId)));
 
             if (role == null || !GameOptionsManager.Instance.currentNormalGameOptions.ConfirmImpostor)
