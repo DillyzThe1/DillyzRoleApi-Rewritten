@@ -50,7 +50,7 @@ namespace DillyzRoleApi_Rewritten
             public static void Postfix(Vent __instance, bool on, bool mainTarget)
             {
                 //__instance.GetComponent<SpriteRenderer>().material.SetFloat("_Outline", on ? 1f: 0f);
-                __instance.GetComponent<SpriteRenderer>().material.SetColor("_OutlineColor", DillyzUtil.roleColor(PlayerControl.LocalPlayer, false));
+                //__instance.GetComponent<SpriteRenderer>().material.SetColor("_OutlineColor", DillyzUtil.roleColor(PlayerControl.LocalPlayer, false));
             }
         }
 
