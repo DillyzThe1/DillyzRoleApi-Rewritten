@@ -27,6 +27,13 @@ namespace DillyzRoleApi_Rewritten
             // colorization
             string rnnnmn = DillyzUtil.getRoleName(PlayerControl.LocalPlayer);
             CustomRole localRole = (rnnnmn != null && rnnnmn != "") ? CustomRole.getByName(rnnnmn) : null;
+
+            if (localRole != null)
+            {
+                __instance.ImpostorVentButton.enabled = localRole.ventPrivilege == VentPrivilege.Impostor;
+                __instance.KillButton.enabled = localRole.canKill;
+            }
+
             foreach (PlayerControl player in PlayerControl.AllPlayerControls)
             {
                 bool youre = player.PlayerId == PlayerControl.LocalPlayer.PlayerId;

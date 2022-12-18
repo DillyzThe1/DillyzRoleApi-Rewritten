@@ -40,7 +40,14 @@ namespace DillyzRoleApi_Rewritten
             {
                 Log.LogInfo("Adding a Jester!");
                 CustomRole.createRole("Jester", "Get voted out to win.", true, false, new Color(90, 50, 200), false,
-                                                                        CustomRoleSide.LoneWolf, false, false, true);
+                                                                        CustomRoleSide.LoneWolf, VentPrivilege.Impostor, false, true);
+                CustomRole.getByName("Jester").a_or_an = "a";
+
+                Log.LogInfo("Adding a Sheriff!");
+                CustomRole.createRole("Sheriff", "Kill the impostor or suicide.", true, true, new Color(255, 185, 30), false,
+                                                                        CustomRoleSide.Crewmate, VentPrivilege.None, true, true);
+                CustomRole.getByName("Sheriff").a_or_an = "a";
+
                 foreach (CustomRole role in CustomRole.allRoles)
                     Log.LogInfo(role.ToString());
             }
