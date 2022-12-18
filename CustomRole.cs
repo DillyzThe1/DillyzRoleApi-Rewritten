@@ -16,14 +16,14 @@ namespace DillyzRoleApi_Rewritten
         public static List<CustomRole> allRoles = new List<CustomRole>();
         public static void appendRole(CustomRole yourRole) => allRoles.Add(yourRole);
         public static CustomRole createRole(String name, String subtext, bool nameColor, bool nameColorPublic, Color roleColor, bool canSeeTeam, CustomRoleSide side,
-                    VentPrivelege ventPrivelege, bool canKill, bool showEjectText) {
+                    VentPrivilege ventPrivilege, bool canKill, bool showEjectText) {
             foreach (CustomRole role in allRoles)
                 if (role.name == name)
                 {
                     HarmonyMain.Instance.Log.LogError($"Role by name \"{role.name}\" already exists!");
                     return role;
                 }
-            CustomRole rolee = new CustomRole(name, subtext, nameColor, nameColorPublic, roleColor, canSeeTeam, side, ventPrivelege, canKill, showEjectText);
+            CustomRole rolee = new CustomRole(name, subtext, nameColor, nameColorPublic, roleColor, canSeeTeam, side, ventPrivilege, canKill, showEjectText);
             CustomRole.appendRole(rolee);
             return rolee;
         }
@@ -48,14 +48,14 @@ namespace DillyzRoleApi_Rewritten
         public bool teamCanSeeYou;                              // Determines if your team can see you.
         public CustomRoleSide side;                             // Determines who you work with.
         //public bool commitsTaxFraud { get; }                  // 192.512.3.62
-        public VentPrivelege ventPrivelege;                     // Your vent privelege level.
+        public VentPrivilege ventPrivilege;                     // Your vent privelege level.
         public bool canKill;                                    // Are you seriously this blind?
         public string ejectionText;                             // "DillyzThe1 was The Jester"
         public bool switchToImpostor = false;                   // Will switch a crewmate role to an Impostor role.
         public string a_or_an = "an";                           // "DillyzThe1 was a Jester" vs "DillyzThe1 was an Jester"
 
         public CustomRole(String name, String subtext, bool nameColor, bool nameColorPublic, Color roleColor, bool canSeeTeam, 
-                            CustomRoleSide side, VentPrivelege ventPrivelege, bool canKill, bool showEjectText) {
+                            CustomRoleSide side, VentPrivilege ventPrivilege, bool canKill, bool showEjectText) {
             this.name = name;
             this.subtext = subtext;
             this.nameColorChanges = nameColor;
@@ -63,7 +63,7 @@ namespace DillyzRoleApi_Rewritten
             this.roleColor = roleColor;
             this.teamCanSeeYou = canSeeTeam;
             this.side = side;
-            this.ventPrivelege = ventPrivelege;
+            this.ventPrivilege = ventPrivilege;
             this.canKill = canKill;
             this.ejectionText = "[0] was ";
             //this.ejectionText_bad = "[0] was not ";
@@ -84,7 +84,7 @@ namespace DillyzRoleApi_Rewritten
         public override string ToString() {
             return $"DillyzRoleApi_Rewritten.CustomRole [name: {this.name}, subtext: {this.subtext}, nameColorChanges: {this.nameColorChanges}, " +
                    $"roleColor: [{this.roleColor.r}, {this.roleColor.g}, {this.roleColor.b}, teamCanSeeYou: {this.teamCanSeeYou}, side: {this.side}, " +
-                   $"ventPrivelege: {this.ventPrivelege}, canKill: {this.canKill}]";
+                   $"ventPrivilege: {this.ventPrivilege}, canKill: {this.canKill}]";
         }
 
         public void WinGame(PlayerControl cause) {
@@ -114,7 +114,7 @@ namespace DillyzRoleApi_Rewritten
         LoneWolf = 3      // You work by yourself.
     }
 
-    internal enum VentPrivelege
+    internal enum VentPrivilege
     {
         None = 0,     // You possess an inability to use vents.
         Impostor = 1, // You inheret the venting power of an Impostor.
