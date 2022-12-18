@@ -9,9 +9,10 @@ using UnityEngine.SceneManagement;
 namespace DillyzRoleApi_Rewritten
 {
     [BepInPlugin(HarmonyMain.MOD_ID, HarmonyMain.MOD_NAME, HarmonyMain.MOD_VERSION)]
-    #if RELEASE
     [BepInProcess("Among Us.exe")]
-    #endif
+    [BepInProcess("Among Us2.exe")]
+    [BepInProcess("Among Us3.exe")]
+    [BepInProcess("Among Us4.exe")]
     public class HarmonyMain : BasePlugin
     {
         public const string MOD_NAME = "DillyzRoleApi", MOD_VERSION = "2.0.0", MOD_ID = "8ac3dbff-b06b-434b-8783-e0a43e7eeb53";
