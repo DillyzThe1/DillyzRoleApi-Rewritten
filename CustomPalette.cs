@@ -13,5 +13,11 @@ namespace DillyzRoleApi_Rewritten
         public static Color ImpostorRed => new Color(253, 25, 25);
         public static Color CrewmateBlue => new Color(139, 253, 253);
         public static Color LoneWolfGray => new Color(125, 125, 165);
+
+        // BASE GAME ROLE MODIFIERS
+        public static Color EngineerOrange => new Color(255, 145, 35);
+        public static Color ScientistTeal => new Color(105, 150, 255);
+        public static Color GuardianAngleLightBlue => new Color(165, 225, 255);
+        public static Color ShapeShifterCrimson => new Color(190, 30, 55);
     }
 }

@@ -19,12 +19,11 @@ namespace DillyzRoleApi_Rewritten
             CustomRole role = CustomRole.getByName(DillyzUtil.getRoleName(PlayerControl.LocalPlayer));
             if (role == null)
             {
-                if (DillyzUtil.roleSide(PlayerControl.LocalPlayer) == CustomRoleSide.Crewmate)
-                    colorHex = DillyzUtil.colorToHex(CustomPalette.CrewmateBlue);
-                else
-                    colorHex = DillyzUtil.colorToHex(CustomPalette.ImpostorRed);
-
-                HarmonyMain.Instance.Log.LogInfo((DillyzUtil.roleSide(PlayerControl.LocalPlayer) == CustomRoleSide.Crewmate) + " " + colorHex);
+                colorHex = DillyzUtil.colorToHex(DillyzUtil.roleColor(PlayerControl.LocalPlayer, false));
+                __instance.__4__this.RoleText.text = $"<{colorHex}>{__instance.__4__this.RoleText.text}</color>";
+                __instance.__4__this.RoleBlurbText.text = $"<{colorHex}>{__instance.__4__this.RoleBlurbText.text}</color>";
+                __instance.__4__this.YouAreText.text = $"<{colorHex}>Your role is</color>";
+                //HarmonyMain.Instance.Log.LogInfo((DillyzUtil.roleSide(PlayerControl.LocalPlayer) == CustomRoleSide.Crewmate) + " " + colorHex);
                 return;
             }
 

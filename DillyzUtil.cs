@@ -39,13 +39,68 @@ namespace DillyzRoleApi_Rewritten
 
         public static CustomRoleSide roleSide(PlayerControl player)
         {
-            if (player == null || player.PlayerId == null || player.Data == null)
+            if (player == null || player.Data == null)
                 return CustomRoleSide.Crewmate;
-            if (CustomRole.getRoleName(player.PlayerId) != "")
+            if (CustomRole.getRoleName(player.PlayerId) != "" && CustomRole.getRoleName(player.PlayerId) != null)
                 return CustomRole.getByName(CustomRole.getRoleName(player.PlayerId)).side;
             if (player.Data.RoleType == RoleTypes.Impostor || player.Data.RoleType == RoleTypes.ImpostorGhost || player.Data.RoleType == RoleTypes.Shapeshifter)
                 return CustomRoleSide.Impostor;
             return CustomRoleSide.Crewmate;
+        }
+
+        public static Color roleColor(PlayerControl player, bool nameText)
+        {
+            if (player == null || player.Data == null)
+                return nameText ? CustomPalette.White : CustomPalette.CrewmateBlue;
+            if (CustomRole.getRoleName(player.PlayerId) != "" && CustomRole.getRoleName(player.PlayerId) != null)
+                return CustomRole.getByName(CustomRole.getRoleName(player.PlayerId)).roleColor;
+
+            switch (player.Data.RoleType) {
+                case RoleTypes.Impostor | RoleTypes.ImpostorGhost:
+                    return CustomPalette.ImpostorRed;
+                case RoleTypes.Shapeshifter:
+                    return CustomPalette.ShapeShifterCrimson;
+                case RoleTypes.Engineer:
+                    return CustomPalette.EngineerOrange;
+                case RoleTypes.Scientist:
+                    return CustomPalette.ScientistTeal;
+                case RoleTypes.GuardianAngel:
+                    return CustomPalette.GuardianAngleLightBlue;
+            }
+
+            return nameText ? CustomPalette.White : CustomPalette.CrewmateBlue;
+        }
+
+        public static string roleText(PlayerControl player)
+        {
+            if (player == null)
+                return "";
+            if (player == null || player.Data == null)
+                return "You're a Crewmate.";
+            string rc = colorToHex(roleColor(player, false));
+
+            if (CustomRole.getRoleName(player.PlayerId) != "" && CustomRole.getRoleName(player.PlayerId) != null)
+            {
+                CustomRole cr = CustomRole.getByName(CustomRole.getRoleName(player.PlayerId));
+                if (cr.name != "" && cr.name != null)
+                    return $"\n\n<{rc}>You're {cr.a_or_an} {cr.name}. {cr.subtext}</color>";
+            }
+
+            switch (player.Data.RoleType)
+            {
+                case RoleTypes.Impostor | RoleTypes.ImpostorGhost:
+                    return $"\n\n<{rc}>You're an Impostor.</color>";
+                case RoleTypes.Shapeshifter:
+                    return $"\n\n<{rc}>You're a Shapeshifter. Shapeshift to decieve the crew.</color>";
+                case RoleTypes.Engineer:
+                    return $"\n\n<{rc}>You're an Engineer. Use the vents to help the crew.</color>";
+                case RoleTypes.Scientist:
+                    return $"\n\n<{rc}>You're a Scientist. Use vitals to track the crew.</color>";
+                case RoleTypes.GuardianAngel:
+                    return $"\n\n<{rc}>You're a Guardian Angel. Protect the crew from kills.</color>";
+            }
+
+            return "You're a Crewmate.";
         }
 
         public static bool templateRole(PlayerControl player) {
