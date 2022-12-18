@@ -60,10 +60,11 @@ namespace DillyzRoleApi_Rewritten
                 return;
 
             // task list
-            if (!PlayerControl.LocalPlayer.Data.IsDead || PlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.GuardianAngel)
+            bool udiededed = PlayerControl.LocalPlayer.Data.IsDead;
+            if (!udiededed || PlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.GuardianAngel)
             {
                 string intendedString = DillyzUtil.roleText(PlayerControl.LocalPlayer);
-                if (!__instance.TaskPanel.taskText.text.Contains(intendedString))
+                if (__instance.TaskPanel.taskText.text.Length != 0 && !__instance.TaskPanel.taskText.text.Contains(intendedString))
                 {
                     if (PlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.Scientist)
                         __instance.TaskPanel.taskText.text = 
@@ -81,10 +82,10 @@ namespace DillyzRoleApi_Rewritten
 
             if (localRole != null)
             {
-                //GameObject buttonIWant = __instance.Find("Button").transform.Find("BottomRight").gameObject;
+                //GameObject buttonIWant = __instance.Find("Buttons").transform.Find("BottomRight").gameObject;
                 //buttonIWant.transform.Find("").gameObject.active = localRole.ventPrivilege == VentPrivilege.Impostor;
-                __instance.ImpostorVentButton.gameObject.active = localRole.ventPrivilege == VentPrivilege.Impostor;
-                __instance.KillButton.gameObject.active = localRole.canKill;
+                __instance.ImpostorVentButton.gameObject.active = (localRole.ventPrivilege == VentPrivilege.Impostor) && !udiededed;
+                __instance.KillButton.gameObject.active = localRole.canKill && !udiededed;
             }
         }
 

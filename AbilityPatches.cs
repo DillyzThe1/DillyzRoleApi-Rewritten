@@ -98,7 +98,6 @@ namespace DillyzRoleApi_Rewritten
         }
 
 
-        // screw ur bans lmao
         [HarmonyPatch(typeof(ActionButton), nameof(ActionButton.CanInteract))]
         public static class ActionButtonInteractionPatch
         {
@@ -112,14 +111,51 @@ namespace DillyzRoleApi_Rewritten
                 switch (__instance.name) {
                     case "KillButton":
                         if (role.canKill)
+                            __result = true;
+                        else
                             __result = false;
                         return false;
                     case "VentButton":
                         if (role.ventPrivilege != VentPrivilege.None)
+                            __result = true;
+                        else
                             __result = false;
                         return false;
                 }
                 return true;
+            }
+        }
+        [HarmonyPatch(typeof(KillButton), nameof(KillButton.DoClick))]
+        [HarmonyPriority(Priority.Last)]
+        public static class KillButtonClickPatch
+        {
+            public static bool Prefix(KillButton __instance)
+            {
+                /*string rolename = DillyzUtil.getRoleName(PlayerControl.LocalPlayer);
+                CustomRole role = CustomRole.getByName(rolename);
+                if (PlayerControl.LocalPlayer.Data.IsDead || !PlayerControl.LocalPlayer.CanMove || __instance.currentTarget == null || __instance.isCoolingDown 
+                    || (rolename != "Impostor" && rolename != "ShapeShifter" && role == null))
+                    return false;
+
+                if (!role.canKill)
+                    return false;
+
+                PlayerControl.LocalPlayer.CheckMurder(__instance.currentTarget);
+                __instance.SetTarget(null);*/
+
+                string rolename = DillyzUtil.getRoleName(PlayerControl.LocalPlayer);
+                CustomRole role = CustomRole.getByName(rolename);
+                if (PlayerControl.LocalPlayer.Data.IsDead || !PlayerControl.LocalPlayer.CanMove || __instance.currentTarget == null || __instance.isCoolingDown 
+                    || (rolename != "Impostor" && rolename != "ShapeShifter" && role == null))
+                    return false;
+
+                if (!role.canKill)
+                    return false;
+
+                PlayerControl.LocalPlayer.CheckMurder(__instance.currentTarget);
+                __instance.SetTarget(null);
+
+                return false;
             }
         }
     }
