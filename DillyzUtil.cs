@@ -68,7 +68,7 @@ namespace DillyzRoleApi_Rewritten
                     return CustomPalette.GuardianAngleLightBlue;
             }
 
-            return nameText ? CustomPalette.White : CustomPalette.CrewmateBlue;
+            return player.Data.Role.IsImpostor ? CustomPalette.ImpostorRed : (nameText ? CustomPalette.White : CustomPalette.CrewmateBlue);
         }
 
         public static string roleText(PlayerControl player)

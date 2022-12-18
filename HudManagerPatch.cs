@@ -37,7 +37,10 @@ namespace DillyzRoleApi_Rewritten
                 // if the role is not there or doesn't change color, leave it alone
                 if (theRole == null || !theRole.nameColorChanges)
                 {
-                    if (youre)
+                    if (PlayerControl.LocalPlayer.Data.Role.IsImpostor && player.Data.Role.IsImpostor)
+                        HudManagerPatch.displayColor(__instance, player, (player.Data.RoleType == RoleTypes.Shapeshifter) ?
+                                                                        CustomPalette.ShapeShifterCrimson : CustomPalette.ImpostorRed);
+                    else if (youre)
                         HudManagerPatch.displayColor(__instance, player, DillyzUtil.roleColor(player, true));
                     else
                         HudManagerPatch.displayColor(__instance, player, CustomPalette.White);
