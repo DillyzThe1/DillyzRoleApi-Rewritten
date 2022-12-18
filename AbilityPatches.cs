@@ -145,14 +145,28 @@ namespace DillyzRoleApi_Rewritten
 
                 string rolename = DillyzUtil.getRoleName(PlayerControl.LocalPlayer);
                 CustomRole role = CustomRole.getByName(rolename);
-                if (PlayerControl.LocalPlayer.Data.IsDead || !PlayerControl.LocalPlayer.CanMove || __instance.currentTarget == null || __instance.isCoolingDown 
-                    || (rolename != "Impostor" && rolename != "ShapeShifter" && role == null))
+                if (PlayerControl.LocalPlayer.Data.IsDead || !PlayerControl.LocalPlayer.CanMove || __instance.currentTarget == null || __instance.isCoolingDown)
                     return false;
 
-                if (!role.canKill)
+                if (rolename == "Impostor" || rolename == "ShapeShifter" || (role != null && role.switchToImpostor))
+                    return true;
+
+                if (role == null || !role.canKill)
                     return false;
 
-                PlayerControl.LocalPlayer.CheckMurder(__instance.currentTarget);
+                //PlayerControl.LocalPlayer.CheckMurder(__instance.currentTarget);
+
+                RoleTypes oldroletype = PlayerControl.LocalPlayer.Data.RoleType;
+                RoleBehaviour oldrole = PlayerControl.LocalPlayer.Data.Role;
+
+                PlayerControl.LocalPlayer.Data.RoleType = RoleTypes.Impostor;
+                PlayerControl.LocalPlayer.Data.Role = new ImpostorRole();
+
+                PlayerControl.LocalPlayer.MurderPlayer(__instance.currentTarget);
+
+                PlayerControl.LocalPlayer.Data.RoleType = oldroletype;
+                PlayerControl.LocalPlayer.Data.Role = oldrole;
+
                 __instance.SetTarget(null);
 
                 return false;

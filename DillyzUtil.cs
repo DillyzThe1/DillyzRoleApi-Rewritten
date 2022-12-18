@@ -130,7 +130,45 @@ namespace DillyzRoleApi_Rewritten
             return "0";
         }
         private static String convNumToHexNum(int num) => convDigitToHexNum(num / 16) + convDigitToHexNum(num % 16);
-        public static String colorToHex(Color ogColor)  => "#" + convNumToHexNum((int)Math.Floor(ogColor.r)) + 
+        public static String colorToHex(Color ogColor) => "#" + convNumToHexNum((int)Math.Floor(ogColor.r)) +
                                                                 convNumToHexNum((int)Math.Floor(ogColor.g)) + convNumToHexNum((int)Math.Floor(ogColor.b));
+
+
+        public static PlayerControl getClosestPlayer(PlayerControl centerPlayer)
+        {
+            return getClosestPlayer(centerPlayer, 2.5);
+        }
+        public static PlayerControl getClosestPlayer(PlayerControl centerPlayer, double mindist)
+        {
+            return getClosestPlayer(centerPlayer, null, 2.5, true);
+        }
+
+        public static PlayerControl getClosestPlayer(PlayerControl centerPlayer, List<String> roleFilters, double mindist, bool shouldBeAlive) {
+            List<PlayerControl> welcomeOldPlayers = PlayerControl.AllPlayerControls.ToArray().ToList();
+            PlayerControl close = null;
+            double playerDist = mindist;
+
+            if (roleFilters != null)
+                welcomeOldPlayers.RemoveAll(x => roleFilters.Contains(getRoleName(x)));
+            welcomeOldPlayers.RemoveAll(x => x.Data.IsDead == shouldBeAlive);
+
+            foreach (PlayerControl player in welcomeOldPlayers)
+            {
+                double dist = getDistBetweenPlayers(centerPlayer, player);
+                if (dist >= playerDist)
+                    continue;
+                playerDist = dist;
+                close = player;
+            }
+            return close;
+        }
+        
+        public static double getDistBetweenPlayers(PlayerControl player, PlayerControl refplayer)
+        {
+            Vector2 refpos = refplayer.GetTruePosition();
+            Vector2 playerpos = player.GetTruePosition();
+            // maths
+            return Math.Sqrt((refpos[0] - playerpos[0]) * (refpos[0] - playerpos[0]) + (refpos[1] - playerpos[1]) * (refpos[1] - playerpos[1]));
+        }
     }
 }

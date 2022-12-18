@@ -64,7 +64,7 @@ namespace DillyzRoleApi_Rewritten
             if (!udiededed || PlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.GuardianAngel)
             {
                 string intendedString = DillyzUtil.roleText(PlayerControl.LocalPlayer);
-                if (__instance.TaskPanel.taskText.text.Length != 0 && !__instance.TaskPanel.taskText.text.Contains(intendedString))
+                if (__instance.TaskPanel.taskText.text.Length > 0 && !__instance.TaskPanel.taskText.text.Contains(intendedString))
                 {
                     if (PlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.Scientist)
                         __instance.TaskPanel.taskText.text = 
@@ -85,9 +85,16 @@ namespace DillyzRoleApi_Rewritten
                 //GameObject buttonIWant = __instance.Find("Buttons").transform.Find("BottomRight").gameObject;
                 //buttonIWant.transform.Find("").gameObject.active = localRole.ventPrivilege == VentPrivilege.Impostor;
                 __instance.ImpostorVentButton.gameObject.active = (localRole.ventPrivilege == VentPrivilege.Impostor) && !udiededed;
-                __instance.KillButton.gameObject.active = localRole.canKill && !udiededed;
+
+                __instance.KillButton.gameObject.SetActive(localRole.canKill && !udiededed);
+                //__instance.KillButton.canInteract = __instance.KillButton.enabled = __instance.KillButton.gameObject.active;
+                if (__instance.KillButton.gameObject.active)
+                {
+                    __instance.KillButton.SetCoolDown(0, GameOptionsManager.Instance.currentNormalGameOptions.KillCooldown);
+                    __instance.KillButton.SetTarget(DillyzUtil.getClosestPlayer(PlayerControl.LocalPlayer));
+                }
+                }
             }
-        }
 
         public static void displayColor(HudManager __instance, PlayerControl player, Color roleColor) {
             string hex = DillyzUtil.colorToHex(roleColor);
