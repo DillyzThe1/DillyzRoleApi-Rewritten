@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AmongUs.GameOptions;
+using Hazel;
 using UnityEngine;
 
 namespace DillyzRoleApi_Rewritten
@@ -136,11 +137,11 @@ namespace DillyzRoleApi_Rewritten
 
         public static PlayerControl getClosestPlayer(PlayerControl centerPlayer)
         {
-            return getClosestPlayer(centerPlayer, 2.5);
+            return getClosestPlayer(centerPlayer, GameOptionsManager.Instance.currentNormalGameOptions.KillDistance);
         }
         public static PlayerControl getClosestPlayer(PlayerControl centerPlayer, double mindist)
         {
-            return getClosestPlayer(centerPlayer, null, 2.5, true);
+            return getClosestPlayer(centerPlayer, null, mindist, true);
         }
 
         public static PlayerControl getClosestPlayer(PlayerControl centerPlayer, List<String> roleFilters, double mindist, bool shouldBeAlive) {
@@ -162,6 +163,38 @@ namespace DillyzRoleApi_Rewritten
             }
             return close;
         }
+
+        // A workaround for killing.
+        public static void RpcCommitAssassination(PlayerControl assassinator, PlayerControl target)
+        {
+            string rolename = getRoleName(assassinator);
+
+            if (rolename == "Impostor" || rolename == "ShapeShifter")
+            {
+                assassinator.RpcMurderPlayer(target);
+                return;
+            }
+
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.Assassinate, Hazel.SendOption.None, -1);
+            writer.Write(assassinator.PlayerId);
+            writer.Write(target.PlayerId);
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+
+            commitAssassination(assassinator, target);
+        }
+
+        public static void commitAssassination(PlayerControl assassinator, PlayerControl target) {
+            RoleTypes oldroletype = assassinator.Data.RoleType;
+            RoleBehaviour oldrole = assassinator.Data.Role;
+
+            assassinator.Data.RoleType = RoleTypes.Impostor;
+            assassinator.Data.Role = new ImpostorRole();
+
+            assassinator.MurderPlayer(target);
+
+            assassinator.Data.RoleType = oldroletype;
+            assassinator.Data.Role = oldrole;
+        } 
         
         public static double getDistBetweenPlayers(PlayerControl player, PlayerControl refplayer)
         {

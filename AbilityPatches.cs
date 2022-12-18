@@ -154,19 +154,7 @@ namespace DillyzRoleApi_Rewritten
                 if (role == null || !role.canKill)
                     return false;
 
-                //PlayerControl.LocalPlayer.CheckMurder(__instance.currentTarget);
-
-                RoleTypes oldroletype = PlayerControl.LocalPlayer.Data.RoleType;
-                RoleBehaviour oldrole = PlayerControl.LocalPlayer.Data.Role;
-
-                PlayerControl.LocalPlayer.Data.RoleType = RoleTypes.Impostor;
-                PlayerControl.LocalPlayer.Data.Role = new ImpostorRole();
-
-                PlayerControl.LocalPlayer.MurderPlayer(__instance.currentTarget);
-
-                PlayerControl.LocalPlayer.Data.RoleType = oldroletype;
-                PlayerControl.LocalPlayer.Data.Role = oldrole;
-
+                DillyzUtil.RpcCommitAssassination(PlayerControl.LocalPlayer, __instance.currentTarget);
                 __instance.SetTarget(null);
 
                 return false;
