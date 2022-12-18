@@ -89,5 +89,31 @@ namespace DillyzRoleApi_Rewritten
                 __result = false;
             }
         }
+
+
+        // screw ur bans lmao
+        [HarmonyPatch(typeof(ActionButton), nameof(ActionButton.CanInteract))]
+        public static class ActionButtonInteractionPatch
+        {
+            public static bool Prefix(ActionButton __instance, ref bool __result)
+            {
+                CustomRole role = CustomRole.getByName(DillyzUtil.getRoleName(PlayerControl.LocalPlayer));
+
+                if (role == null)
+                    return true;
+
+                switch (__instance.name) {
+                    case "KillButton":
+                        if (role.canKill)
+                            __result = false;
+                        return false;
+                    case "VentButton":
+                        if (role.ventPrivilege != VentPrivilege.None)
+                            __result = false;
+                        return false;
+                }
+                return true;
+            }
+        }
     }
 }

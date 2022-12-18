@@ -28,12 +28,6 @@ namespace DillyzRoleApi_Rewritten
             string rnnnmn = DillyzUtil.getRoleName(PlayerControl.LocalPlayer);
             CustomRole localRole = (rnnnmn != null && rnnnmn != "") ? CustomRole.getByName(rnnnmn) : null;
 
-            if (localRole != null)
-            {
-                __instance.ImpostorVentButton.enabled = localRole.ventPrivilege == VentPrivilege.Impostor;
-                __instance.KillButton.enabled = localRole.canKill;
-            }
-
             foreach (PlayerControl player in PlayerControl.AllPlayerControls)
             {
                 bool youre = player.PlayerId == PlayerControl.LocalPlayer.PlayerId;
@@ -62,6 +56,9 @@ namespace DillyzRoleApi_Rewritten
                     HudManagerPatch.displayColor(__instance, player, CustomPalette.White);
             }
 
+            if (AmongUsClient.Instance == null || AmongUsClient.Instance.GameState != InnerNetClient.GameStates.Started)
+                return;
+
             // task list
             if (!PlayerControl.LocalPlayer.Data.IsDead || PlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.GuardianAngel)
             {
@@ -80,6 +77,14 @@ namespace DillyzRoleApi_Rewritten
 
                     __instance.TaskPanel.taskText.text += intendedString;
                 }
+            }
+
+            if (localRole != null)
+            {
+                //GameObject buttonIWant = __instance.Find("Button").transform.Find("BottomRight").gameObject;
+                //buttonIWant.transform.Find("").gameObject.active = localRole.ventPrivilege == VentPrivilege.Impostor;
+                __instance.ImpostorVentButton.gameObject.active = localRole.ventPrivilege == VentPrivilege.Impostor;
+                __instance.KillButton.gameObject.active = localRole.canKill;
             }
         }
 

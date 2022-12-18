@@ -31,7 +31,7 @@ namespace DillyzRoleApi_Rewritten
                 case RoleTypes.GuardianAngel:
                     return "GuardianAngel";
                 case RoleTypes.Shapeshifter:
-                    return "Shapeshifter";
+                    return "ShapeShifter";
             }
 
             return "Crewmate";
