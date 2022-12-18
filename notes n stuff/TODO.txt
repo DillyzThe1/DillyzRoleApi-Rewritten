@@ -1,0 +1,7 @@
+Custom button data & support w/ on click funcs and whatnot.
+Make engineer vent privilege work.
+Allow canKill to work.
+Custom settings.
+Custom settings per role.
+Custom advanced role settings.
+more
