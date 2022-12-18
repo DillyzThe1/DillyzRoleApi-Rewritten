@@ -23,8 +23,6 @@ namespace DillyzRoleApi_Rewritten
                     Vector3 pos = __instance.transform.position;
                     dist = Vector2.Distance(truepos, pos);
                     canUse &= (dist <= __instance.UsableDistance);
-
-                    __instance.GetComponent<SpriteRenderer>().material.SetColor("_OutlineColor", DillyzUtil.roleColor(PlayerControl.LocalPlayer, false));
                 }
                 __result = dist;
             }
@@ -44,6 +42,15 @@ namespace DillyzRoleApi_Rewritten
                     return false;
 
                 return role.ventPrivilege != VentPrivilege.None;
+            }
+        }
+        [HarmonyPatch(typeof(Vent), nameof(Vent.SetOutline))]
+        public class VentOutlinePatch
+        {
+            public static void Postfix(Vent __instance, bool on, bool mainTarget)
+            {
+                //__instance.GetComponent<SpriteRenderer>().material.SetFloat("_Outline", on ? 1f: 0f);
+                __instance.GetComponent<SpriteRenderer>().material.SetColor("_OutlineColor", DillyzUtil.roleColor(PlayerControl.LocalPlayer, false));
             }
         }
 
