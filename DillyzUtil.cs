@@ -41,7 +41,10 @@ namespace DillyzRoleApi_Rewritten
         public static CustomRoleSide roleSide(PlayerControl player)
         {
             if (player == null || player.Data == null)
+            {
+                HarmonyMain.Instance.Log.LogInfo("hey noob ur mod broke");
                 return CustomRoleSide.Crewmate;
+            }
             if (CustomRole.getRoleName(player.PlayerId) != "" && CustomRole.getRoleName(player.PlayerId) != null)
                 return CustomRole.getByName(CustomRole.getRoleName(player.PlayerId)).side;
             if (player.Data.RoleType == RoleTypes.Impostor || player.Data.RoleType == RoleTypes.ImpostorGhost || player.Data.RoleType == RoleTypes.Shapeshifter)
@@ -137,7 +140,7 @@ namespace DillyzRoleApi_Rewritten
 
         public static PlayerControl getClosestPlayer(PlayerControl centerPlayer)
         {
-            return getClosestPlayer(centerPlayer, GameOptionsManager.Instance.currentNormalGameOptions.KillDistance);
+            return getClosestPlayer(centerPlayer, GameOptionsData.KillDistances[GameOptionsManager.Instance.currentNormalGameOptions.KillDistance]);
         }
         public static PlayerControl getClosestPlayer(PlayerControl centerPlayer, double mindist)
         {
@@ -155,6 +158,8 @@ namespace DillyzRoleApi_Rewritten
 
             foreach (PlayerControl player in welcomeOldPlayers)
             {
+                if (player == centerPlayer)
+                    continue;
                 double dist = getDistBetweenPlayers(centerPlayer, player);
                 if (dist >= playerDist)
                     continue;
@@ -167,33 +172,32 @@ namespace DillyzRoleApi_Rewritten
         // A workaround for killing.
         public static void RpcCommitAssassination(PlayerControl assassinator, PlayerControl target)
         {
-            string rolename = getRoleName(assassinator);
-
-            if (rolename == "Impostor" || rolename == "ShapeShifter")
-            {
-                assassinator.RpcMurderPlayer(target);
-                return;
-            }
+            commitAssassination(assassinator, target);
 
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.Assassinate, Hazel.SendOption.None, -1);
             writer.Write(assassinator.PlayerId);
             writer.Write(target.PlayerId);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
-
-            commitAssassination(assassinator, target);
         }
 
         public static void commitAssassination(PlayerControl assassinator, PlayerControl target) {
             RoleTypes oldroletype = assassinator.Data.RoleType;
             RoleBehaviour oldrole = assassinator.Data.Role;
-
             assassinator.Data.RoleType = RoleTypes.Impostor;
             assassinator.Data.Role = new ImpostorRole();
+
+            RoleTypes oldroletype_target = target.Data.RoleType;
+            RoleBehaviour oldrole_target = target.Data.Role;
+            target.Data.RoleType = RoleTypes.Crewmate;
+            target.Data.Role = new CrewmateRole();
 
             assassinator.MurderPlayer(target);
 
             assassinator.Data.RoleType = oldroletype;
             assassinator.Data.Role = oldrole;
+
+            target.Data.RoleType = oldroletype_target;
+            target.Data.Role = oldrole_target;
         } 
         
         public static double getDistBetweenPlayers(PlayerControl player, PlayerControl refplayer)

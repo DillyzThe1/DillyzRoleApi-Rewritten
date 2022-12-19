@@ -107,17 +107,51 @@ namespace DillyzRoleApi_Rewritten
             public static void Prefix(AmongUsClient __instance, EndGameResult endGameResult) {
                 gameOverReason = endGameResult.GameOverReason;
 
-                 if (customWin)
+                List<PlayerControl> playersLol = PlayerControl.AllPlayerControls.ToArray().ToList();
+                HarmonyMain.Instance.Log.LogInfo("got pipe bombed " + playersLol.Count);
+
+                if (customWin)
+                {
+                    foreach (PlayerControl player in playersLol)
+                    {
+                        if (customWinners.Contains(player.PlayerId))
+                        {
+                            HarmonyMain.Instance.Log.LogInfo(player.name + " is now marked as Crewmate!");
+                            player.Data.RoleType = AmongUs.GameOptions.RoleTypes.Crewmate;
+                            player.Data.Role = new CrewmateRole();
+                        }
+                        else
+                        {
+                            HarmonyMain.Instance.Log.LogInfo(player.name + " is now marked as Impostor!");
+                            player.Data.RoleType = AmongUs.GameOptions.RoleTypes.Impostor;
+                            player.Data.Role = new ImpostorRole();
+                        }
+                    }
+
+                    CustomRole.roleNameMap.Clear();
                     return;
+                }
 
                 bool impsWon = (gameOverReason == GameOverReason.ImpostorByKill || gameOverReason == GameOverReason.ImpostorBySabotage ||
                     gameOverReason == GameOverReason.ImpostorByVote || gameOverReason == GameOverReason.ImpostorDisconnect);
 
-                foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+                foreach (PlayerControl player in playersLol)
                 {
-                    CustomRoleSide rs = DillyzUtil.roleSide(DillyzUtil.findPlayerControl(player.PlayerId));
-                    if (rs == CustomRoleSide.Crewmate || rs == CustomRoleSide.Impostor)
+                    CustomRoleSide rs = DillyzUtil.roleSide(player);
+                    if (rs == CustomRoleSide.Crewmate)
+                    {
+                        HarmonyMain.Instance.Log.LogInfo(player.name + " is now marked as Crewmate!");
+                        player.Data.RoleType = AmongUs.GameOptions.RoleTypes.Crewmate;
+                        player.Data.Role = new CrewmateRole();
                         continue;
+                    }
+                    if (rs == CustomRoleSide.Impostor)
+                    {
+                        HarmonyMain.Instance.Log.LogInfo(player.name + " is now marked as Impostor!");
+                        player.Data.RoleType = AmongUs.GameOptions.RoleTypes.Impostor;
+                        player.Data.Role = new ImpostorRole();
+                        continue;
+                    }
 
                     if (impsWon)
                     {
@@ -136,5 +170,7 @@ namespace DillyzRoleApi_Rewritten
                 CustomRole.roleNameMap.Clear();
             }
         }
+
+
     }
 }

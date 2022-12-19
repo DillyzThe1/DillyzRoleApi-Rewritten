@@ -148,7 +148,7 @@ namespace DillyzRoleApi_Rewritten
                 if (PlayerControl.LocalPlayer.Data.IsDead || !PlayerControl.LocalPlayer.CanMove || __instance.currentTarget == null || __instance.isCoolingDown)
                     return false;
 
-                if (rolename == "Impostor" || rolename == "ShapeShifter" || (role != null && role.switchToImpostor))
+                if (rolename == "Impostor" || rolename == "ShapeShifter" || rolename == "GuardianAngel" || (role != null && role.switchToImpostor))
                     return true;
 
                 if (role == null || !role.canKill)
