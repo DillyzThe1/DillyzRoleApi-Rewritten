@@ -89,8 +89,19 @@ namespace DillyzRoleApi_Rewritten
                 }
             }
 
+            // DOING THIS FOR THE RETURN THING BC I LIKE RETURNS
+            displayActionButton(__instance, localRole, udiededed);
+        }
+
+        public static void displayActionButton(HudManager __instance, CustomRole localRole, bool udiededed) {
             if (localRole != null)
             {
+                if (MeetingHud.Instance != null)
+                {
+                    __instance.ImpostorVentButton.gameObject.active = false;
+                    __instance.KillButton.gameObject.SetActive(false);
+                    return;
+                }
                 //GameObject buttonIWant = __instance.Find("Buttons").transform.Find("BottomRight").gameObject;
                 //buttonIWant.transform.Find("").gameObject.active = localRole.ventPrivilege == VentPrivilege.Impostor;
                 __instance.ImpostorVentButton.gameObject.active = (localRole.ventPrivilege == VentPrivilege.Impostor) && !udiededed;
