@@ -48,6 +48,17 @@ namespace DillyzRoleApi_Rewritten
                                                                         CustomRoleSide.Crewmate, VentPrivilege.None, true, true);
                 CustomRole.getByName("Sheriff").a_or_an = "a";
 
+                Log.LogInfo("Adding a funny button!");
+                CustomButton.addButton("Fred", "DillyzRoleApi-Rewritten.Assets.uncle_fred.png", 20, true, new string[] { "Scientist" }, new string[] {}, 
+                delegate (CustomActionButton button, bool success) {
+                    if (!success)
+                        return;
+
+                    Log.LogInfo(button.curTarget.name + " was targetted by fred!");
+
+                    DillyzUtil.RpcCommitAssassination(PlayerControl.LocalPlayer, button.curTarget);
+                });
+
                 foreach (CustomRole role in CustomRole.allRoles)
                     Log.LogInfo(role.ToString());
             }

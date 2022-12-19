@@ -1,0 +1,4 @@
+put ur 110x110 image as Assets/image_name.png
+drag assets folder in vs csproj
+right click image in vs
+"Embedded resource"

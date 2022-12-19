@@ -16,6 +16,35 @@ namespace DillyzRoleApi_Rewritten
     {
         public static void Postfix(HudManager __instance) {
             HudManagerPatch.lastKillThingForCustoms = DateTime.UtcNow;
+
+            if (__instance.KillButton == null) {
+                HarmonyMain.Instance.Log.LogInfo("No kill button here!");
+                return;
+            }
+
+            Transform buttonParent = __instance.KillButton.transform.parent;
+            HudManagerPatch.AllActiveButtons = new List<CustomActionButton>();
+
+            foreach (CustomButton button in CustomButton.AllCustomButtons)
+            {
+                CustomActionButton skillIssue = new CustomActionButton(button);
+                skillIssue.name = button.name + "Button";
+                skillIssue.transform.parent = buttonParent;
+                HudManagerPatch.AllActiveButtons.Add(skillIssue);
+            }
+
+        }
+    }
+
+    [HarmonyPatch(typeof(HudManager), nameof(HudManager.OnDestroy))]
+    class HudManagerDestroyPatch
+    {
+        public static void Prefix(HudManager __instance)
+        {
+            for (int i = 0; i < HudManagerPatch.AllActiveButtons.Count; i++)
+                GameObject.Destroy(HudManagerPatch.AllActiveButtons[i]);
+            HudManagerPatch.AllActiveButtons.Clear();
+            HudManagerPatch.AllActiveButtons = null;
         }
     }
 
@@ -23,6 +52,8 @@ namespace DillyzRoleApi_Rewritten
     class HudManagerPatch
     {
         public static DateTime lastKillThingForCustoms = DateTime.UtcNow;
+        public static List<CustomActionButton> AllActiveButtons;
+
         public static void Postfix(HudManager __instance)
         {
             if (/*AmongUsClient.Instance == null || AmongUsClient.Instance.GameState != InnerNetClient.GameStates.Started ||*/ PlayerControl.LocalPlayer == null ||
@@ -100,6 +131,10 @@ namespace DillyzRoleApi_Rewritten
                 {
                     __instance.ImpostorVentButton.gameObject.active = false;
                     __instance.KillButton.gameObject.SetActive(false);
+
+                    if (AllActiveButtons != null)
+                        foreach (CustomActionButton button in AllActiveButtons)
+                            button.gameObject.SetActive(false);
                     return;
                 }
                 //GameObject buttonIWant = __instance.Find("Buttons").transform.Find("BottomRight").gameObject;
@@ -116,6 +151,10 @@ namespace DillyzRoleApi_Rewritten
                     __instance.KillButton.SetCoolDown(timeRemaining < 0 ? 0 : timeRemaining, fullCooldown);
                     __instance.KillButton.SetTarget(DillyzUtil.getClosestPlayer(PlayerControl.LocalPlayer));
                 }
+
+                if (AllActiveButtons != null)
+                    foreach (CustomActionButton button in AllActiveButtons)
+                        button.gameObject.SetActive(button.CanUse());
             }
         }
 

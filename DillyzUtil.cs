@@ -144,12 +144,12 @@ namespace DillyzRoleApi_Rewritten
         }
         public static PlayerControl getClosestPlayer(PlayerControl centerPlayer, double mindist)
         {
-            return getClosestPlayer(centerPlayer, null, mindist, true);
+            return getClosestPlayer(centerPlayer, null, mindist, true, false);
         }
 
-        public static PlayerControl getClosestPlayer(PlayerControl centerPlayer, List<String> roleFilters, double mindist, bool shouldBeAlive) {
+        public static PlayerControl getClosestPlayer(PlayerControl centerPlayer, List<String> roleFilters, double mindist, bool shouldBeAlive, bool canTargetSelf) {
             List<PlayerControl> welcomeOldPlayers = PlayerControl.AllPlayerControls.ToArray().ToList();
-            PlayerControl close = null;
+            PlayerControl close = canTargetSelf ? PlayerControl.LocalPlayer : null;
             double playerDist = mindist;
 
             if (roleFilters != null)
