@@ -102,58 +102,70 @@ namespace DillyzRoleApi_Rewritten
             displayActionButton(__instance, localRole, udiededed);
         }
 
-        public static void MakeFunnyThing(GameObject baseThing) {
-            HarmonyMain.Instance.Log.LogInfo("bruh moment");
-
+        public static void MakeFunnyThing(KillButton killButton, AbilityButton abilityButton) {
             if (CustomButton.AllCustomButtons.Count < 1)
                 return;
 
-            HarmonyMain.Instance.Log.LogInfo("bruh moment1");
             HudManagerPatch.lastKillThingForCustoms = DateTime.UtcNow;
 
-            HarmonyMain.Instance.Log.LogInfo("bruh moment12");
-            Transform buttonParent = baseThing.transform.parent;
-            HarmonyMain.Instance.Log.LogInfo("bruh moment123");
+            Transform buttonParent = killButton.gameObject.transform.parent;
             HudManagerPatch.AllActiveButtons = new List<CustomActionButton>();
 
-            HarmonyMain.Instance.Log.LogInfo("bruh moment1234");
             foreach (CustomButton button in CustomButton.AllCustomButtons)
             {
-                HarmonyMain.Instance.Log.LogInfo("bruh moment12345");
                 GameObject buttonObject = new GameObject();
-                HarmonyMain.Instance.Log.LogInfo("bruh moment123456");
+                HarmonyMain.Instance.Log.LogInfo("bruh moment12345");
                 CustomActionButton skillIssue = buttonObject.AddComponent<CustomActionButton>();
-                HarmonyMain.Instance.Log.LogInfo("bruh moment1234567");
                 skillIssue.name = button.name + "Button";
-                skillIssue.Setup(button);
-                HarmonyMain.Instance.Log.LogInfo("bruh moment12345678");
+
+                // the actual thing lol
+                skillIssue.graphic = new GameObject().AddComponent<SpriteRenderer>();
+                skillIssue.graphic.transform.parent = skillIssue.transform;
+                skillIssue.graphic.gameObject.name = "Button";
+
+                skillIssue.usesRemainingSprite = GameObject.Instantiate(abilityButton.usesRemainingSprite);
+                skillIssue.usesRemainingSprite.transform.parent = skillIssue.transform;
+                skillIssue.usesRemainingSprite.name = "Uses";
+
+                skillIssue.usesRemainingText = GameObject.Instantiate(abilityButton.usesRemainingText);
+                skillIssue.usesRemainingText.transform.parent = skillIssue.transform;
+
+                skillIssue.buttonLabelText = GameObject.Instantiate(killButton.buttonLabelText);
+                skillIssue.buttonLabelText.transform.parent = skillIssue.graphic.transform;
+                skillIssue.buttonLabelText.text = button.name;
+
+                skillIssue.cooldownTimerText = GameObject.Instantiate(killButton.cooldownTimerText);
+                skillIssue.cooldownTimerText.transform.parent = skillIssue.graphic.transform;
+
+                skillIssue.glyph = GameObject.Instantiate(killButton.glyph);
+                skillIssue.glyph.transform.parent = skillIssue.graphic.transform;
+
+                skillIssue.isCoolingDown = false;
+                skillIssue.canInteract = false;
+                skillIssue.position = new Vector3();
+                skillIssue.Setup(button.globalId);
                 skillIssue.transform.parent = buttonParent;
-                HarmonyMain.Instance.Log.LogInfo("bruh moment123456789");
                 HudManagerPatch.AllActiveButtons.Add(skillIssue);
-                HarmonyMain.Instance.Log.LogInfo("bruh moment123456789A");
             }
-            HarmonyMain.Instance.Log.LogInfo("bruh moment123456789B");
+            HarmonyMain.Instance.Log.LogInfo("bruh moment123456789D");
         }
 
         public static void displayActionButton(HudManager __instance, CustomRole localRole, bool udiededed) {
+            if (MeetingHud.Instance != null)
+            {
+                __instance.ImpostorVentButton.gameObject.active = false;
+                __instance.KillButton.gameObject.SetActive(false);
+
+                if (AllActiveButtons != null)
+                    foreach (CustomActionButton button in AllActiveButtons)
+                        button.gameObject.SetActive(false);
+                return;
+            }
+
             if (localRole != null)
             {
-                if (MeetingHud.Instance != null)
-                {
-                    __instance.ImpostorVentButton.gameObject.active = false;
-                    __instance.KillButton.gameObject.SetActive(false);
-
-                    if (AllActiveButtons != null)
-                        foreach (CustomActionButton button in AllActiveButtons)
-                            button.gameObject.SetActive(false);
-                    return;
-                }
-                //GameObject buttonIWant = __instance.Find("Buttons").transform.Find("BottomRight").gameObject;
-                //buttonIWant.transform.Find("").gameObject.active = localRole.ventPrivilege == VentPrivilege.Impostor;
                 __instance.ImpostorVentButton.gameObject.active = (localRole.ventPrivilege == VentPrivilege.Impostor) && !udiededed;
-
                 __instance.KillButton.gameObject.SetActive(localRole.canKill && !udiededed);
-                //__instance.KillButton.canInteract = __instance.KillButton.enabled = __instance.KillButton.gameObject.active;
                 if (__instance.KillButton.gameObject.active)
                 {
                     float fullCooldown = GameOptionsManager.Instance.currentNormalGameOptions.KillCooldown;
@@ -162,25 +174,15 @@ namespace DillyzRoleApi_Rewritten
                     __instance.KillButton.SetCoolDown(timeRemaining < 0 ? 0 : timeRemaining, fullCooldown);
                     __instance.KillButton.SetTarget(DillyzUtil.getClosestPlayer(PlayerControl.LocalPlayer));
                 }
-
-                /*bool thingsExist = false;
-
-                Action<GameObject> funnyAction = delegate (GameObject o) { 
-
-                };
-                GameObjectExtensions.ForEachChild(__instance.KillButton.transform.parent.gameObject, funnyAction);
-
-                if (!thingsExist)
-                    MakeFunnyThing(__instance.KillButton.gameObject);*/
-
-                if (AllActiveButtons != null && AllActiveButtons.Count > 0)
-                {
-                    foreach (CustomActionButton button in AllActiveButtons)
-                        button.gameObject.SetActive(button.CanUse());
-                }
-                else
-                    MakeFunnyThing(__instance.KillButton.gameObject);
             }
+
+            if (AllActiveButtons != null && AllActiveButtons.Count > 0)
+            {
+                foreach (CustomActionButton button in AllActiveButtons)
+                    button.gameObject.SetActive(button.CanUse());
+            }
+            else
+                MakeFunnyThing(__instance.KillButton, __instance.AbilityButton);
         }
 
         public static void displayColor(HudManager __instance, PlayerControl player, Color roleColor) {

@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using BepInEx;
 using BepInEx.IL2CPP;
 using HarmonyLib;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static DillyzRoleApi_Rewritten.Il2CppItemAttribute;
 
 namespace DillyzRoleApi_Rewritten
 {
@@ -49,7 +52,7 @@ namespace DillyzRoleApi_Rewritten
                 CustomRole.getByName("Sheriff").a_or_an = "a";
 
                 Log.LogInfo("Adding a funny button!");
-                CustomButton.addButton("Fred", "DillyzRoleApi-Rewritten.Assets.uncle_fred.png", 20, true, new string[] { "Scientist" }, new string[] {}, 
+                CustomButton.addButton("Fred", "DillyzRoleApi_Rewritten.Assets.uncle_fred.png", 20, true, new string[] { "Sheriff" }, new string[] {}, 
                 delegate (CustomActionButton button, bool success) {
                     if (!success)
                         return;
@@ -62,6 +65,11 @@ namespace DillyzRoleApi_Rewritten
                 foreach (CustomRole role in CustomRole.allRoles)
                     Log.LogInfo(role.ToString());
             }
+
+            IL2CPPChainloaderPatch.Reg(Assembly.GetExecutingAssembly());
+            List<string> assetNames = Assembly.GetExecutingAssembly().GetManifestResourceNames().ToArray().ToList();
+            foreach (string asset in assetNames)
+                Log.LogInfo("We have an asset called " + asset);
          }
     }
 }

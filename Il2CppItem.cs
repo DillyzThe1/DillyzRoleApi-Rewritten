@@ -37,16 +37,24 @@ namespace DillyzRoleApi_Rewritten
             try
             {
                 RegisterTypeOptions options = new RegisterTypeOptions() { Interfaces = interfaces };
+                HarmonyMain.Instance.Log.LogInfo($"Registering Class {type.FullDescription()}");
                 ClassInjector.RegisterTypeInIl2Cpp(type, options);
             }
             catch (Exception e) {
-                HarmonyMain.Instance.Log.LogError("epic reg fail " + e + "   " + type.FullDescription());
+                HarmonyMain.Instance.Log.LogError($"Cannot register {type.FullDescription()}! ({e})");
             }
         }
 
         [HarmonyPatch(typeof(IL2CPPChainloader), nameof(IL2CPPChainloader.LoadPlugin))]
         public class IL2CPPChainloaderPatch {
-            public static void Postfix(IL2CPPChainloaderPatch __instance, PluginInfo pluginInfo, Assembly pluginAssembly) {
+            public static void Postfix(IL2CPPChainloaderPatch __instance, PluginInfo pluginInfo, Assembly pluginAssembly)
+            {
+                HarmonyMain.Instance.Log.LogInfo("Loading plugin " + pluginInfo.TypeName);
+                Reg(pluginAssembly); 
+            }
+
+            // doing this for self registering
+            public static void Reg(Assembly pluginAssembly) {
                 if (_registeredAssemblies.Contains(pluginAssembly))
                     return;
                 _registeredAssemblies.Add(pluginAssembly);
@@ -57,7 +65,7 @@ namespace DillyzRoleApi_Rewritten
                     if (attribute != null)
                         TypeReg(type, attribute.Interfaces);
                 }
-            } 
+            }
         }
     }
 }
