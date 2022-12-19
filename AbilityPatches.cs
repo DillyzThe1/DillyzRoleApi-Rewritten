@@ -154,6 +154,7 @@ namespace DillyzRoleApi_Rewritten
                 if (role == null || !role.canKill)
                     return false;
 
+                HudManagerPatch.lastKillThingForCustoms = DateTime.UtcNow;
                 DillyzUtil.RpcCommitAssassination(PlayerControl.LocalPlayer, __instance.currentTarget);
                 __instance.SetTarget(null);
 

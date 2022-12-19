@@ -11,9 +11,18 @@ using InnerNet;
 
 namespace DillyzRoleApi_Rewritten
 {
+    [HarmonyPatch(typeof(HudManager), nameof(HudManager.Start))]
+    class HudManagerStartPatch
+    {
+        public static void Postfix(HudManager __instance) {
+            HudManagerPatch.lastKillThingForCustoms = DateTime.UtcNow;
+        }
+    }
+
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
     class HudManagerPatch
     {
+        public static DateTime lastKillThingForCustoms = DateTime.UtcNow;
         public static void Postfix(HudManager __instance)
         {
             if (/*AmongUsClient.Instance == null || AmongUsClient.Instance.GameState != InnerNetClient.GameStates.Started ||*/ PlayerControl.LocalPlayer == null ||
@@ -90,11 +99,14 @@ namespace DillyzRoleApi_Rewritten
                 //__instance.KillButton.canInteract = __instance.KillButton.enabled = __instance.KillButton.gameObject.active;
                 if (__instance.KillButton.gameObject.active)
                 {
-                    __instance.KillButton.SetCoolDown(0, GameOptionsManager.Instance.currentNormalGameOptions.KillCooldown);
+                    float fullCooldown = GameOptionsManager.Instance.currentNormalGameOptions.KillCooldown;
+                    TimeSpan timeLeft = DateTime.UtcNow - lastKillThingForCustoms;
+                    int timeRemaining = (int)Math.Ceiling((double)new decimal(fullCooldown - timeLeft.TotalMilliseconds / 1000f));
+                    __instance.KillButton.SetCoolDown(timeRemaining < 0 ? 0 : timeRemaining, fullCooldown);
                     __instance.KillButton.SetTarget(DillyzUtil.getClosestPlayer(PlayerControl.LocalPlayer));
                 }
-                }
             }
+        }
 
         public static void displayColor(HudManager __instance, PlayerControl player, Color roleColor) {
             string hex = DillyzUtil.colorToHex(roleColor);
