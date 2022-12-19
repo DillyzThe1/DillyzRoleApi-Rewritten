@@ -114,31 +114,38 @@ namespace DillyzRoleApi_Rewritten
             foreach (CustomButton button in CustomButton.AllCustomButtons)
             {
                 GameObject buttonObject = new GameObject();
+                buttonObject.layer = killButton.gameObject.layer;
                 HarmonyMain.Instance.Log.LogInfo("bruh moment12345");
                 CustomActionButton skillIssue = buttonObject.AddComponent<CustomActionButton>();
                 skillIssue.name = button.name + "Button";
 
+                buttonObject.AddComponent<PassiveButton>();
+                BoxCollider2D hitbox = buttonObject.AddComponent<BoxCollider2D>();
+                hitbox.size = killButton.GetComponent<BoxCollider2D>().size;
+                hitbox.offset = killButton.GetComponent<BoxCollider2D>().offset;
+
                 // the actual thing lol
-                skillIssue.graphic = new GameObject().AddComponent<SpriteRenderer>();
+                skillIssue.graphic = buttonObject.AddComponent<SpriteRenderer>();
                 skillIssue.graphic.transform.parent = skillIssue.transform;
-                skillIssue.graphic.gameObject.name = "Button";
+
+                GameObject buttonContainer = new GameObject();
+                buttonContainer.name = "Button";
+                buttonContainer.transform.parent = skillIssue.transform;
 
                 skillIssue.usesRemainingSprite = GameObject.Instantiate(abilityButton.usesRemainingSprite);
                 skillIssue.usesRemainingSprite.transform.parent = skillIssue.transform;
                 skillIssue.usesRemainingSprite.name = "Uses";
 
-                skillIssue.usesRemainingText = GameObject.Instantiate(abilityButton.usesRemainingText);
-                skillIssue.usesRemainingText.transform.parent = skillIssue.transform;
+                skillIssue.usesRemainingText = skillIssue.usesRemainingSprite.GetComponentInChildren<TextMeshPro>();
 
                 skillIssue.buttonLabelText = GameObject.Instantiate(killButton.buttonLabelText);
-                skillIssue.buttonLabelText.transform.parent = skillIssue.graphic.transform;
-                skillIssue.buttonLabelText.text = button.name;
+                skillIssue.buttonLabelText.transform.parent = buttonContainer.transform;
 
                 skillIssue.cooldownTimerText = GameObject.Instantiate(killButton.cooldownTimerText);
-                skillIssue.cooldownTimerText.transform.parent = skillIssue.graphic.transform;
+                skillIssue.cooldownTimerText.transform.parent = buttonContainer.transform;
 
                 skillIssue.glyph = GameObject.Instantiate(killButton.glyph);
-                skillIssue.glyph.transform.parent = skillIssue.graphic.transform;
+                skillIssue.glyph.transform.parent = buttonContainer.transform;
 
                 skillIssue.isCoolingDown = false;
                 skillIssue.canInteract = false;

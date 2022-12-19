@@ -73,7 +73,10 @@ namespace DillyzRoleApi_Rewritten
             return allowedRoles.Contains(role);
         }
 
-        public void OnClicked(CustomActionButton button, bool success) { }
+        public void OnClicked(CustomActionButton button, bool success) {
+            if (this.onClicked != null)
+                this.onClicked(button, success);
+        }
     }
 
     [Il2CppItem]
@@ -115,6 +118,8 @@ namespace DillyzRoleApi_Rewritten
                 ImageConversion.LoadImage(tex2d, buttonTexture, false);
                 HarmonyMain.Instance.Log.LogInfo("buttonnnnn123456789");
                 this.graphic.sprite = Sprite.Create(tex2d, new Rect(0, 0, 110, 110), new Vector2(0, 0));
+
+                //this.graphic.sprite.pivot = new Vector2();
             }
             else
                 HarmonyMain.Instance.Log.LogInfo("buttonnnnn123456 null");
@@ -142,6 +147,11 @@ namespace DillyzRoleApi_Rewritten
             SetTarget(DillyzUtil.getClosestPlayer(PlayerControl.LocalPlayer, this.buttonData.rolesCantTarget, 
                     GameOptionsData.KillDistances[GameOptionsManager.Instance.currentNormalGameOptions.KillDistance], !this.buttonData.buttonTargetsGhosts, 
                     this.buttonData.canTargetSelf));
+
+            this.buttonLabelText.text = this.buttonData.name;
+            // switch false to maxUses > 0 ? true : false;
+            // and also this.usesRemainingText.text = maxUses > 0 ? remainingUses : "none";
+            this.usesRemainingSprite.gameObject.active = false;
         }
 
         public bool CanUse()
@@ -149,7 +159,8 @@ namespace DillyzRoleApi_Rewritten
             if (!ready)
                 return false;
 
-            return MeetingHud.Instance == null && buttonData.RoleAllowed(DillyzUtil.getRoleName(PlayerControl.LocalPlayer));
+            return MeetingHud.Instance == null && (buttonData.RoleAllowed(DillyzUtil.getRoleName(PlayerControl.LocalPlayer)) || 
+                                                                    AmongUsClient.Instance.NetworkMode == NetworkModes.FreePlay);
         }
 
         public void DoClick()
