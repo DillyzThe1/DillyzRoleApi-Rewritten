@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DillyzRoleApi_Rewritten</RootNamespace>
     <AssemblyName>DillyzRoleApi-Rewritten</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -41,6 +42,7 @@
     <Compile Include="GameOverPatch.cs" />
     <Compile Include="HarmonyMain.cs" />
     <Compile Include="HudManagerPatch.cs" />
+    <Compile Include="Il2CppItem.cs" />
     <Compile Include="IntroCutscenePatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CreditsDisplay.cs" />

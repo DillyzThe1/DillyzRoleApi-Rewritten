@@ -11,36 +11,13 @@ using InnerNet;
 
 namespace DillyzRoleApi_Rewritten
 {
-    [HarmonyPatch(typeof(HudManager), nameof(HudManager.Start))]
-    class HudManagerStartPatch
-    {
-        public static void Postfix(HudManager __instance) {
-            HudManagerPatch.lastKillThingForCustoms = DateTime.UtcNow;
-
-            if (__instance.KillButton == null) {
-                HarmonyMain.Instance.Log.LogInfo("No kill button here!");
-                return;
-            }
-
-            Transform buttonParent = __instance.KillButton.transform.parent;
-            HudManagerPatch.AllActiveButtons = new List<CustomActionButton>();
-
-            foreach (CustomButton button in CustomButton.AllCustomButtons)
-            {
-                CustomActionButton skillIssue = new CustomActionButton(button);
-                skillIssue.name = button.name + "Button";
-                skillIssue.transform.parent = buttonParent;
-                HudManagerPatch.AllActiveButtons.Add(skillIssue);
-            }
-
-        }
-    }
-
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.OnDestroy))]
     class HudManagerDestroyPatch
     {
         public static void Prefix(HudManager __instance)
         {
+            if (HudManagerPatch.AllActiveButtons == null)
+                return;
             for (int i = 0; i < HudManagerPatch.AllActiveButtons.Count; i++)
                 GameObject.Destroy(HudManagerPatch.AllActiveButtons[i]);
             HudManagerPatch.AllActiveButtons.Clear();
@@ -88,15 +65,16 @@ namespace DillyzRoleApi_Rewritten
                     continue;
                 }
 
-                 if (theRole.nameColorPublic || youre || // If the name color was public. || if it's you
-                    // If it's private but you get it.
-                    (theRole.teamCanSeeYou && localRole != null && theRole.name == localRole.name && theRole.side != CustomRoleSide.LoneWolf)) 
+                if (theRole.nameColorPublic || youre || // If the name color was public. || if it's you
+                                                        // If it's private but you get it.
+                   (theRole.teamCanSeeYou && localRole != null && theRole.name == localRole.name && theRole.side != CustomRoleSide.LoneWolf))
                     HudManagerPatch.displayColor(__instance, player, theRole.roleColor);
                 else
                     HudManagerPatch.displayColor(__instance, player, CustomPalette.White);
             }
 
-            if (AmongUsClient.Instance == null || AmongUsClient.Instance.GameState != InnerNetClient.GameStates.Started)
+            if ((AmongUsClient.Instance == null || AmongUsClient.Instance.GameState != InnerNetClient.GameStates.Started)
+                && AmongUsClient.Instance.NetworkMode != NetworkModes.FreePlay)
                 return;
 
             // task list
@@ -107,7 +85,7 @@ namespace DillyzRoleApi_Rewritten
                 if (__instance.TaskPanel.taskText.text.Length > 0 && !__instance.TaskPanel.taskText.text.Contains(intendedString))
                 {
                     if (PlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.Scientist)
-                        __instance.TaskPanel.taskText.text = 
+                        __instance.TaskPanel.taskText.text =
                             __instance.TaskPanel.taskText.text.Substring(0, __instance.TaskPanel.taskText.text.IndexOf("Scientist Hint") - 1);
                     else if (PlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.Engineer)
                         __instance.TaskPanel.taskText.text =
@@ -122,6 +100,39 @@ namespace DillyzRoleApi_Rewritten
 
             // DOING THIS FOR THE RETURN THING BC I LIKE RETURNS
             displayActionButton(__instance, localRole, udiededed);
+        }
+
+        public static void MakeFunnyThing(GameObject baseThing) {
+            HarmonyMain.Instance.Log.LogInfo("bruh moment");
+
+            if (CustomButton.AllCustomButtons.Count < 1)
+                return;
+
+            HarmonyMain.Instance.Log.LogInfo("bruh moment1");
+            HudManagerPatch.lastKillThingForCustoms = DateTime.UtcNow;
+
+            HarmonyMain.Instance.Log.LogInfo("bruh moment12");
+            Transform buttonParent = baseThing.transform.parent;
+            HarmonyMain.Instance.Log.LogInfo("bruh moment123");
+            HudManagerPatch.AllActiveButtons = new List<CustomActionButton>();
+
+            HarmonyMain.Instance.Log.LogInfo("bruh moment1234");
+            foreach (CustomButton button in CustomButton.AllCustomButtons)
+            {
+                HarmonyMain.Instance.Log.LogInfo("bruh moment12345");
+                GameObject buttonObject = new GameObject();
+                HarmonyMain.Instance.Log.LogInfo("bruh moment123456");
+                CustomActionButton skillIssue = buttonObject.AddComponent<CustomActionButton>();
+                HarmonyMain.Instance.Log.LogInfo("bruh moment1234567");
+                skillIssue.name = button.name + "Button";
+                skillIssue.Setup(button);
+                HarmonyMain.Instance.Log.LogInfo("bruh moment12345678");
+                skillIssue.transform.parent = buttonParent;
+                HarmonyMain.Instance.Log.LogInfo("bruh moment123456789");
+                HudManagerPatch.AllActiveButtons.Add(skillIssue);
+                HarmonyMain.Instance.Log.LogInfo("bruh moment123456789A");
+            }
+            HarmonyMain.Instance.Log.LogInfo("bruh moment123456789B");
         }
 
         public static void displayActionButton(HudManager __instance, CustomRole localRole, bool udiededed) {
@@ -152,9 +163,23 @@ namespace DillyzRoleApi_Rewritten
                     __instance.KillButton.SetTarget(DillyzUtil.getClosestPlayer(PlayerControl.LocalPlayer));
                 }
 
-                if (AllActiveButtons != null)
+                /*bool thingsExist = false;
+
+                Action<GameObject> funnyAction = delegate (GameObject o) { 
+
+                };
+                GameObjectExtensions.ForEachChild(__instance.KillButton.transform.parent.gameObject, funnyAction);
+
+                if (!thingsExist)
+                    MakeFunnyThing(__instance.KillButton.gameObject);*/
+
+                if (AllActiveButtons != null && AllActiveButtons.Count > 0)
+                {
                     foreach (CustomActionButton button in AllActiveButtons)
                         button.gameObject.SetActive(button.CanUse());
+                }
+                else
+                    MakeFunnyThing(__instance.KillButton.gameObject);
             }
         }
 

@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AmongUs.GameOptions;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace DillyzRoleApi_Rewritten
 {
@@ -63,6 +64,7 @@ namespace DillyzRoleApi_Rewritten
         public void OnClicked(CustomActionButton button, bool success) { }
     }
 
+    [Il2CppItem]
     class CustomActionButton : ActionButton {
         public float maxCooldown;
         private DateTime lastUse;
@@ -70,7 +72,7 @@ namespace DillyzRoleApi_Rewritten
 
         public PlayerControl curTarget;
 
-        public CustomActionButton(CustomButton buttonData) : base() {
+        public void Setup(CustomButton buttonData) {
             this.buttonData = buttonData;
             this.maxCooldown = this.buttonData.cooldown;
         }
