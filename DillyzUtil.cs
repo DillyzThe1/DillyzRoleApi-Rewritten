@@ -256,5 +256,10 @@ namespace DillyzRoleApi_Rewritten
             // maths
             return Math.Sqrt((refpos[0] - playerpos[0]) * (refpos[0] - playerpos[0]) + (refpos[1] - playerpos[1]) * (refpos[1] - playerpos[1]));
         }
+
+        public static bool InFreeplay()
+        {
+            return AmongUsClient.Instance.NetworkMode == NetworkModes.FreePlay;
+        }
     }
 }

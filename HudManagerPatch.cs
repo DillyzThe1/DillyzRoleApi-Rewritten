@@ -94,7 +94,7 @@ namespace DillyzRoleApi_Rewritten
 
             // task list
             bool udiededed = PlayerControl.LocalPlayer.Data.IsDead;
-            if (!udiededed || DillyzUtil.getRoleName(PlayerControl.LocalPlayer) == "GuardianAngel")
+            if (!DillyzUtil.InFreeplay() && (!udiededed || DillyzUtil.getRoleName(PlayerControl.LocalPlayer) == "GuardianAngel"))
             {
                 string intendedString = DillyzUtil.roleText(PlayerControl.LocalPlayer);
                 if (__instance.TaskPanel.taskText.text.Length > 0 && !__instance.TaskPanel.taskText.text.Contains(intendedString))

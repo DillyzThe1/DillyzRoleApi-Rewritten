@@ -140,8 +140,8 @@ namespace DillyzRoleApi_Rewritten
             if (!isSetup)
                 return false;
 
-            return MeetingHud.Instance == null && (buttonData.RoleAllowed(DillyzUtil.getRoleName(PlayerControl.LocalPlayer)) ||
-                    AmongUsClient.Instance.NetworkMode == NetworkModes.FreePlay) && PlayerControl.LocalPlayer.Data.IsDead == this.buttonData.buttonForGhosts;
+            return MeetingHud.Instance == null && (buttonData.RoleAllowed(DillyzUtil.getRoleName(PlayerControl.LocalPlayer)) || DillyzUtil.InFreeplay()) 
+                                                                                && PlayerControl.LocalPlayer.Data.IsDead == this.buttonData.buttonForGhosts;
         }
 
         public void SetTarget(PlayerControl player)
