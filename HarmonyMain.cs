@@ -63,7 +63,7 @@ namespace DillyzRoleApi_Rewritten
                 CustomRole.getByName("Sheriff").a_or_an = "a";
 
                 Log.LogInfo("Adding a sherrif button!");
-                DillyzUtil.addButton(Assembly.GetExecutingAssembly(), "Sheriff Kill Button", "DillyzRoleApi_Rewritten.Assets.kill.png", 20, true, 
+                DillyzUtil.addButton(Assembly.GetExecutingAssembly(), "Sheriff Kill Button", "DillyzRoleApi_Rewritten.Assets.kill.png", -1f, true, 
                 new string[] { "Sheriff" }, new string[] {}, delegate (KillButtonCustomData button, bool success) {
                     if (!success)
                         return;

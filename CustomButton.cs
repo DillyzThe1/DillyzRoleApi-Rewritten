@@ -16,7 +16,8 @@ namespace DillyzRoleApi_Rewritten
     {
         public string name = "OtherKill";
         public string imageName = "DillyzRoleApi_Rewritten.Assets.kill.png";
-        public float cooldown = 30;
+        private float _cooldown = 30;
+        public float cooldown => _cooldown >= 0 ? _cooldown : GameOptionsManager.Instance.currentNormalGameOptions.KillCooldown * Math.Abs(_cooldown);
         public bool targetButton = false;
         public bool buttonForGhosts = false;
         public bool buttonTargetsGhosts = false;
@@ -55,7 +56,7 @@ namespace DillyzRoleApi_Rewritten
             this.epicAssemblyFail = epicAssemblyFail;
             this.name = name;
             this.imageName = imageName;
-            this.cooldown = cooldown;
+            this._cooldown = cooldown;
             this.targetButton = isTargetButton;
             this.buttonForGhosts = false;
             this.buttonTargetsGhosts = false;
