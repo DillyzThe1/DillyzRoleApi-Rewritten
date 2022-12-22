@@ -121,8 +121,11 @@ namespace DillyzRoleApi_Rewritten
                 newKill.transform.parent = killButton.transform.parent;
                 newKill.name = button.name + "CustomButton";
 
+                KillButtonCustomData customKillControl = newKill.gameObject.AddComponent<KillButtonCustomData>();
+                customKillControl.Setup(button, newKill);
+
                 Texture2D tex2d = new Texture2D(110, 110);
-                Stream myStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(button.imageName);
+                Stream myStream = customKillControl.buttonData.epicAssemblyFail.GetManifestResourceStream(button.imageName);
                 if (myStream != null)
                 {
                     myStream.Position = 0;
@@ -138,8 +141,6 @@ namespace DillyzRoleApi_Rewritten
                 PassiveButton pbjsandwich = newKill.gameObject.GetComponent<PassiveButton>();
                 pbjsandwich.OnClick.RemoveAllListeners();
 
-                KillButtonCustomData customKillControl = newKill.gameObject.AddComponent<KillButtonCustomData>();
-                customKillControl.Setup(button, newKill);
 
                 pbjsandwich.OnClick.AddListener((UnityEngine.Events.UnityAction)listener);
 

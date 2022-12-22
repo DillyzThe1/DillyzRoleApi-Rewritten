@@ -28,13 +28,15 @@ namespace DillyzRoleApi_Rewritten
         public byte globalId;
         public byte topGlobalId = 0;
 
+        public Assembly epicAssemblyFail = Assembly.GetExecutingAssembly();
+
         private Action<KillButtonCustomData, bool> onClicked;
 
         public static Dictionary<string, CustomButton> buttonMap = new Dictionary<string, CustomButton>();
         public static CustomButton getButtonByName(string name) => buttonMap.ContainsKey(name) ? buttonMap[name] : null;
-        public static void addButton(string name, string imageName, float cooldown, bool isTargetButton, string[] allowedRoles, string[] rolesCantTarget,
-                        Action<KillButtonCustomData, bool> onClicked) => buttonMap[name] = new CustomButton(name, imageName, cooldown, isTargetButton, allowedRoles,
-                                                                                                                                        rolesCantTarget, onClicked);
+        public static void addButton(Assembly epicAssemblyFail, string name, string imageName, float cooldown, bool isTargetButton, string[] allowedRoles, 
+            string[] rolesCantTarget, Action<KillButtonCustomData, bool> onClicked) => 
+                            buttonMap[name] = new CustomButton(epicAssemblyFail, name, imageName, cooldown, isTargetButton, allowedRoles, rolesCantTarget, onClicked);
         public static List<CustomButton> AllCustomButtons => buttonMap.Values.ToArray().ToList();
 
         public static CustomButton getById(byte targetId) {
@@ -44,12 +46,13 @@ namespace DillyzRoleApi_Rewritten
             return null;
         }
 
-        public CustomButton(string name, string imageName, float cooldown, bool isTargetButton, string[] allowedRoles,
+        public CustomButton(Assembly epicAssemblyFail, string name, string imageName, float cooldown, bool isTargetButton, string[] allowedRoles,
                                                         string[] rolesCantTarget, Action<KillButtonCustomData, bool> onClicked)
         {
             this.globalId = topGlobalId++;
             HarmonyMain.Instance.Log.LogInfo($"Button ID {this.globalId} exists under {name}.");
 
+            this.epicAssemblyFail = epicAssemblyFail;
             this.name = name;
             this.imageName = imageName;
             this.cooldown = cooldown;
@@ -123,7 +126,7 @@ namespace DillyzRoleApi_Rewritten
                 return false;
 
             return MeetingHud.Instance == null && (buttonData.RoleAllowed(DillyzUtil.getRoleName(PlayerControl.LocalPlayer)) ||
-                                                                    AmongUsClient.Instance.NetworkMode == NetworkModes.FreePlay);
+                    AmongUsClient.Instance.NetworkMode == NetworkModes.FreePlay) && PlayerControl.LocalPlayer.Data.IsDead == this.buttonData.buttonForGhosts;
         }
 
         public void SetTarget(PlayerControl player)

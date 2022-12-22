@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using AmongUs.GameOptions;
@@ -11,9 +12,9 @@ namespace DillyzRoleApi_Rewritten
 {
     public class DillyzUtil
     {
-        public static void addButton(string name, string imageName, float cooldown, bool isTargetButton, string[] allowedRoles, string[] rolesCantTarget,
-                       Action<KillButtonCustomData, bool> onClicked) => 
-                                                            CustomButton.addButton(name, imageName, cooldown, isTargetButton, allowedRoles, rolesCantTarget, onClicked);
+        public static void addButton(Assembly epicAssemblyFail, string name, string imageName, float cooldown, bool isTargetButton, string[] allowedRoles, 
+                                                                                    string[] rolesCantTarget, Action<KillButtonCustomData, bool> onClicked) => 
+                                    CustomButton.addButton(epicAssemblyFail, name, imageName, cooldown, isTargetButton, allowedRoles, rolesCantTarget, onClicked);
         public static CustomRole createRole(String name, String subtext, bool nameColor, bool nameColorPublic, Color roleColor, bool canSeeTeam, CustomRoleSide side,
                     VentPrivilege ventPrivilege, bool canKill, bool showEjectText) =>
                                  CustomRole.createRole(name, subtext, nameColor, nameColorPublic, roleColor, canSeeTeam, side, ventPrivilege, canKill, showEjectText);
@@ -188,25 +189,36 @@ namespace DillyzRoleApi_Rewritten
         }
 
         public static void commitAssassination(PlayerControl assassinator, PlayerControl target) {
+
             RoleTypes oldroletype = assassinator.Data.RoleType;
             RoleBehaviour oldrole = assassinator.Data.Role;
             assassinator.Data.RoleType = RoleTypes.Impostor;
             assassinator.Data.Role = new ImpostorRole();
 
-            RoleTypes oldroletype_target = target.Data.RoleType;
-            RoleBehaviour oldrole_target = target.Data.Role;
-            target.Data.RoleType = RoleTypes.Crewmate;
-            target.Data.Role = new CrewmateRole();
+            // for the advice takers
+            if (assassinator != target)
+            {
+                RoleTypes oldroletype_target = target.Data.RoleType;
+                RoleBehaviour oldrole_target = target.Data.Role;
+                target.Data.RoleType = RoleTypes.Crewmate;
+                target.Data.Role = new CrewmateRole();
+
+                assassinator.MurderPlayer(target);
+
+                assassinator.Data.RoleType = oldroletype;
+                assassinator.Data.Role = oldrole;
+
+                target.Data.RoleType = oldroletype_target;
+                target.Data.Role = oldrole_target;
+                return;
+            }
 
             assassinator.MurderPlayer(target);
 
             assassinator.Data.RoleType = oldroletype;
             assassinator.Data.Role = oldrole;
+        }
 
-            target.Data.RoleType = oldroletype_target;
-            target.Data.Role = oldrole_target;
-        } 
-        
         public static double getDistBetweenPlayers(PlayerControl player, PlayerControl refplayer)
         {
             Vector2 refpos = refplayer.GetTruePosition();

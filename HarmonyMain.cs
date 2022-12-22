@@ -63,14 +63,21 @@ namespace DillyzRoleApi_Rewritten
                 CustomRole.getByName("Sheriff").a_or_an = "a";
 
                 Log.LogInfo("Adding a sherrif button!");
-                DillyzUtil.addButton("Sheriff Kill Button", "DillyzRoleApi_Rewritten.Assets.kill.png", 20, true, new string[] { "Sheriff" }, new string[] {}, 
-                delegate (KillButtonCustomData button, bool success) {
+                DillyzUtil.addButton(Assembly.GetExecutingAssembly(), "Sheriff Kill Button", "DillyzRoleApi_Rewritten.Assets.kill.png", 20, true, 
+                new string[] { "Sheriff" }, new string[] {}, delegate (KillButtonCustomData button, bool success) {
                     if (!success)
                         return;
 
                     Log.LogInfo(button.killButton.currentTarget.name + " was targetted by fred!");
 
                     DillyzUtil.RpcCommitAssassination(PlayerControl.LocalPlayer, button.killButton.currentTarget);
+
+                    if (DillyzUtil.roleSide(button.killButton.currentTarget) == CustomRoleSide.Crewmate)
+                    {
+                        Log.LogInfo("kys");
+                        DillyzUtil.RpcCommitAssassination(PlayerControl.LocalPlayer, PlayerControl.LocalPlayer);
+                    }
+
                 });
 
                 foreach (CustomRole role in CustomRole.allRoles)
