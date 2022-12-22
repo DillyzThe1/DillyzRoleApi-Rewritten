@@ -102,7 +102,8 @@ namespace DillyzRoleApi_Rewritten
             this.isSetup = true;
         }
 
-        public void Update() {
+        public void Update()
+        {
             if (!isSetup)
                 return;
 
@@ -113,11 +114,18 @@ namespace DillyzRoleApi_Rewritten
             this.killButton.SetCoolDown(timeRemaining < 0 ? 0 : timeRemaining, maxCooldown);
 
             if (this.buttonData.targetButton)
+            {
                 SetTarget(DillyzUtil.getClosestPlayer(PlayerControl.LocalPlayer, this.buttonData.rolesCantTarget,
                         GameOptionsData.KillDistances[GameOptionsManager.Instance.currentNormalGameOptions.KillDistance], !this.buttonData.buttonTargetsGhosts,
                         this.buttonData.canTargetSelf));
+            }
             else
-                this.killButton.SetEnabled();
+            {
+                if (timeRemaining < 0)
+                    this.killButton.SetEnabled();
+                else
+                    this.killButton.SetDisabled();
+            }
         }
 
         public bool CanUse()

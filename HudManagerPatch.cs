@@ -29,7 +29,18 @@ namespace DillyzRoleApi_Rewritten
         }
     }
 
-    [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
+
+    [HarmonyPatch(typeof(HudManager), nameof(HudManager.SetHudActive))]
+    class HudManagerEnablingPatch
+    {
+        public static bool isActive = true;
+
+        public static void Postfix(HudManager __instance, bool isActive) {
+            HudManagerEnablingPatch.isActive = isActive;
+        }
+    }
+
+        [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
     class HudManagerPatch
     {
         public static DateTime lastKillThingForCustoms = DateTime.UtcNow;
@@ -168,7 +179,7 @@ namespace DillyzRoleApi_Rewritten
         }
 
         public static void displayActionButton(HudManager __instance, CustomRole localRole, bool udiededed) {
-            if (MeetingHud.Instance != null)
+            if (MeetingHud.Instance != null || !HudManagerEnablingPatch.isActive)
             {
                 __instance.ImpostorVentButton.gameObject.active = false;
                 __instance.KillButton.gameObject.SetActive(false);
