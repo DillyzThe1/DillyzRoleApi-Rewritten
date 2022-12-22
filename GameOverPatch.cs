@@ -116,15 +116,15 @@ namespace DillyzRoleApi_Rewritten
                     {
                         if (customWinners.Contains(player.PlayerId))
                         {
-                            HarmonyMain.Instance.Log.LogInfo(player.name + " is now marked as Crewmate!");
-                            player.Data.RoleType = AmongUs.GameOptions.RoleTypes.Crewmate;
-                            player.Data.Role = new CrewmateRole();
-                        }
-                        else
-                        {
                             HarmonyMain.Instance.Log.LogInfo(player.name + " is now marked as Impostor!");
                             player.Data.RoleType = AmongUs.GameOptions.RoleTypes.Impostor;
                             player.Data.Role = new ImpostorRole();
+                        }
+                        else
+                        {
+                            HarmonyMain.Instance.Log.LogInfo(player.name + " is now marked as Crewmate!");
+                            player.Data.RoleType = AmongUs.GameOptions.RoleTypes.Crewmate;
+                            player.Data.Role = new CrewmateRole();
                         }
                     }
 
