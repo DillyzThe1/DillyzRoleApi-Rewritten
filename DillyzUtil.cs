@@ -9,8 +9,15 @@ using UnityEngine;
 
 namespace DillyzRoleApi_Rewritten
 {
-    class DillyzUtil
+    public class DillyzUtil
     {
+        public static void addButton(string name, string imageName, float cooldown, bool isTargetButton, string[] allowedRoles, string[] rolesCantTarget,
+                       Action<CustomActionButton, bool> onClicked) => 
+                                                            CustomButton.addButton(name, imageName, cooldown, isTargetButton, allowedRoles, rolesCantTarget, onClicked);
+        public static CustomRole createRole(String name, String subtext, bool nameColor, bool nameColorPublic, Color roleColor, bool canSeeTeam, CustomRoleSide side,
+                    VentPrivilege ventPrivilege, bool canKill, bool showEjectText) =>
+                                 CustomRole.createRole(name, subtext, nameColor, nameColorPublic, roleColor, canSeeTeam, side, ventPrivilege, canKill, showEjectText);
+
         public static String getRoleName(PlayerControl player)
         {
             if (player == null || player.Data == null)

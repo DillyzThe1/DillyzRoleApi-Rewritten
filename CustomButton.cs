@@ -12,7 +12,7 @@ using UnityEngine.SceneManagement;
 namespace DillyzRoleApi_Rewritten
 {
     // https://stackoverflow.com/questions/7056041/can-you-assign-a-function-to-a-variable-in-c
-    class CustomButton
+    public class CustomButton
     {
         public string name = "OtherKill";
         public string imageName = "DillyzRoleApi_Rewritten.Assets.kill.png";
@@ -28,7 +28,7 @@ namespace DillyzRoleApi_Rewritten
         public byte globalId;
         public byte topGlobalId = 0;
 
-        public Action<CustomActionButton, bool> onClicked;
+        private Action<CustomActionButton, bool> onClicked;
 
         public static Dictionary<string, CustomButton> buttonMap = new Dictionary<string, CustomButton>();
         public static CustomButton getButtonByName(string name) => buttonMap.ContainsKey(name) ? buttonMap[name] : null;
@@ -80,7 +80,7 @@ namespace DillyzRoleApi_Rewritten
     }
 
     [Il2CppItem]
-    class CustomActionButton : ActionButton {
+    public class CustomActionButton : ActionButton {
         public float maxCooldown;
         private DateTime lastUse;
         public CustomButton buttonData;

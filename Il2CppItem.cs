@@ -12,7 +12,7 @@ using UnhollowerRuntimeLib;
 namespace DillyzRoleApi_Rewritten
 {
     [AttributeUsage(AttributeTargets.Class)]
-    class Il2CppItemAttribute : Attribute
+    public class Il2CppItemAttribute : Attribute
     {
         public static HashSet<Assembly> _registeredAssemblies = new HashSet<Assembly>();
 

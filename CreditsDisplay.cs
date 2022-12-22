@@ -9,7 +9,7 @@ using UnityEngine;
 namespace DillyzRoleApi_Rewritten
 {
     [HarmonyPatch]
-    public class CreditsDisplay
+    class CreditsDisplay
     {
         [HarmonyPatch(typeof(VersionShower), nameof(VersionShower.Start))]
         public static class VersionShowerPatch
@@ -24,7 +24,7 @@ namespace DillyzRoleApi_Rewritten
         }
 
         [HarmonyPatch(typeof(PingTracker), nameof(PingTracker.Update))]
-        public static class PingPatch
+        class PingPatch
         {
             public static void Postfix(PingTracker __instance)
             {

@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace DillyzRoleApi_Rewritten
 {
-    class CustomPalette
+    public class CustomPalette
     {
         public static Color White => new Color(253, 253, 253);
         public static Color ImpostorRed => new Color(253, 25, 25);

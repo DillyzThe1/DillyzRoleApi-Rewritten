@@ -11,7 +11,7 @@ using UnityEngine;
 //     CustomRole.createRole("Jester", "Get voted out to win. You're a real trickster!", true, new Color(90, 50, 200), false, LoneWolf, false, false);
 namespace DillyzRoleApi_Rewritten
 {
-    class CustomRole
+    public class CustomRole
     {
         public static List<CustomRole> allRoles = new List<CustomRole>();
         public static void appendRole(CustomRole yourRole) => allRoles.Add(yourRole);
@@ -107,14 +107,14 @@ namespace DillyzRoleApi_Rewritten
         }
     }
 
-    internal enum CustomRoleSide { 
+    public enum CustomRoleSide { 
         Impostor = 0,     // You work alongside the Impostors.
         Crewmate = 1,     // You work alongside the Crewmates.
         Independent = 2,  // You work upon your own team.
         LoneWolf = 3      // You work by yourself.
     }
 
-    internal enum VentPrivilege
+    public enum VentPrivilege
     {
         None = 0,     // You possess an inability to use vents.
         Impostor = 1, // You inheret the venting power of an Impostor.
