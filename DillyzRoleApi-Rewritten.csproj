@@ -10,7 +10,7 @@
     <RootNamespace>DillyzRoleApi_Rewritten</RootNamespace>
     <AssemblyName>DillyzRoleApi-Rewritten</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-	<LangVersion>latest</LangVersion>
+    <LangVersion>latest</LangVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
@@ -51,9 +51,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Assets\kill.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Assets\uncle_fred.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="0Harmony">

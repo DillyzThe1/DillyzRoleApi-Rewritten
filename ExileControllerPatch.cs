@@ -30,7 +30,7 @@ namespace DillyzRoleApi_Rewritten
         public static bool killem = true;
         public static void Prefix(PlayerControl __instance)
         {
-            if (DillyzUtil.getRoleName(__instance) == "Jester")
+            if (HarmonyMain.DILLYZ_DEBUG && DillyzUtil.getRoleName(__instance) == "Jester")
                 CustomRole.getByName("Jester").WinGame(__instance);
         }
     }

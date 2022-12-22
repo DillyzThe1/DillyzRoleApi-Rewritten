@@ -14,6 +14,9 @@ namespace DillyzRoleApi_Rewritten
     {
         public static string colorHex = "#FF0000";
         public static void Postfix(IntroCutscene._ShowRole_d__35 __instance) {
+            if (HarmonyMain.DILLYZ_DEBUG)
+                CustomButton.getButtonByName("Sheriff Kill Button").cooldown = GameOptionsManager.Instance.currentNormalGameOptions.KillCooldown;
+
             GameOverPatch.customWin = false;
 
             CustomRole role = CustomRole.getByName(DillyzUtil.getRoleName(PlayerControl.LocalPlayer));

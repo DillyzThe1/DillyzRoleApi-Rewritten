@@ -34,7 +34,7 @@ namespace DillyzRoleApi_Rewritten
 
         public static HarmonyMain Instance;
 
-        public const bool DILLYZ_DEBUG = false;
+        public const bool DILLYZ_DEBUG = true;
 
         public override void Load()
         {
@@ -62,8 +62,8 @@ namespace DillyzRoleApi_Rewritten
                                                                         CustomRoleSide.Crewmate, VentPrivilege.None, false, true);
                 CustomRole.getByName("Sheriff").a_or_an = "a";
 
-                Log.LogInfo("Adding a funny button!");
-                DillyzUtil.addButton("Fred", "DillyzRoleApi_Rewritten.Assets.uncle_fred.png", 20, true, new string[] { "Sheriff" }, new string[] {}, 
+                Log.LogInfo("Adding a sherrif button!");
+                DillyzUtil.addButton("Sheriff Kill Button", "DillyzRoleApi_Rewritten.Assets.kill.png", 20, true, new string[] { "Sheriff" }, new string[] {}, 
                 delegate (KillButtonCustomData button, bool success) {
                     if (!success)
                         return;
