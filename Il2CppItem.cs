@@ -59,6 +59,10 @@ namespace DillyzRoleApi_Rewritten
                     return;
                 _registeredAssemblies.Add(pluginAssembly);
 
+                List<string> assetNames = pluginAssembly.GetManifestResourceNames().ToArray().ToList();
+                foreach (string asset in assetNames)
+                    HarmonyMain.Instance.Log.LogInfo("Asset Found: " + asset);
+
                 foreach (Type type in pluginAssembly.GetTypes())
                 {
                     var attribute = type?.GetCustomAttribute<Il2CppItemAttribute>();

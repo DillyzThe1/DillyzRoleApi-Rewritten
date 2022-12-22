@@ -67,9 +67,6 @@ namespace DillyzRoleApi_Rewritten
             }
 
             IL2CPPChainloaderPatch.Reg(Assembly.GetExecutingAssembly());
-            List<string> assetNames = Assembly.GetExecutingAssembly().GetManifestResourceNames().ToArray().ToList();
-            foreach (string asset in assetNames)
-                Log.LogInfo("We have an asset called " + asset);
          }
     }
 }

@@ -132,6 +132,8 @@ namespace DillyzRoleApi_Rewritten
                     ImageConversion.LoadImage(tex2d, buttonTexture, false);
                     newKill.graphic.sprite = Sprite.Create(tex2d, new Rect(0, 0, 110, 110), Vector2.one * 0.5f, 100f);
                 }
+                else
+                    HarmonyMain.Instance.Log.LogError("Button image \"" + button.name + "\" could not be found!");
 
                 PassiveButton pbjsandwich = newKill.gameObject.GetComponent<PassiveButton>();
                 pbjsandwich.OnClick.RemoveAllListeners();
