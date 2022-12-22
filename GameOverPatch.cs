@@ -64,7 +64,7 @@ namespace DillyzRoleApi_Rewritten
             if (customWin)
             {
                 HarmonyMain.Instance.Log.LogInfo("TOP 10 PEOPLE IN MY BASEMENT!!!");
-                Color wincolor = CustomRole.getByName(winningRole).roleColor;
+                Color32 wincolor = CustomRole.getByName(winningRole).roleColor;
                 string hexthing = DillyzUtil.colorToHex(wincolor);
                 if (customWinners.Contains(PlayerControl.LocalPlayer.PlayerId))
                     __instance.WinText.text = $"<{hexthing}>Victory</color>";

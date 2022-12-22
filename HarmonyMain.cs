@@ -53,12 +53,12 @@ namespace DillyzRoleApi_Rewritten
             if (DILLYZ_DEBUG)
             {
                 Log.LogInfo("Adding a Jester!");
-                DillyzUtil.createRole("Jester", "Get voted out to win.", true, false, new Color(90, 50, 200), false,
+                DillyzUtil.createRole("Jester", "Get voted out to win.", true, false, new Color32(90, 50, 200, 255), false,
                                                                         CustomRoleSide.LoneWolf, VentPrivilege.None, false, true);
                 CustomRole.getByName("Jester").a_or_an = "a";
 
                 Log.LogInfo("Adding a Sheriff!");
-                DillyzUtil.createRole("Sheriff", "Kill the impostor or suicide.", true, true, new Color(255, 185, 30), false,
+                DillyzUtil.createRole("Sheriff", "Kill the impostor or suicide.", true, true, new Color32(255, 185, 30, 255), false,
                                                                         CustomRoleSide.Crewmate, VentPrivilege.None, false, true);
                 CustomRole.getByName("Sheriff").a_or_an = "a";
 
@@ -76,6 +76,9 @@ namespace DillyzRoleApi_Rewritten
                         DillyzUtil.RpcCommitAssassination(PlayerControl.LocalPlayer, PlayerControl.LocalPlayer);
 
                 });
+
+                CustomButton.getButtonByName("Sheriff Kill Button").buttonText = "Kill";
+                CustomButton.getButtonByName("Sheriff Kill Button").textOutlineColor = new Color32(255, 185, 30, 255);
 
                 foreach (CustomRole role in CustomRole.allRoles)
                     Log.LogInfo(role.ToString());

@@ -26,6 +26,9 @@ namespace DillyzRoleApi_Rewritten
         public bool canTargetSelf = false;
         public List<string> rolesCantTarget;
 
+        public string buttonText;
+        public Color32 textOutlineColor;
+
         public byte globalId;
         public byte topGlobalId = 0;
 
@@ -54,7 +57,7 @@ namespace DillyzRoleApi_Rewritten
             HarmonyMain.Instance.Log.LogInfo($"Button ID {this.globalId} exists under {name}.");
 
             this.epicAssemblyFail = epicAssemblyFail;
-            this.name = name;
+            this.buttonText = this.name = name;
             this.imageName = imageName;
             this._cooldown = cooldown;
             this.targetButton = isTargetButton;
@@ -64,6 +67,8 @@ namespace DillyzRoleApi_Rewritten
             this.allowedRoles = allowedRoles.ToList();
             this.canTargetSelf = false;
             this.rolesCantTarget = rolesCantTarget.ToList();
+
+            this.textOutlineColor = this.targetButton ? CustomPalette.KillButtonTextOutline : CustomPalette.PassiveButtonTextOutline;
 
             this.onClicked = onClicked;
         }
@@ -108,7 +113,8 @@ namespace DillyzRoleApi_Rewritten
             if (!isSetup)
                 return;
 
-            this.killButton.buttonLabelText.text = this.buttonData.name;
+            this.killButton.buttonLabelText.text = this.buttonData.buttonText;
+            this.killButton.buttonLabelText.SetOutlineColor(this.buttonData.textOutlineColor);
 
             TimeSpan timeLeft = DateTime.UtcNow - lastUse;
             int timeRemaining = (int)Math.Ceiling((double)new decimal(maxCooldown - timeLeft.TotalMilliseconds / 1000f));

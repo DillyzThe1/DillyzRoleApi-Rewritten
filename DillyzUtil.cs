@@ -16,7 +16,7 @@ namespace DillyzRoleApi_Rewritten
         public static void addButton(Assembly epicAssemblyFail, string name, string imageName, float cooldown, bool isTargetButton, string[] allowedRoles, 
                                                                                     string[] rolesCantTarget, Action<KillButtonCustomData, bool> onClicked) => 
                                     CustomButton.addButton(epicAssemblyFail, name, imageName, cooldown, isTargetButton, allowedRoles, rolesCantTarget, onClicked);
-        public static CustomRole createRole(String name, String subtext, bool nameColor, bool nameColorPublic, Color roleColor, bool canSeeTeam, CustomRoleSide side,
+        public static CustomRole createRole(String name, String subtext, bool nameColor, bool nameColorPublic, Color32 roleColor, bool canSeeTeam, CustomRoleSide side,
                     VentPrivilege ventPrivilege, bool canKill, bool showEjectText) =>
                                  CustomRole.createRole(name, subtext, nameColor, nameColorPublic, roleColor, canSeeTeam, side, ventPrivilege, canKill, showEjectText);
 
@@ -61,7 +61,7 @@ namespace DillyzRoleApi_Rewritten
             return CustomRoleSide.Crewmate;
         }
 
-        public static Color roleColor(PlayerControl player, bool nameText)
+        public static Color32 roleColor(PlayerControl player, bool nameText)
         {
             if (player == null || player.Data == null)
                 return nameText ? CustomPalette.White : CustomPalette.CrewmateBlue;
@@ -128,8 +128,8 @@ namespace DillyzRoleApi_Rewritten
             return null;
         }
 
-        public static Color copyColor(Color ogColor) => new Color(ogColor.r, ogColor.g, ogColor.b);
-        private static String convDigitToHexNum(int num) {
+        public static Color32 copyColor(Color32 ogColor) => new Color32(ogColor.r, ogColor.g, ogColor.b, ogColor.a);
+        private static String convDigitToHexNum(byte num) {
             if (num < 10)
                 return num.ToString();
             switch (num % 16) {
@@ -142,9 +142,8 @@ namespace DillyzRoleApi_Rewritten
             }
             return "0";
         }
-        private static String convNumToHexNum(int num) => convDigitToHexNum(num / 16) + convDigitToHexNum(num % 16);
-        public static String colorToHex(Color ogColor) => "#" + convNumToHexNum((int)Math.Floor(ogColor.r)) +
-                                                                convNumToHexNum((int)Math.Floor(ogColor.g)) + convNumToHexNum((int)Math.Floor(ogColor.b));
+        private static String convNumToHexNum(byte num) => convDigitToHexNum((byte)(num / 16)) + convDigitToHexNum((byte)(num % 16));
+        public static String colorToHex(Color32 ogColor) => "#" + convNumToHexNum(ogColor.r) + convNumToHexNum(ogColor.g) + convNumToHexNum(ogColor.b);
 
 
         public static PlayerControl getClosestPlayer(PlayerControl centerPlayer)

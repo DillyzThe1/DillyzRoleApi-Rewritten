@@ -46,7 +46,7 @@ namespace DillyzRoleApi_Rewritten
             if (role.side == CustomRoleSide.Impostor || role.side == CustomRoleSide.Crewmate)
                 return;
 
-            Color intendedColor = (role.side == CustomRoleSide.Independent) ? role.roleColor : CustomPalette.LoneWolfGray;
+            Color32 intendedColor = (role.side == CustomRoleSide.Independent) ? role.roleColor : CustomPalette.LoneWolfGray;
             string colorHex = DillyzUtil.colorToHex(intendedColor);
             string teamText = (role.side == CustomRoleSide.Independent) ? role.name : "Neutral";
             __instance.__4__this.TeamTitle.text = $"<{colorHex}>{teamText}</color>";

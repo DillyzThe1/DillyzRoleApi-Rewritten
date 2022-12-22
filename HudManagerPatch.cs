@@ -213,7 +213,7 @@ namespace DillyzRoleApi_Rewritten
                 MakeFunnyThing(__instance.KillButton, __instance.AbilityButton);
         }
 
-        public static void displayColor(HudManager __instance, PlayerControl player, Color roleColor) {
+        public static void displayColor(HudManager __instance, PlayerControl player, Color32 roleColor) {
             string hex = DillyzUtil.colorToHex(roleColor);
             TextMeshPro tmp = player.gameObject.transform.Find("Names").Find("NameText_TMP").GetComponent<TextMeshPro>();
             tmp.text = $"<{hex}>{player.name}</color>";

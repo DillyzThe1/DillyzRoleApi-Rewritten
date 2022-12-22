@@ -9,15 +9,20 @@ namespace DillyzRoleApi_Rewritten
 {
     public class CustomPalette
     {
-        public static Color White => new Color(253, 253, 253);
-        public static Color ImpostorRed => new Color(253, 25, 25);
-        public static Color CrewmateBlue => new Color(139, 253, 253);
-        public static Color LoneWolfGray => new Color(125, 125, 165);
+        // ROLE NAME COLORS
+        public static Color32 White => new Color32(253, 253, 253, 255);
+        public static Color32 ImpostorRed => new Color32(253, 25, 25, 255);
+        public static Color32 CrewmateBlue => new Color32(139, 253, 253, 255);
+        public static Color32 LoneWolfGray => new Color32(125, 125, 165, 255);
 
         // BASE GAME ROLE MODIFIERS
-        public static Color EngineerOrange => new Color(255, 145, 35);
-        public static Color ScientistTeal => new Color(105, 150, 255);
-        public static Color GuardianAngleLightBlue => new Color(165, 225, 255);
-        public static Color ShapeShifterCrimson => new Color(190, 30, 55);
+        public static Color32 EngineerOrange => new Color32(255, 145, 35, 255);
+        public static Color32 ScientistTeal => new Color32(105, 150, 255, 255);
+        public static Color32 GuardianAngleLightBlue => new Color32(165, 225, 255, 255);
+        public static Color32 ShapeShifterCrimson => new Color32(190, 30, 55, 255);
+
+        // BUTTONS
+        public static Color KillButtonTextOutline = new Color32(219, 37, 0, 255);
+        public static Color PassiveButtonTextOutline = new Color32(0, 0, 0, 255);
     }
 }

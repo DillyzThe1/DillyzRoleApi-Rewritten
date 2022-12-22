@@ -8,14 +8,14 @@ using UnityEngine;
 
 // the idea here is that you'll instiate this class for your own purposes
 // example for this:
-//     CustomRole.createRole("Jester", "Get voted out to win. You're a real trickster!", true, new Color(90, 50, 200), false, LoneWolf, false, false);
+//     CustomRole.createRole("Jester", "Get voted out to win. You're a real trickster!", true, new Color32(90, 50, 200), false, LoneWolf, false, false);
 namespace DillyzRoleApi_Rewritten
 {
     public class CustomRole
     {
         public static List<CustomRole> allRoles = new List<CustomRole>();
         public static void appendRole(CustomRole yourRole) => allRoles.Add(yourRole);
-        public static CustomRole createRole(String name, String subtext, bool nameColor, bool nameColorPublic, Color roleColor, bool canSeeTeam, CustomRoleSide side,
+        public static CustomRole createRole(String name, String subtext, bool nameColor, bool nameColorPublic, Color32 roleColor, bool canSeeTeam, CustomRoleSide side,
                     VentPrivilege ventPrivilege, bool canKill, bool showEjectText) {
             foreach (CustomRole role in allRoles)
                 if (role.name == name)
@@ -44,7 +44,7 @@ namespace DillyzRoleApi_Rewritten
         public String subtext;                                  // The text that appears under.
         public bool nameColorChanges;                           // Determines if your name color is your role color or just red/white.
         public bool nameColorPublic;                            // Determines if your name color is public to all or not.
-        public Color roleColor;                                 // The current color of your role.
+        public Color32 roleColor;                                 // The current color of your role.
         public bool teamCanSeeYou;                              // Determines if your team can see you.
         public CustomRoleSide side;                             // Determines who you work with.
         //public bool commitsTaxFraud { get; }                  // 192.512.3.62
@@ -54,7 +54,7 @@ namespace DillyzRoleApi_Rewritten
         public bool switchToImpostor = false;                   // Will switch a crewmate role to an Impostor role.
         public string a_or_an = "an";                           // "DillyzThe1 was a Jester" vs "DillyzThe1 was an Jester"
 
-        public CustomRole(String name, String subtext, bool nameColor, bool nameColorPublic, Color roleColor, bool canSeeTeam, 
+        public CustomRole(String name, String subtext, bool nameColor, bool nameColorPublic, Color32 roleColor, bool canSeeTeam, 
                             CustomRoleSide side, VentPrivilege ventPrivilege, bool canKill, bool showEjectText) {
             this.name = name;
             this.subtext = subtext;
