@@ -28,6 +28,9 @@ namespace DillyzRoleApi_Rewritten
             }
             public static bool roleCanVent(PlayerControl player)
             {
+                if (AmongUsClient.Instance.NetworkMode == NetworkModes.FreePlay)
+                    return true;
+
                 string rolename = DillyzUtil.getRoleName(player);
 
                 if (player.Data.IsDead)
@@ -142,6 +145,8 @@ namespace DillyzRoleApi_Rewritten
 
                 PlayerControl.LocalPlayer.CheckMurder(__instance.currentTarget);
                 __instance.SetTarget(null);*/
+                if (AmongUsClient.Instance.NetworkMode == NetworkModes.FreePlay)
+                    return true;
 
                 string rolename = DillyzUtil.getRoleName(PlayerControl.LocalPlayer);
                 CustomRole role = CustomRole.getByName(rolename);
