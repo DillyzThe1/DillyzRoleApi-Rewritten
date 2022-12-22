@@ -119,7 +119,19 @@ namespace DillyzRoleApi_Rewritten
                 CustomActionButton skillIssue = buttonObject.AddComponent<CustomActionButton>();
                 skillIssue.name = button.name + "Button";
 
-                buttonObject.AddComponent<PassiveButton>();
+                PassiveButton pb = buttonObject.AddComponent<PassiveButton>();
+                pb.ClickSound = killButton.gameObject.GetComponent<PassiveButton>().ClickSound;
+                pb.OnUp = true;
+                pb.OnDown = true;
+                pb.OnRepeat = true;
+                pb.RepeatDuration = 0.3f;
+                pb.TargetActionButton = skillIssue;
+                pb.HoldToUse = false;
+                pb.hasBeenReleased = true;
+                pb.repeatTimer = 0;
+                pb.totalHeldTime = 0;
+                pb.checkedClickEvent = false;
+
                 BoxCollider2D hitbox = buttonObject.AddComponent<BoxCollider2D>();
                 hitbox.size = killButton.GetComponent<BoxCollider2D>().size;
                 hitbox.offset = killButton.GetComponent<BoxCollider2D>().offset;

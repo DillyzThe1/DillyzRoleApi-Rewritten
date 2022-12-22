@@ -52,7 +52,7 @@ namespace DillyzRoleApi_Rewritten
                 CustomRole.getByName("Sheriff").a_or_an = "a";
 
                 Log.LogInfo("Adding a funny button!");
-                CustomButton.addButton("Fred", "DillyzRoleApi_Rewritten.Assets.uncle_fred.png", 20, true, new string[] { "Sheriff" }, new string[] {}, 
+                /*CustomButton.addButton("Fred", "DillyzRoleApi_Rewritten.Assets.uncle_fred.png", 20, true, new string[] { "Sheriff" }, new string[] {}, 
                 delegate (CustomActionButton button, bool success) {
                     if (!success)
                         return;
@@ -60,7 +60,7 @@ namespace DillyzRoleApi_Rewritten
                     Log.LogInfo(button.curTarget.name + " was targetted by fred!");
 
                     DillyzUtil.RpcCommitAssassination(PlayerControl.LocalPlayer, button.curTarget);
-                });
+                });*/
 
                 foreach (CustomRole role in CustomRole.allRoles)
                     Log.LogInfo(role.ToString());

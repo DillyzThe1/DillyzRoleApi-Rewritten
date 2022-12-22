@@ -117,7 +117,7 @@ namespace DillyzRoleApi_Rewritten
                 HarmonyMain.Instance.Log.LogInfo("buttonnnnn12345678");
                 ImageConversion.LoadImage(tex2d, buttonTexture, false);
                 HarmonyMain.Instance.Log.LogInfo("buttonnnnn123456789");
-                this.graphic.sprite = Sprite.Create(tex2d, new Rect(0, 0, 110, 110), new Vector2(0, 0));
+                this.graphic.sprite = Sprite.Create(tex2d, new Rect(0, 0, 110, 110), Vector2.one * 0.5f);
 
                 //this.graphic.sprite.pivot = new Vector2();
             }
@@ -131,7 +131,7 @@ namespace DillyzRoleApi_Rewritten
             ready = true;
         }
 
-        public void Start()
+        public new void Start()
         {
             // block it
         }
@@ -163,7 +163,7 @@ namespace DillyzRoleApi_Rewritten
                                                                     AmongUsClient.Instance.NetworkMode == NetworkModes.FreePlay);
         }
 
-        public void DoClick()
+        public new void DoClick()
         {
             if (!ready)
                 return;
