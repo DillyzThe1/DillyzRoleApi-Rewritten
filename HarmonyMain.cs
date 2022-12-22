@@ -16,6 +16,17 @@ namespace DillyzRoleApi_Rewritten
     [BepInProcess("Among Us2.exe")]
     [BepInProcess("Among Us3.exe")]
     [BepInProcess("Among Us4.exe")]
+    [BepInProcess("Among Us5.exe")]
+    [BepInProcess("Among Us6.exe")]
+    [BepInProcess("Among Us7.exe")]
+    [BepInProcess("Among Us8.exe")]
+    [BepInProcess("Among Us9.exe")]
+    [BepInProcess("Among Us10.exe")]
+    [BepInProcess("Among Us11.exe")]
+    [BepInProcess("Among Us12.exe")]
+    [BepInProcess("Among Us13.exe")]
+    [BepInProcess("Among Us14.exe")]
+    [BepInProcess("Among Us15.exe")]
     public class HarmonyMain : BasePlugin
     {
         public const string MOD_NAME = "DillyzRoleApi", MOD_VERSION = "2.0.0", MOD_ID = "com.github.dillyzthe1.dillyzroleapi";
