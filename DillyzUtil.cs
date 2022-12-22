@@ -12,7 +12,7 @@ namespace DillyzRoleApi_Rewritten
     public class DillyzUtil
     {
         public static void addButton(string name, string imageName, float cooldown, bool isTargetButton, string[] allowedRoles, string[] rolesCantTarget,
-                       Action<CustomActionButton, bool> onClicked) => 
+                       Action<KillButtonCustomData, bool> onClicked) => 
                                                             CustomButton.addButton(name, imageName, cooldown, isTargetButton, allowedRoles, rolesCantTarget, onClicked);
         public static CustomRole createRole(String name, String subtext, bool nameColor, bool nameColorPublic, Color roleColor, bool canSeeTeam, CustomRoleSide side,
                     VentPrivilege ventPrivilege, bool canKill, bool showEjectText) =>

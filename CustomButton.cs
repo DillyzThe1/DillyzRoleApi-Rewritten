@@ -28,12 +28,12 @@ namespace DillyzRoleApi_Rewritten
         public byte globalId;
         public byte topGlobalId = 0;
 
-        private Action<CustomActionButton, bool> onClicked;
+        private Action<KillButtonCustomData, bool> onClicked;
 
         public static Dictionary<string, CustomButton> buttonMap = new Dictionary<string, CustomButton>();
         public static CustomButton getButtonByName(string name) => buttonMap.ContainsKey(name) ? buttonMap[name] : null;
         public static void addButton(string name, string imageName, float cooldown, bool isTargetButton, string[] allowedRoles, string[] rolesCantTarget,
-                        Action<CustomActionButton, bool> onClicked) => buttonMap[name] = new CustomButton(name, imageName, cooldown, isTargetButton, allowedRoles,
+                        Action<KillButtonCustomData, bool> onClicked) => buttonMap[name] = new CustomButton(name, imageName, cooldown, isTargetButton, allowedRoles,
                                                                                                                                         rolesCantTarget, onClicked);
         public static List<CustomButton> AllCustomButtons => buttonMap.Values.ToArray().ToList();
 
@@ -45,7 +45,7 @@ namespace DillyzRoleApi_Rewritten
         }
 
         public CustomButton(string name, string imageName, float cooldown, bool isTargetButton, string[] allowedRoles,
-                                                        string[] rolesCantTarget, Action<CustomActionButton, bool> onClicked)
+                                                        string[] rolesCantTarget, Action<KillButtonCustomData, bool> onClicked)
         {
             this.globalId = topGlobalId++;
             HarmonyMain.Instance.Log.LogInfo($"Button ID {this.globalId} exists under {name}.");
@@ -73,128 +73,74 @@ namespace DillyzRoleApi_Rewritten
             return allowedRoles.Contains(role);
         }
 
-        public void OnClicked(CustomActionButton button, bool success) {
+        public void OnClicked(KillButtonCustomData button, bool success) {
             if (this.onClicked != null)
                 this.onClicked(button, success);
         }
     }
 
+    // used to attach data to kill button clones
     [Il2CppItem]
-    public class CustomActionButton : ActionButton {
+    public class KillButtonCustomData : MonoBehaviour
+    {
         public float maxCooldown;
-        private DateTime lastUse;
+        public DateTime lastUse;
         public CustomButton buttonData;
+        public KillButton killButton;
 
-        public PlayerControl curTarget;
+        public bool isSetup = false;
 
-        private bool ready = false;
-
-        public void Setup(byte buttonId)
+        public void Setup(CustomButton buttonData, KillButton killButton)
         {
-            HarmonyMain.Instance.Log.LogInfo("buttonnnnn1");
-            this.buttonData = CustomButton.getById(buttonId);
-            HarmonyMain.Instance.Log.LogInfo("buttonnnnn12");
+            this.buttonData = buttonData;
+            this.killButton = killButton;
             this.maxCooldown = this.buttonData.cooldown;
-
-            HarmonyMain.Instance.Log.LogInfo("buttonnnnn123");
-            // start code
-            this.isCoolingDown = true;
             this.lastUse = DateTime.UtcNow;
-
-            HarmonyMain.Instance.Log.LogInfo("buttonnnnn1234");
-            Texture2D tex2d = new Texture2D(110, 110);
-            HarmonyMain.Instance.Log.LogInfo("buttonnnnn12345 " + buttonData.imageName);
-            Stream myStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(buttonData.imageName);
-            if (myStream != null)
-            {
-                HarmonyMain.Instance.Log.LogInfo("buttonnnnn123456 " + myStream.Length);
-
-                myStream.Position = 0;
-                byte[] buttonTexture = new byte[myStream.Length];
-                HarmonyMain.Instance.Log.LogInfo("buttonnnnn1234567");
-                for (int i = 0; i < myStream.Length;)
-                    i += myStream.Read(buttonTexture, i, Convert.ToInt32(myStream.Length) - i);
-                HarmonyMain.Instance.Log.LogInfo("buttonnnnn12345678");
-                ImageConversion.LoadImage(tex2d, buttonTexture, false);
-                HarmonyMain.Instance.Log.LogInfo("buttonnnnn123456789");
-                this.graphic.sprite = Sprite.Create(tex2d, new Rect(0, 0, 110, 110), Vector2.one * 0.5f);
-
-                //this.graphic.sprite.pivot = new Vector2();
-            }
-            else
-                HarmonyMain.Instance.Log.LogInfo("buttonnnnn123456 null");
-
-            HarmonyMain.Instance.Log.LogInfo("buttonnnnn123456789A");
-            base.Start();
-
-            HarmonyMain.Instance.Log.LogInfo("buttonnnnn123456789B");
-            ready = true;
-        }
-
-        public new void Start()
-        {
-            // block it
+            this.isSetup = true;
         }
 
         public void Update() {
-            if (!ready)
+            if (!isSetup)
                 return;
+
+            this.killButton.buttonLabelText.text = this.buttonData.name;
 
             TimeSpan timeLeft = DateTime.UtcNow - lastUse;
             int timeRemaining = (int)Math.Ceiling((double)new decimal(maxCooldown - timeLeft.TotalMilliseconds / 1000f));
-            SetCoolDown(timeRemaining < 0 ? 0 : timeRemaining, maxCooldown);
+            this.killButton.SetCoolDown(timeRemaining < 0 ? 0 : timeRemaining, maxCooldown);
 
-            SetTarget(DillyzUtil.getClosestPlayer(PlayerControl.LocalPlayer, this.buttonData.rolesCantTarget, 
-                    GameOptionsData.KillDistances[GameOptionsManager.Instance.currentNormalGameOptions.KillDistance], !this.buttonData.buttonTargetsGhosts, 
-                    this.buttonData.canTargetSelf));
-
-            this.buttonLabelText.text = this.buttonData.name;
-            // switch false to maxUses > 0 ? true : false;
-            // and also this.usesRemainingText.text = maxUses > 0 ? remainingUses : "none";
-            this.usesRemainingSprite.gameObject.active = false;
+            if (this.buttonData.targetButton)
+                SetTarget(DillyzUtil.getClosestPlayer(PlayerControl.LocalPlayer, this.buttonData.rolesCantTarget,
+                        GameOptionsData.KillDistances[GameOptionsManager.Instance.currentNormalGameOptions.KillDistance], !this.buttonData.buttonTargetsGhosts,
+                        this.buttonData.canTargetSelf));
+            else
+                this.killButton.SetEnabled();
         }
 
         public bool CanUse()
         {
-            if (!ready)
+            if (!isSetup)
                 return false;
 
-            return MeetingHud.Instance == null && (buttonData.RoleAllowed(DillyzUtil.getRoleName(PlayerControl.LocalPlayer)) || 
+            return MeetingHud.Instance == null && (buttonData.RoleAllowed(DillyzUtil.getRoleName(PlayerControl.LocalPlayer)) ||
                                                                     AmongUsClient.Instance.NetworkMode == NetworkModes.FreePlay);
-        }
-
-        public new void DoClick()
-        {
-            if (!ready)
-                return;
-
-            if (!base.isActiveAndEnabled || (this.curTarget == null && this.buttonData.targetButton) || this.isCoolingDown &&
-                PlayerControl.LocalPlayer.Data.IsDead != this.buttonData.buttonForGhosts || (this.buttonData.caresAboutMoving && !PlayerControl.LocalPlayer.CanMove))
-            { 
-                this.buttonData.OnClicked(this, false);
-                return;
-            }
-
-            this.lastUse = DateTime.UtcNow;
-            this.buttonData.OnClicked(this, true);
-            SetTarget(null);
         }
 
         public void SetTarget(PlayerControl player)
         {
-            if (!ready)
+            if (!isSetup)
                 return;
 
-            if (this.curTarget != null && this.curTarget != player)
-                this.curTarget.ToggleHighlight(false, PlayerControl.LocalPlayer.Data.Role.TeamType);
-            this.curTarget = player;
-            if (curTarget != null)
+            if (this.killButton.currentTarget != null && this.killButton.currentTarget != player)
+                this.killButton.currentTarget.ToggleHighlight(false, PlayerControl.LocalPlayer.Data.Role.TeamType);
+            this.killButton.currentTarget = player;
+            if (killButton.currentTarget != null)
             {
-                this.curTarget.ToggleHighlight(true, PlayerControl.LocalPlayer.Data.Role.TeamType);
-                base.SetEnabled();
+                this.killButton.currentTarget.ToggleHighlight(true, PlayerControl.LocalPlayer.Data.Role.TeamType);
+                this.killButton.SetEnabled();
                 return;
             }
-            base.SetDisabled();
+            this.killButton.SetDisabled();
         }
     }
 }

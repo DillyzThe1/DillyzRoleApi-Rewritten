@@ -20,12 +20,12 @@ namespace DillyzRoleApi_Rewritten
     {
         public static void Prefix(HudManager __instance)
         {
-            if (HudManagerPatch.AllActiveButtons == null)
+            if (HudManagerPatch.AllKillButtons == null)
                 return;
-            for (int i = 0; i < HudManagerPatch.AllActiveButtons.Count; i++)
-                GameObject.Destroy(HudManagerPatch.AllActiveButtons[i]);
-            HudManagerPatch.AllActiveButtons.Clear();
-            HudManagerPatch.AllActiveButtons = null;
+            for (int i = 0; i < HudManagerPatch.AllKillButtons.Count; i++)
+                GameObject.Destroy(HudManagerPatch.AllKillButtons[i]);
+            HudManagerPatch.AllKillButtons.Clear();
+            HudManagerPatch.AllKillButtons = null;
         }
     }
 
@@ -33,7 +33,7 @@ namespace DillyzRoleApi_Rewritten
     class HudManagerPatch
     {
         public static DateTime lastKillThingForCustoms = DateTime.UtcNow;
-        public static List<CustomActionButton> AllActiveButtons;
+        public static List<KillButtonCustomData> AllKillButtons;
 
         public static void Postfix(HudManager __instance)
         {
@@ -113,106 +113,53 @@ namespace DillyzRoleApi_Rewritten
             HudManagerPatch.lastKillThingForCustoms = DateTime.UtcNow;
 
             Transform buttonParent = killButton.gameObject.transform.parent;
-            HudManagerPatch.AllActiveButtons = new List<CustomActionButton>();
+            HudManagerPatch.AllKillButtons = new List<KillButtonCustomData>();
 
             foreach (CustomButton button in CustomButton.AllCustomButtons)
             {
-                if (true) {
-                    Texture2D tex2d = new Texture2D(110, 110);
-                    Stream myStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("DillyzRoleApi_Rewritten.Assets.uncle_fred.png");
+                KillButton newKill = GameObject.Instantiate(killButton);
+                newKill.transform.parent = killButton.transform.parent;
+                newKill.name = button.name + "CustomButton";
+
+                Texture2D tex2d = new Texture2D(110, 110);
+                Stream myStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(button.imageName);
+                if (myStream != null)
+                {
                     myStream.Position = 0;
                     byte[] buttonTexture = new byte[myStream.Length];
                     for (int i = 0; i < myStream.Length;)
                         i += myStream.Read(buttonTexture, i, Convert.ToInt32(myStream.Length) - i);
                     ImageConversion.LoadImage(tex2d, buttonTexture, false);
-                    killButton.graphic.sprite = Sprite.Create(tex2d, new Rect(0, 0, 110, 110), Vector2.one * 0.5f, 100f);
-                    killButton.buttonLabelText.text = "fred";
-
-                    /*PassiveButton pbjsandwich = killButton.gameObject.GetComponent<PassiveButton>();
-                    pbjsandwich.OnClick.RemoveAllListeners();
-                    pbjsandwich.OnClick.AddListener((UnityEngine.Events.UnityAction)listener);
-
-                    void listener() {
-                        HarmonyMain.Instance.Log.LogInfo("epic clickenining");
-                    }*/
-                    continue;    
+                    newKill.graphic.sprite = Sprite.Create(tex2d, new Rect(0, 0, 110, 110), Vector2.one * 0.5f, 100f);
                 }
 
-                HarmonyMain.Instance.Log.LogInfo("bruh moment1");
-                GameObject buttonObject = new GameObject();
-                buttonObject.layer = killButton.gameObject.layer;
-                HarmonyMain.Instance.Log.LogInfo("bruh moment2");
-                buttonObject.transform.parent = killButton.transform.parent;
-                CustomActionButton skillIssue = buttonObject.AddComponent<CustomActionButton>();
-                HarmonyMain.Instance.Log.LogInfo("bruh moment3");
-                skillIssue.name = button.name + "Button";
+                PassiveButton pbjsandwich = newKill.gameObject.GetComponent<PassiveButton>();
+                pbjsandwich.OnClick.RemoveAllListeners();
 
-                PassiveButton pb = buttonObject.AddComponent<PassiveButton>();
-                HarmonyMain.Instance.Log.LogInfo("bruh moment4");
-                pb.ClickSound = killButton.gameObject.GetComponent<PassiveButton>().ClickSound;
-                pb.OnUp = true;
-                pb.OnDown = false;
-                pb.OnRepeat = false;
-                pb.RepeatDuration = 0.3f;
-                pb.TargetActionButton = skillIssue;
-                pb.HoldToUse = false;
-                pb.hasBeenReleased = true;
-                pb.repeatTimer = 0;
-                pb.totalHeldTime = 0;
-                pb.checkedClickEvent = false;
+                KillButtonCustomData customKillControl = newKill.gameObject.AddComponent<KillButtonCustomData>();
+                customKillControl.Setup(button, newKill);
 
-                HarmonyMain.Instance.Log.LogInfo("bruh moment5");
-                BoxCollider2D hitbox = buttonObject.AddComponent<BoxCollider2D>();
-                hitbox.size = killButton.GetComponent<BoxCollider2D>().size;
-                HarmonyMain.Instance.Log.LogInfo("bruh moment6");
-                hitbox.offset = killButton.GetComponent<BoxCollider2D>().offset;
+                pbjsandwich.OnClick.AddListener((UnityEngine.Events.UnityAction)listener);
 
+                void listener() {
+                    HarmonyMain.Instance.Log.LogInfo("epic clickenining");
 
-                HarmonyMain.Instance.Log.LogInfo("bruh moment8");
-                GameObject buttonContainer = new GameObject();
-                buttonContainer.name = "Button";
-                buttonContainer.transform.parent = skillIssue.transform;
+                    if (!newKill.isActiveAndEnabled || (newKill.currentTarget == null && customKillControl.buttonData.targetButton) || newKill.isCoolingDown ||
+                         PlayerControl.LocalPlayer.Data.IsDead != customKillControl.buttonData.buttonForGhosts || (customKillControl.buttonData.caresAboutMoving 
+                                                                                                                && !PlayerControl.LocalPlayer.CanMove))
+                    {
+                        customKillControl.buttonData.OnClicked(customKillControl, false);
+                        return;
+                    }
 
-                // the actual thing lol
-                HarmonyMain.Instance.Log.LogInfo("bruh moment7");
-                skillIssue.graphic = buttonContainer.AddComponent<SpriteRenderer>();
-                skillIssue.graphic.transform.parent = skillIssue.transform;
+                    customKillControl.lastUse = DateTime.UtcNow;
+                    customKillControl.buttonData.OnClicked(customKillControl, true);
 
-                HarmonyMain.Instance.Log.LogInfo("bruh moment8");
-                skillIssue.usesRemainingSprite = new GameObject().AddComponent<SpriteRenderer>();//GameObject.Instantiate(abilityButton.usesRemainingSprite);
-                skillIssue.usesRemainingSprite.transform.parent = skillIssue.transform;
-                skillIssue.usesRemainingSprite.name = "Uses";
-                skillIssue.usesRemainingSprite.sprite = abilityButton.usesRemainingSprite.sprite;
+                    if (customKillControl.buttonData.targetButton)
+                        customKillControl.SetTarget(null);
+                }
 
-                HarmonyMain.Instance.Log.LogInfo("bruh moment9");
-                skillIssue.usesRemainingText = new GameObject().AddComponent<TextMeshPro>();//skillIssue.usesRemainingSprite.GetComponentInChildren<TextMeshPro>();
-                skillIssue.usesRemainingText.transform.parent = skillIssue.usesRemainingSprite.transform;
-                skillIssue.usesRemainingText.text = abilityButton.usesRemainingSprite.GetComponentInChildren<TextMeshPro>().text;
-
-                HarmonyMain.Instance.Log.LogInfo("bruh moment10");
-                skillIssue.buttonLabelText = new GameObject().AddComponent<TextMeshPro>();//GameObject.Instantiate(killButton.buttonLabelText);
-                HarmonyMain.Instance.Log.LogInfo("bruh moment10-2");
-                skillIssue.buttonLabelText.transform.parent = buttonContainer.transform;
-                
-                HarmonyMain.Instance.Log.LogInfo("bruh moment11");
-                skillIssue.cooldownTimerText = new GameObject().AddComponent<TextMeshPro>();//GameObject.Instantiate(killButton.cooldownTimerText);
-                skillIssue.cooldownTimerText.transform.parent = buttonContainer.transform;
-
-                HarmonyMain.Instance.Log.LogInfo("bruh moment12");
-                skillIssue.glyph = new GameObject().AddComponent<ActionMapGlyphDisplay>();//GameObject.Instantiate(killButton.glyph);
-                HarmonyMain.Instance.Log.LogInfo("bruh moment12-1");
-                skillIssue.glyph.transform.parent = buttonContainer.transform;
-                //skillIssue.glyph.sr = skillIssue.glyph.gameObject.AddComponent<SpriteRenderer>();
-                //skillIssue.glyph.sr.sprite = killButton.glyph.sr.sprite;
-
-                HarmonyMain.Instance.Log.LogInfo("bruh moment13");
-                skillIssue.isCoolingDown = false;
-                skillIssue.canInteract = false;
-                skillIssue.position = new Vector3();
-                skillIssue.Setup(button.globalId);
-                skillIssue.transform.parent = buttonParent;
-                HudManagerPatch.AllActiveButtons.Add(skillIssue);
-                HarmonyMain.Instance.Log.LogInfo("bruh moment14");
+                AllKillButtons.Add(customKillControl);
             }
             HarmonyMain.Instance.Log.LogInfo("bruh moment123456789D");
         }
@@ -223,9 +170,9 @@ namespace DillyzRoleApi_Rewritten
                 __instance.ImpostorVentButton.gameObject.active = false;
                 __instance.KillButton.gameObject.SetActive(false);
 
-                if (AllActiveButtons != null)
-                    foreach (CustomActionButton button in AllActiveButtons)
-                        button.gameObject.SetActive(false);
+                if (AllKillButtons != null)
+                    foreach (KillButtonCustomData button in AllKillButtons)
+                        button.killButton.gameObject.SetActive(false);
                 return;
             }
 
@@ -243,12 +190,12 @@ namespace DillyzRoleApi_Rewritten
                 }
             }
 
-            if (AllActiveButtons != null && AllActiveButtons.Count > 0)
+            if (AllKillButtons != null && AllKillButtons.Count > 0)
             {
-                foreach (CustomActionButton button in AllActiveButtons)
-                    button.gameObject.SetActive(true);//button.CanUse());
+                foreach (KillButtonCustomData button in AllKillButtons)
+                    button.killButton.gameObject.SetActive(button.CanUse());
             }
-            else if (AllActiveButtons == null)
+            else if (AllKillButtons == null)
                 MakeFunnyThing(__instance.KillButton, __instance.AbilityButton);
         }
 

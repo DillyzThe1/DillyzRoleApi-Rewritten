@@ -23,7 +23,7 @@ namespace DillyzRoleApi_Rewritten
 
         public static HarmonyMain Instance;
 
-        public const bool DILLYZ_DEBUG = true;
+        public const bool DILLYZ_DEBUG = false;
 
         public override void Load()
         {
@@ -48,18 +48,18 @@ namespace DillyzRoleApi_Rewritten
 
                 Log.LogInfo("Adding a Sheriff!");
                 DillyzUtil.createRole("Sheriff", "Kill the impostor or suicide.", true, true, new Color(255, 185, 30), false,
-                                                                        CustomRoleSide.Crewmate, VentPrivilege.None, true, true);
+                                                                        CustomRoleSide.Crewmate, VentPrivilege.None, false, true);
                 CustomRole.getByName("Sheriff").a_or_an = "a";
 
                 Log.LogInfo("Adding a funny button!");
                 DillyzUtil.addButton("Fred", "DillyzRoleApi_Rewritten.Assets.uncle_fred.png", 20, true, new string[] { "Sheriff" }, new string[] {}, 
-                delegate (CustomActionButton button, bool success) {
+                delegate (KillButtonCustomData button, bool success) {
                     if (!success)
                         return;
 
-                    Log.LogInfo(button.curTarget.name + " was targetted by fred!");
+                    Log.LogInfo(button.killButton.currentTarget.name + " was targetted by fred!");
 
-                    DillyzUtil.RpcCommitAssassination(PlayerControl.LocalPlayer, button.curTarget);
+                    DillyzUtil.RpcCommitAssassination(PlayerControl.LocalPlayer, button.killButton.currentTarget);
                 });
 
                 foreach (CustomRole role in CustomRole.allRoles)

@@ -145,6 +145,10 @@ namespace DillyzRoleApi_Rewritten
 
                 PlayerControl.LocalPlayer.CheckMurder(__instance.currentTarget);
                 __instance.SetTarget(null);*/
+
+                if (__instance.gameObject.GetComponent<KillButtonCustomData>() != null)
+                    return false;
+
                 if (AmongUsClient.Instance.NetworkMode == NetworkModes.FreePlay)
                     return true;
 
