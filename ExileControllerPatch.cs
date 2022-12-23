@@ -27,7 +27,6 @@ namespace DillyzRoleApi_Rewritten
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Exiled))]
     class PlayerExilePatch
     {
-        public static bool killem = true;
         public static void Prefix(PlayerControl __instance)
         {
             if (HarmonyMain.Instance.enableDebugJester.Value && DillyzUtil.getRoleName(__instance) == "Jester")
