@@ -90,16 +90,6 @@ namespace DillyzRoleApi_Rewritten
             }
         }
 
-        // screw ur bans lmao
-        [HarmonyPatch(typeof(StatsManager), nameof(StatsManager.AmBanned), MethodType.Getter)]
-        public static class AmBannedPatch
-        {
-            public static void Postfix(out bool __result)
-            {
-                __result = false;
-            }
-        }
-
 
         [HarmonyPatch(typeof(ActionButton), nameof(ActionButton.CanInteract))]
         public static class ActionButtonInteractionPatch

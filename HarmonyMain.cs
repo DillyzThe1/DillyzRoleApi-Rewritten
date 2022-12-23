@@ -6,6 +6,8 @@ using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.IL2CPP;
 using HarmonyLib;
+using Il2CppSystem;
+using Il2CppSystem.Net;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using static DillyzRoleApi_Rewritten.Il2CppItemAttribute;
@@ -55,7 +57,7 @@ namespace DillyzRoleApi_Rewritten
             Log.LogInfo($"{HarmonyMain.MOD_NAME} v{HarmonyMain.MOD_VERSION} loaded. Hooray!");
             harmony.PatchAll();
 
-            SceneManager.add_sceneLoaded((Action<Scene, LoadSceneMode>)((scene, loadscenemode) =>
+            SceneManager.add_sceneLoaded((System.Action<Scene, LoadSceneMode>)((scene, loadscenemode) =>
             {
                 Log.LogInfo("this is so sad can we " + scene.name);
                 if (scene.name == "MainMenu") // :happyspongebob:
@@ -112,6 +114,17 @@ namespace DillyzRoleApi_Rewritten
             Log.LogInfo(outputLayerStr);
 
             Log.LogInfo(BEPINEX_CONFIG_FOLDER);
+
+            var regions = ServerManager.DefaultRegions.ToList();
+            string iptouse = "localhost";
+            /*if (Uri.CheckHostName(iptouse).ToString() == "Dns")
+                foreach (IPAddress address in Dns.GetHostAddresses(iptouse))
+                    if (address.AddressFamily == Il2CppSystem.Net.Sockets.AddressFamily.InterNetwork)
+                    {
+                        iptouse = address.ToString();
+                        break;
+                    }*/
+            regions.Insert(0, new StaticHttpRegionInfo("Localhost", StringNames.NoneLabel, "localhost", new ServerInfo[] { new ServerInfo("",iptouse,22023,false) }));
         }
     }
 }

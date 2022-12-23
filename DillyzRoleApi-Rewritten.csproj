@@ -34,6 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AbilityPatches.cs" />
+    <Compile Include="AntiCheat.cs" />
     <Compile Include="CustomButton.cs" />
     <Compile Include="CustomPalette.cs" />
     <Compile Include="CustomRole.cs" />
