@@ -87,14 +87,45 @@ namespace DillyzRoleApi_Rewritten
                 for (int i = 0; i < textsToMakeActive.Length; i++)
                 {
                     TextMeshPro curTMP = textsToMakeActive[i];
-                    HarmonyMain.Instance.Log.LogInfo("prank");
+                    //HarmonyMain.Instance.Log.LogInfo("prank");
                     PassiveButton tmpButton = curTMP.gameObject.GetComponent<PassiveButton>();
 
-                    HarmonyMain.Instance.Log.LogInfo("prank23");
+                    //HarmonyMain.Instance.Log.LogInfo("prank23");
                     tmpButton.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
                     tmpButton.OnClick.AddListener((UnityEngine.Events.UnityAction)callback);
                     void callback() {
-                        HarmonyMain.Instance.Log.LogInfo(role.name + "'s " + curTMP.name + " was clicked");
+                        //HarmonyMain.Instance.Log.LogInfo(role.name + "'s " + curTMP.name + " was clicked");
+
+                        if (!AmongUsClient.Instance.AmHost)
+                            return;
+
+                        switch (curTMP.name) {
+                            case "Count Plus_TMP":
+                                if (role.setting_countPerGame == 0)
+                                    role.setting_chancePerGame = 50;
+
+                                role.setting_countPerGame++;
+                                break;
+                            case "Count Minus_TMP":
+                                role.setting_countPerGame--;
+                                break;
+                            case "Chance Plus_TMP":
+                                if (role.setting_countPerGame == 0)
+                                    role.setting_countPerGame = 1;
+
+                                role.setting_chancePerGame += 10;
+                                break;
+                            case "Chance Minus_TMP":
+                                role.setting_chancePerGame -= 10;
+                                break;
+                        }
+
+                        if (role.setting_countPerGame == 0)
+                            role.setting_chancePerGame = 0;
+
+                        countValueText.text = role.setting_countPerGame.ToString();
+                        chanceValueText.text = role.setting_chancePerGame.ToString() + "%";
+
                     }
                 }
                 #endregion
