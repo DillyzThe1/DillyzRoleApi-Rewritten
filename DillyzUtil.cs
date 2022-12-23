@@ -197,7 +197,7 @@ namespace DillyzRoleApi_Rewritten
                 HarmonyMain.Instance.Log.LogInfo("Kill animation " + killanim.name + " found!");
 
             // for the advice takers
-            /*if (assassinator != target)
+            if (assassinator != target)
             {
                 RoleTypes oldroletype = assassinator.Data.RoleType;
                 RoleBehaviour oldrole = assassinator.Data.Role;
@@ -217,7 +217,7 @@ namespace DillyzRoleApi_Rewritten
                 target.Data.RoleType = oldroletype_target;
                 target.Data.Role = oldrole_target;
                 return;
-            }*/
+            }
 
             if (target.protectedByGuardian)
             {
