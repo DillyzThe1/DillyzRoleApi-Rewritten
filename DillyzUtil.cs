@@ -169,7 +169,7 @@ namespace DillyzRoleApi_Rewritten
             {
                 if (player == centerPlayer)
                     continue;
-                double dist = getDistBetweenPlayers(centerPlayer, player);
+                double dist = getDist(centerPlayer.GetTruePosition(), player.GetTruePosition());
                 if (dist >= playerDist)
                     continue;
                 playerDist = dist;
@@ -250,12 +250,10 @@ namespace DillyzRoleApi_Rewritten
             assassinator.Data.Role = oldrole;
         }
 
-        public static double getDistBetweenPlayers(PlayerControl player, PlayerControl refplayer)
+        public static double getDist(Vector2 p1, Vector2 p2)
         {
-            Vector2 refpos = refplayer.GetTruePosition();
-            Vector2 playerpos = player.GetTruePosition();
             // maths
-            return Math.Sqrt((refpos[0] - playerpos[0]) * (refpos[0] - playerpos[0]) + (refpos[1] - playerpos[1]) * (refpos[1] - playerpos[1]));
+            return Math.Sqrt((p1[0] - p2[0]) * (p1[0] - p2[0]) + (p1[1] - p2[1]) * (p1[1] - p2[1]));
         }
 
         public static bool InFreeplay()
