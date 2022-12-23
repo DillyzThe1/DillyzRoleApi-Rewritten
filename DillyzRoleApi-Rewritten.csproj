@@ -37,6 +37,7 @@
     <Compile Include="CustomButton.cs" />
     <Compile Include="CustomPalette.cs" />
     <Compile Include="CustomRole.cs" />
+    <Compile Include="LobbyBehaviourPatch.cs" />
     <Compile Include="LobbyConfigManager.cs" />
     <Compile Include="RolesSettingsMenuPatch.cs" />
     <Compile Include="CustomRpc.cs" />

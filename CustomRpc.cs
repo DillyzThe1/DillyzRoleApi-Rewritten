@@ -70,7 +70,7 @@ namespace DillyzRoleApi_Rewritten
 
                         // LOBBY_ROLE_SETTING-Jester-Count
                         if (settingToSet.StartsWith("LOBBY_ROLE_SETTING-")) {
-                            LobbyRoleSetting setting = null;
+                            //LobbyRoleSetting setting = null;
                             int epictrtoll = settingToSet.IndexOf("-") + 1;
                             string roleToGet_Wthing = settingToSet.Substring(epictrtoll, settingToSet.Length - epictrtoll);
                             string roleToACTAULLYGet = roleToGet_Wthing.Substring(0, roleToGet_Wthing.LastIndexOf("-"));
