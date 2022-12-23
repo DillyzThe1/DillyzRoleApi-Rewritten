@@ -22,7 +22,7 @@ namespace DillyzRoleApi_Rewritten
         public static Color32 ShapeShifterCrimson => new Color32(190, 30, 55, 255);
 
         // BUTTONS
-        public static Color KillButtonTextOutline = new Color32(219, 37, 0, 255);
-        public static Color PassiveButtonTextOutline = new Color32(0, 0, 0, 255);
+        public static Color32 KillButtonTextOutline = new Color32(219, 37, 0, 255);
+        public static Color32 PassiveButtonTextOutline = new Color32(0, 0, 0, 255);
     }
 }
