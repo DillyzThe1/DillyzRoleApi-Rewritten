@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using BepInEx;
+using BepInEx.Configuration;
 using BepInEx.IL2CPP;
 using HarmonyLib;
 using UnityEngine;
@@ -34,11 +35,20 @@ namespace DillyzRoleApi_Rewritten
 
         public static HarmonyMain Instance;
 
-        public const bool DILLYZ_DEBUG = true;
+        // https://docs.bepinex.dev/v5.4.21/articles/dev_guide/plugin_tutorial/4_configuration.html
+        public ConfigEntry<bool> enableDebugJester;
+        public ConfigEntry<bool> enableDebugSheriff;
 
         public override void Load()
         {
             Instance = this;
+
+            enableDebugJester = Config.Bind("Debug", "Debug Jester", false,
+                "Enables the Debug Jester built into the API.\nThis functions normally, but you may want to use the official package here:\n" +
+                "https://github.com/DillyzThe1/DillyzRoleApi-Rewritten/Packages.md");
+            enableDebugSheriff = Config.Bind("Debug", "Debug Sheriff", false,
+                "Enables the Debug Sheriff built into the API.\nThis functions normally, but you may want to use the official package here:\n" +
+                "https://github.com/DillyzThe1/DillyzRoleApi-Rewritten/Packages.md");
 
             Log.LogInfo($"{HarmonyMain.MOD_NAME} v{HarmonyMain.MOD_VERSION} loaded. Hooray!");
             harmony.PatchAll();
@@ -50,21 +60,25 @@ namespace DillyzRoleApi_Rewritten
                     ModManager.Instance.ShowModStamp();
             }));
 
-            if (DILLYZ_DEBUG)
+            if (enableDebugJester.Value)
             {
                 Log.LogInfo("Adding a Jester!");
                 DillyzUtil.createRole("Jester", "Get voted out to win.", true, false, new Color32(90, 50, 200, 255), false,
                                                                         CustomRoleSide.LoneWolf, VentPrivilege.None, false, true);
                 CustomRole.getByName("Jester").a_or_an = "a";
+            }
 
+            if (enableDebugSheriff.Value)
+            {
                 Log.LogInfo("Adding a Sheriff!");
                 DillyzUtil.createRole("Sheriff", "Kill the impostor or suicide.", true, true, new Color32(255, 185, 30, 255), false,
                                                                         CustomRoleSide.Crewmate, VentPrivilege.None, false, true);
                 CustomRole.getByName("Sheriff").a_or_an = "a";
 
                 Log.LogInfo("Adding a sherrif button!");
-                DillyzUtil.addButton(Assembly.GetExecutingAssembly(), "Sheriff Kill Button", "DillyzRoleApi_Rewritten.Assets.kill.png", -1f, true, 
-                new string[] { "Sheriff" }, new string[] {}, delegate (KillButtonCustomData button, bool success) {
+                DillyzUtil.addButton(Assembly.GetExecutingAssembly(), "Sheriff Kill Button", "DillyzRoleApi_Rewritten.Assets.kill.png", -1f, true,
+                new string[] { "Sheriff" }, new string[] { }, delegate (KillButtonCustomData button, bool success)
+                {
                     if (!success)
                         return;
 
@@ -79,12 +93,12 @@ namespace DillyzRoleApi_Rewritten
 
                 CustomButton.getButtonByName("Sheriff Kill Button").buttonText = "Kill";
                 CustomButton.getButtonByName("Sheriff Kill Button").textOutlineColor = new Color32(255, 185, 30, 255);
-
-                foreach (CustomRole role in CustomRole.allRoles)
-                    Log.LogInfo(role.ToString());
             }
 
+            foreach (CustomRole role in CustomRole.allRoles)
+                Log.LogInfo(role.ToString());
+
             IL2CPPChainloaderPatch.Reg(Assembly.GetExecutingAssembly());
-         }
+        }
     }
 }
