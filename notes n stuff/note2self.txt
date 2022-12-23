@@ -2,3 +2,5 @@ bepinex build for unity thing - https://builds.bepinex.dev/projects/bepinex_be/5
 ue issue - https://github.com/sinai-dev/UnityExplorer/issues/192
 au version - 2022.12.14
 to mak a role - extend CustomRole
+
+gameObject.layer = LayerMask.NameToLayer("Ghost");
