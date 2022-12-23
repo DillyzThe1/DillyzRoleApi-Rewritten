@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AmongUs.GameOptions;
 using Hazel;
+using MS.Internal.Xml.XPath;
 using UnityEngine;
 using static Il2CppSystem.Globalization.CultureInfo;
 
@@ -189,16 +190,20 @@ namespace DillyzRoleApi_Rewritten
             AmongUsClient.Instance.FinishRpcImmediately(writer);
         }
 
-        public static void commitAssassination(PlayerControl assassinator, PlayerControl target) {
-
-            RoleTypes oldroletype = assassinator.Data.RoleType;
-            RoleBehaviour oldrole = assassinator.Data.Role;
-            assassinator.Data.RoleType = RoleTypes.Impostor;
-            assassinator.Data.Role = new ImpostorRole();
+        public static void commitAssassination(PlayerControl assassinator, PlayerControl target)
+        {
+            HarmonyMain.Instance.Log.LogInfo(assassinator.KillAnimations.Length + " kill anims");
+            foreach (KillAnimation killanim in assassinator.KillAnimations)
+                HarmonyMain.Instance.Log.LogInfo("Kill animation " + killanim.name + " found!");
 
             // for the advice takers
-            if (assassinator != target)
+            /*if (assassinator != target)
             {
+                RoleTypes oldroletype = assassinator.Data.RoleType;
+                RoleBehaviour oldrole = assassinator.Data.Role;
+                assassinator.Data.RoleType = RoleTypes.Impostor;
+                assassinator.Data.Role = new ImpostorRole();
+
                 RoleTypes oldroletype_target = target.Data.RoleType;
                 RoleBehaviour oldrole_target = target.Data.Role;
                 target.Data.RoleType = RoleTypes.Crewmate;
@@ -212,42 +217,39 @@ namespace DillyzRoleApi_Rewritten
                 target.Data.RoleType = oldroletype_target;
                 target.Data.Role = oldrole_target;
                 return;
-            }
-            else
+            }*/
+
+            if (target.protectedByGuardian)
             {
-                if (target.protectedByGuardian)
-                {
-                    target.protectedByGuardianThisRound = true;
-                    target.ShowFailedMurder();
-                    assassinator.SetKillTimer(GameOptionsManager.Instance.CurrentGameOptions.GetFloat(FloatOptionNames.KillCooldown) / 2f);
-                    target.RemoveProtection();
-                    return;
-                }
+                target.protectedByGuardianThisRound = true;
+                target.ShowFailedMurder();
+                assassinator.SetKillTimer(GameOptionsManager.Instance.CurrentGameOptions.GetFloat(FloatOptionNames.KillCooldown) / 2f);
+                target.RemoveProtection();
+                return;
+            }
 
-                KillAnimation kil = assassinator.KillAnimations[0];
+            //CustomRoleSide roleSideUrOn = DillyzUtil.roleSide(target);
+            KillAnimation kil = assassinator.KillAnimations[0];
 
-                target.gameObject.layer = LayerMask.NameToLayer("Ghost");
+            target.gameObject.layer = LayerMask.NameToLayer("Ghost");
 
-                DeadBody deadBody = GameObject.Instantiate(kil.bodyPrefab);
-                deadBody.enabled = true;
-                deadBody.ParentId = target.PlayerId;
-                target.SetPlayerMaterialColors(deadBody.bodyRenderer);
-                target.SetPlayerMaterialColors(deadBody.bloodSplatter);
-                Vector3 vector = target.transform.position + kil.BodyOffset;
-                vector.z = vector.y / 1000f;
-                deadBody.transform.position = vector;
-                target.Die(DeathReason.Kill, true);
+            DeadBody deadBody = GameObject.Instantiate(kil.bodyPrefab);
+            deadBody.enabled = true;
+            deadBody.ParentId = target.PlayerId;
+            target.SetPlayerMaterialColors(deadBody.bodyRenderer);
+            target.SetPlayerMaterialColors(deadBody.bloodSplatter);
+            Vector3 vector = target.transform.position + kil.BodyOffset;
+            vector.z = vector.y / 1000f;
+            deadBody.transform.position = vector;
+            target.Die(DeathReason.Kill, true);
 
+            if (PlayerControl.LocalPlayer.PlayerId == target.PlayerId)
+            {
                 DestroyableSingleton<HudManager>.Instance.KillOverlay.ShowKillAnimation(assassinator.Data, target.Data);
                 DestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(false);
                 target.cosmetics.SetNameMask(false);
                 target.RpcSetScanner(false);
             }
-
-            assassinator.MurderPlayer(target);
-
-            assassinator.Data.RoleType = oldroletype;
-            assassinator.Data.Role = oldrole;
         }
 
         public static double getDist(Vector2 p1, Vector2 p2)
@@ -301,7 +303,7 @@ namespace DillyzRoleApi_Rewritten
                     if (writingCallback != null)
                         writingCallback(writer);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    return;
+                    return; 
                 }
 
             HarmonyMain.Instance.Log.LogError("Alright, you're trolling. You're. TROLLING. The RPC you're calling is null. " + rpcName + " doesn't EXIST! Are you ok?!");
