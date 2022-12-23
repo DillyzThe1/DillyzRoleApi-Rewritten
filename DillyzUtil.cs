@@ -265,7 +265,6 @@ namespace DillyzRoleApi_Rewritten
 
         // Make sure your sprite is an Embedded Resource, compile, then check the console. You'll get a sprite path.
         public static Sprite getSprite(Assembly assembly, string spritePath) {
-            Texture2D tex2d = new Texture2D(110, 110);
             Stream myStream = assembly.GetManifestResourceStream(spritePath);
             if (myStream != null)
             {
@@ -273,8 +272,10 @@ namespace DillyzRoleApi_Rewritten
                 byte[] buttonTexture = new byte[myStream.Length];
                 for (int i = 0; i < myStream.Length;)
                     i += myStream.Read(buttonTexture, i, Convert.ToInt32(myStream.Length) - i);
+
+                Texture2D tex2d = new Texture2D(110, 110);
                 ImageConversion.LoadImage(tex2d, buttonTexture, false);
-                return Sprite.Create(tex2d, new Rect(0, 0, 110, 110), Vector2.one * 0.5f, 100f);
+                return Sprite.Create(tex2d, new Rect(0, 0, tex2d.width, tex2d.height), Vector2.one * 0.5f, 100f);
             }
             else
                 HarmonyMain.Instance.Log.LogError("Sprite image \"" + spritePath + "\" could not be found!");

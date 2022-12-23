@@ -128,7 +128,7 @@ namespace DillyzRoleApi_Rewritten
             }
             else
             {
-                if (timeRemaining < 0)
+                if (timeRemaining < 0 || this.buttonData.cooldown == 0)
                     this.killButton.SetEnabled();
                 else
                     this.killButton.SetDisabled();
