@@ -36,15 +36,29 @@ namespace DillyzRoleApi_Rewritten
                 GameObject roleNameCopy = GameObject.Instantiate(ogtab.transform.Find("Role Name").gameObject);
                 roleNameCopy.transform.parent = newTab.transform;
                 roleNameCopy.transform.localScale = Vector3.one;
+                roleNameCopy.transform.position = ogtab.transform.Find("Role Name").position;
 
-                roleNameCopy.GetComponent<TextMeshPro>().text = role.name;
+                //roleNameCopy.GetComponent<TextMeshPro>().text = role.name;
+                TMPTextForcer tmpforce = roleNameCopy.AddComponent<TMPTextForcer>();
+                tmpforce.textToDo = role.name;
+                tmpforce.tmpToDo = roleNameCopy.GetComponent<TextMeshPro>();
 
                 RolesSettingsMenuPatch_FNFModderReference.customtabs[role.name] = newTab;
             }
         }
+    } 
+
+    [Il2CppItem]
+    class TMPTextForcer : MonoBehaviour {
+        public string textToDo = "";
+        public TextMeshPro tmpToDo = null;
+
+        void Update() {
+            tmpToDo?.text = textToDo;
+        }
     }
 
-    [HarmonyPatch(typeof(RolesSettingsMenu), nameof(RolesSettingsMenu.RefreshChildren))]
+    [HarmonyPatch(typeof(RolesSettingsMenu), nameof(RolesSettingsMenu.ShowAdvancedSettings))]
     public class RolesSettingsMenuPatch_FNFModderReference
     {
         public static Dictionary<string, GameObject> customtabs = new Dictionary<string, GameObject>();
@@ -61,6 +75,7 @@ namespace DillyzRoleApi_Rewritten
                 arbys.Tab.SetActive(false);
 
             customtabs[customRoleToSelect]?.SetActive(true);
+            customtabs[customRoleToSelect]?.transform.Find("Role Name")?.gameObject.GetComponent<TextMeshPro>()?.SetText(role.name);
 
             __instance.RoleChancesSettings.SetActive(false);
             __instance.AdvancedRolesSettings.SetActive(true);
@@ -110,7 +125,7 @@ namespace DillyzRoleApi_Rewritten
                 bgpb.OnMouseOver = new UnityEngine.Events.UnityEvent();
                 bgpb.OnMouseOver.AddListener((UnityEngine.Events.UnityAction)bgover);
                 void bgover() {
-                    GameSettingMenu.Instance.RoleName.text = role.name;
+                    GameSettingMenu.Instance.RoleName.text = role.name; 
                     GameSettingMenu.Instance.RoleBlurb.text = $"The {role.name} is a role created using DillyzRoleAPI v2\n\ngithub.com/DillyzThe1";
                     GameSettingMenu.Instance.RoleIcon.sprite = RolesSettingsMenuPatch.cachedsprites[role.name];
                 }
