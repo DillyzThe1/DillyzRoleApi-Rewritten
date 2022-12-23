@@ -51,73 +51,50 @@ namespace DillyzRoleApi_Rewritten
                 titleText.text = role.name;
 
                 #region add texts
-                TextMeshPro countPlusText = GameObject.Instantiate(og_TMP);
+                TextMeshPro countPlusText = GameObject.Instantiate(ogSetting.transform.Find("Count Plus_TMP").gameObject.GetComponent<TextMeshPro>());
                 countPlusText.gameObject.transform.SetParent(settingParent.transform);
                 countPlusText.name = "Count Plus_TMP";
                 countPlusText.text = "+";
 
-                TextMeshPro countValueText = GameObject.Instantiate(og_TMP);
+                TextMeshPro countValueText = GameObject.Instantiate(ogSetting.transform.Find("Count Value_TMP").gameObject.GetComponent<TextMeshPro>());
                 countValueText.gameObject.transform.SetParent(settingParent.transform);
                 countValueText.name = "Count Value_TMP";
                 countValueText.text = role.setting_countPerGame.ToString();
 
-                TextMeshPro countMinusText = GameObject.Instantiate(og_TMP);
+                TextMeshPro countMinusText = GameObject.Instantiate(ogSetting.transform.Find("Count Minus_TMP").gameObject.GetComponent<TextMeshPro>());
                 countMinusText.gameObject.transform.SetParent(settingParent.transform);
                 countMinusText.name = "Count Minus_TMP";
                 countMinusText.text = "-";
 
-                TextMeshPro chancePlusText = GameObject.Instantiate(og_TMP);
+                TextMeshPro chancePlusText = GameObject.Instantiate(ogSetting.transform.Find("Chance Plus_TMP").gameObject.GetComponent<TextMeshPro>());
                 chancePlusText.gameObject.transform.SetParent(settingParent.transform);
                 chancePlusText.name = "Chance Plus_TMP";
                 chancePlusText.text = "+";
 
-                TextMeshPro chanceValueText = GameObject.Instantiate(og_TMP);
+                TextMeshPro chanceValueText = GameObject.Instantiate(ogSetting.transform.Find("Chance Value_TMP").gameObject.GetComponent<TextMeshPro>());
                 chanceValueText.gameObject.transform.SetParent(settingParent.transform);
                 chanceValueText.name = "Chance Value_TMP";
                 chanceValueText.text = role.setting_chancePerGame.ToString() + "%";
 
-                TextMeshPro chanceMinusText = GameObject.Instantiate(og_TMP);
+                TextMeshPro chanceMinusText = GameObject.Instantiate(ogSetting.transform.Find("Chance Minus_TMP").gameObject.GetComponent<TextMeshPro>());
                 chanceMinusText.gameObject.transform.SetParent(settingParent.transform);
-                chanceMinusText.name = "Chance Minus_TMP";
+                chanceMinusText.name = "Chance Minus_TMP"; 
                 chanceMinusText.text = "-";
                 #endregion
 
                 #region add text button functionality
-                TextMeshPro[] textsToMakeActive = new TextMeshPro[] { countPlusText, countMinusText, chanceValueText, chanceMinusText };
-                for (int i = 0; i < 4; i++)
+                TextMeshPro[] textsToMakeActive = new TextMeshPro[] { countPlusText, countMinusText, chancePlusText, chanceMinusText };
+                for (int i = 0; i < textsToMakeActive.Length; i++)
                 {
                     TextMeshPro curTMP = textsToMakeActive[i];
                     HarmonyMain.Instance.Log.LogInfo("prank");
-                    PassiveButton tmpButton = curTMP.gameObject.AddComponent<PassiveButton>();
-                    tmpButton.enabled = true;
-                    tmpButton.OnDown = true;
-                    tmpButton.OnUp = tmpButton.OnRepeat = false;
-
-                    HarmonyMain.Instance.Log.LogInfo("prank2");
-                    curTMP.gameObject.AddComponent<BoxCollider2D>();
+                    PassiveButton tmpButton = curTMP.gameObject.GetComponent<PassiveButton>();
 
                     HarmonyMain.Instance.Log.LogInfo("prank23");
-                    tmpButton.OnClick.RemoveAllListeners();
+                    tmpButton.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
                     tmpButton.OnClick.AddListener((UnityEngine.Events.UnityAction)callback);
                     void callback() {
                         HarmonyMain.Instance.Log.LogInfo(role.name + "'s " + curTMP.name + " was clicked");
-                    }
-
-                    HarmonyMain.Instance.Log.LogInfo("prank234");
-                    //tmpButton.OnMouseOver.RemoveAllListeners();
-                    tmpButton.OnMouseOver = new UnityEngine.Events.UnityEvent();
-                    tmpButton.OnMouseOver.AddListener((UnityEngine.Events.UnityAction)overr);
-                    void overr() {
-                        curTMP.color = CustomPalette.GameSettingSelectedColor;
-                    }
-                    HarmonyMain.Instance.Log.LogInfo("prank2354");
-
-                    //tmpButton.OnMouseOut.RemoveAllListeners();
-                    tmpButton.OnMouseOut = new UnityEngine.Events.UnityEvent();
-                    tmpButton.OnMouseOut.AddListener((UnityEngine.Events.UnityAction)outtt);
-                    void outtt()
-                    {
-                        curTMP.color = CustomPalette.White;
                     }
                 }
                 #endregion
@@ -126,29 +103,6 @@ namespace DillyzRoleApi_Rewritten
                 settingParent.transform.position = new Vector3(ogSetting.transform.position.x, getNewRoleY(), ogSetting.transform.position.z);
 
                 titleText.transform.localPosition = new Vector3(og_TMP.gameObject.transform.localPosition.x, og_TMP.gameObject.transform.localPosition.y, 0);
-
-                Vector3 posOff = new Vector3(1.75f, 0, 0);
-                Vector3 funnyScale = Vector3.one * 1.65f;
-
-                Vector3 funnyScale_value = Vector3.one * 1.2f;
-
-                countPlusText.transform.localScale = funnyScale;
-                countPlusText.transform.localPosition = ogSetting.transform.Find("Count Plus_TMP").localPosition + posOff;
-
-                countValueText.transform.localScale = funnyScale_value;
-                countValueText.transform.localPosition = ogSetting.transform.Find("Count Value_TMP").localPosition + new Vector3(1.275f, 0, 0);
-
-                countMinusText.transform.localScale = funnyScale;
-                countMinusText.transform.localPosition = ogSetting.transform.Find("Count Minus_TMP").localPosition + posOff;
-
-                chancePlusText.transform.localScale = funnyScale;
-                chancePlusText.transform.localPosition = ogSetting.transform.Find("Chance Plus_TMP").localPosition + posOff;
-
-                chanceValueText.transform.localScale = funnyScale_value;
-                chanceValueText.transform.localPosition = ogSetting.transform.Find("Chance Value_TMP").localPosition + new Vector3(1.075f, 0, 0);
-
-                chanceMinusText.transform.localScale = funnyScale;
-                chanceMinusText.transform.localPosition = ogSetting.transform.Find("Chance Minus_TMP").localPosition + posOff;
 
                 rolesThatUsedY++;
                 settingParent.transform.localScale = Vector3.one;
