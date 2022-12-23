@@ -28,12 +28,13 @@ namespace DillyzRoleApi_Rewritten
                     gstextalt.transform.parent = gs.transform.parent;
                     gstextalt.name = "gstextalt";
                     gstextalt.alignment = TextAlignmentOptions.Right;
-                }
+                } 
                 else
                     gstextalt = gstextalttrans.gameObject.GetComponent<TextMeshPro>();
 
                 gstextalt.gameObject.SetActive(true);
-                gstextalt.transform.position = gs.transform.position + new Vector3(4.8f, 0.8f, 0f);
+                gstextalt.transform.position = new Vector3(HudManager.Instance.transform.Find("Buttons").Find("TopRight").Find("MenuButton").transform.position.x - 2.75f, gs.transform.position.y + 0.8f, gs.transform.position.z);
+                //gs.transform.position + new Vector3(4.8f, 0.8f, 0f);
 
                 gstextalt.text = "# Role Settings\n";
                 foreach (RoleBehaviour roleBehaviour in DestroyableSingleton<RoleManager>.Instance.AllRoles)
