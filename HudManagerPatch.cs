@@ -135,19 +135,9 @@ namespace DillyzRoleApi_Rewritten
                 KillButtonCustomData customKillControl = newKill.gameObject.AddComponent<KillButtonCustomData>();
                 customKillControl.Setup(button, newKill);
 
-                Texture2D tex2d = new Texture2D(110, 110);
-                Stream myStream = customKillControl.buttonData.epicAssemblyFail.GetManifestResourceStream(button.imageName);
-                if (myStream != null)
-                {
-                    myStream.Position = 0;
-                    byte[] buttonTexture = new byte[myStream.Length];
-                    for (int i = 0; i < myStream.Length;)
-                        i += myStream.Read(buttonTexture, i, Convert.ToInt32(myStream.Length) - i);
-                    ImageConversion.LoadImage(tex2d, buttonTexture, false);
-                    newKill.graphic.sprite = Sprite.Create(tex2d, new Rect(0, 0, 110, 110), Vector2.one * 0.5f, 100f);
-                }
-                else
-                    HarmonyMain.Instance.Log.LogError("Button image \"" + button.name + "\" could not be found!");
+                Sprite newKillSprite = DillyzUtil.getSprite(Assembly.GetExecutingAssembly(), button.imageName);
+                if (newKillSprite == null)
+                    newKill.graphic.sprite = newKillSprite;
 
                 PassiveButton pbjsandwich = newKill.gameObject.GetComponent<PassiveButton>();
                 pbjsandwich.OnClick.RemoveAllListeners();
