@@ -34,7 +34,9 @@ namespace DillyzRoleApi_Rewritten
 
         public Assembly epicAssemblyFail = Assembly.GetExecutingAssembly();
 
-        private Action<KillButtonCustomData, bool> onClicked;
+        private Action<KillButtonCustomData, bool> _onClicked;
+        private Action _onUpdate;
+        private Action<bool> _canUse; // the bool is the original return
 
         public static Dictionary<string, CustomButton> buttonMap = new Dictionary<string, CustomButton>();
         public static CustomButton getButtonByName(string name) => buttonMap.ContainsKey(name) ? buttonMap[name] : null;
@@ -70,7 +72,7 @@ namespace DillyzRoleApi_Rewritten
 
             this.textOutlineColor = this.targetButton ? CustomPalette.KillButtonTextOutline : CustomPalette.PassiveButtonTextOutline;
 
-            this.onClicked = onClicked;
+            this._onClicked = onClicked;
         }
 
         public CustomButton() {
@@ -83,8 +85,18 @@ namespace DillyzRoleApi_Rewritten
         }
 
         public void OnClicked(KillButtonCustomData button, bool success) {
-            if (this.onClicked != null)
-                this.onClicked(button, success);
+            if (this._onClicked != null)
+                this._onClicked(button, success);
+        }
+
+        public void SetCustomUpdate(Action onUpdate) {
+            this._onUpdate = onUpdate;
+        }
+
+        // the bool in the return is representing 
+        public void SetCanUse(Action<bool> canUse)
+        {
+            this._canUse = canUse;
         }
     }
 

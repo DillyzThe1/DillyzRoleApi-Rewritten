@@ -13,11 +13,19 @@ namespace DillyzRoleApi_Rewritten
         SetRole = 100,          // Takes two arguments: PlayerId (byte) & RoleName (string). Sets the role of the player.
         ResetRoles = 101,       // Takes no arguments. Resets all player roles.
         CustomRoleWin = 102,    // The default jester role's winnning RPC. All jester stuff will move to a standalone mod in the future.
-        Assassinate = 103       // Custom-made assassination.
+        Assassinate = 103,      // Custom-made assassination.
+        AvailableSpace = 150    // Available spaces for custom RPC. Register your own with DillyzUtil.regRpcCallback("RpcName", delegate(MessageReader reader) {});
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRpc))]
-    class HandleRpcPatch {
+    class CustomRpcHandler {
+
+        private static byte _rpcByteOffset = 0;
+        public static byte nextRpcByte => (byte)(((byte)CustomRpc.AvailableSpace) + (_rpcByteOffset++));
+        public static bool rpcByteAvailable = ((int)CustomRpc.AvailableSpace + _rpcByteOffset) < 256;
+
+        public static List<Action<MessageReader>> customRpcCallbacks = new List<Action<MessageReader>>();
+
         static void Postfix(byte callId, MessageReader reader) {
             switch (callId) {
                 case (byte)CustomRpc.SetRole:
@@ -33,6 +41,12 @@ namespace DillyzRoleApi_Rewritten
                     break;
                 case (byte)CustomRpc.Assassinate:
                     DillyzUtil.commitAssassination(DillyzUtil.findPlayerControl(reader.ReadByte()), DillyzUtil.findPlayerControl(reader.ReadByte()));
+                    break;
+                default:
+                    if (callId >= (byte)CustomRpc.AvailableSpace)
+                    {
+                        
+                    }
                     break;
             }
         }
