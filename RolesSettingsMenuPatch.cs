@@ -20,11 +20,52 @@ namespace DillyzRoleApi_Rewritten
         public static void Postfix(RolesSettingsMenu __instance)
         {
             RolesSettingsMenuPatch.cachedsprites.Clear();
+            RolesSettingsMenuPatch_FNFModderReference.customtabs.Clear();
 
+            GameObject ogtab = __instance.AllAdvancedSettingTabs[0].Tab;
 
             foreach (CustomRole role in CustomRole.allRoles) {
                 RolesSettingsMenuPatch.cachedsprites[role.name] = role.settingsSprite;
+
+                GameObject newTab = new GameObject();
+                newTab.name = role.name + " Settings";
+                newTab.transform.parent = ogtab.transform.parent;
+                newTab.transform.position = ogtab.transform.position;
+                newTab.transform.localScale = Vector3.one;
+
+                GameObject roleNameCopy = GameObject.Instantiate(ogtab.transform.Find("Role Name").gameObject);
+                roleNameCopy.transform.parent = newTab.transform;
+                roleNameCopy.transform.localScale = Vector3.one;
+
+                roleNameCopy.GetComponent<TextMeshPro>().text = role.name;
+
+                RolesSettingsMenuPatch_FNFModderReference.customtabs[role.name] = newTab;
             }
+        }
+    }
+
+    [HarmonyPatch(typeof(RolesSettingsMenu), nameof(RolesSettingsMenu.RefreshChildren))]
+    public class RolesSettingsMenuPatch_FNFModderReference
+    {
+        public static Dictionary<string, GameObject> customtabs = new Dictionary<string, GameObject>();
+        public static List<GameObject> AllCustomTabs => customtabs.Values.ToList();
+        public static string customRoleToSelect = "Sheriff";
+        public static bool Prefix(RolesSettingsMenu __instance, RoleBehaviour role)
+        {
+            foreach (GameObject obj in AllCustomTabs)
+                obj.SetActive(false);
+
+            if (role != null)
+                return true;
+            foreach (AdvancedRoleSettingsButton arbys in __instance.AllAdvancedSettingTabs)
+                arbys.Tab.SetActive(false);
+
+            customtabs[customRoleToSelect]?.SetActive(true);
+
+            __instance.RoleChancesSettings.SetActive(false);
+            __instance.AdvancedRolesSettings.SetActive(true);
+            __instance.RefreshChildren();
+            return false;
         }
     }
 
@@ -114,8 +155,13 @@ namespace DillyzRoleApi_Rewritten
                 chanceMinusText.text = "-";
                 #endregion
 
+                TextMeshPro advancedText = GameObject.Instantiate(ogSetting.transform.Find("More Options").gameObject.GetComponent<TextMeshPro>());
+                advancedText.gameObject.transform.SetParent(settingParent.transform);
+                advancedText.name = "More Options";
+                advancedText.text = "Adv";
+
                 #region add text button functionality
-                TextMeshPro[] textsToMakeActive = new TextMeshPro[] { countPlusText, countMinusText, chancePlusText, chanceMinusText };
+                TextMeshPro[] textsToMakeActive = new TextMeshPro[] { countPlusText, countMinusText, chancePlusText, chanceMinusText, advancedText };
                 for (int i = 0; i < textsToMakeActive.Length; i++)
                 {
                     TextMeshPro curTMP = textsToMakeActive[i];
@@ -158,6 +204,11 @@ namespace DillyzRoleApi_Rewritten
 
                                 if (role.setting_chancePerGame == 0)
                                     role.setting_countPerGame = 0;
+                                break;
+                            case "More Options":
+                                bgover();
+                                RolesSettingsMenuPatch_FNFModderReference.customRoleToSelect = role.name;
+                                GameSettingMenu.Instance.ShowAdvancedRoleOptions(null);
                                 break;
                         }
 
