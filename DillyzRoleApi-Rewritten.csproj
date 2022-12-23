@@ -37,6 +37,7 @@
     <Compile Include="CustomButton.cs" />
     <Compile Include="CustomPalette.cs" />
     <Compile Include="CustomRole.cs" />
+    <Compile Include="RolesSettingsMenuPatch.cs" />
     <Compile Include="CustomRpc.cs" />
     <Compile Include="DillyzUtil.cs" />
     <Compile Include="ExileControllerPatch.cs" />

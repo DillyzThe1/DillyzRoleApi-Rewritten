@@ -54,6 +54,14 @@ namespace DillyzRoleApi_Rewritten
         public bool switchToImpostor = false;                   // Will switch a crewmate role to an Impostor role.
         public string a_or_an = "an";                           // "DillyzThe1 was a Jester" vs "DillyzThe1 was an Jester"
 
+        // LOBBY SETTINGS
+        private int _countPerGame = 1;
+        private int _chancePerGame = 50;
+
+        // LOBBY SETTINGS (GET & SET)
+        public int setting_countPerGame { get { return _countPerGame; } set { _countPerGame = Math.Max(Math.Max(_countPerGame, 0), 15); } }
+        public int setting_chancePerGame { get { return _chancePerGame; } set { _chancePerGame = Math.Max(Math.Max(_chancePerGame, 0), 100); } }
+
         public CustomRole(String name, String subtext, bool nameColor, bool nameColorPublic, Color32 roleColor, bool canSeeTeam, 
                             CustomRoleSide side, VentPrivilege ventPrivilege, bool canKill, bool showEjectText) {
             this.name = name;
