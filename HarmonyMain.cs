@@ -94,6 +94,7 @@ namespace DillyzRoleApi_Rewritten
                         DillyzUtil.RpcCommitAssassination(PlayerControl.LocalPlayer, PlayerControl.LocalPlayer);
 
                 });
+                CustomRole.getByName("Sheriff").SetSprite(Assembly.GetExecutingAssembly(), "DillyzRoleApi_Rewritten.Assets.sheriff_kill.png");
 
                 CustomButton.getButtonByName("Sheriff Kill Button").buttonText = "Kill";
                 CustomButton.getButtonByName("Sheriff Kill Button").textOutlineColor = new Color32(255, 185, 30, 255);

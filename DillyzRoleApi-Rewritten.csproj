@@ -474,6 +474,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Assets\sheriff_kill.png" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\settings_genericrole.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

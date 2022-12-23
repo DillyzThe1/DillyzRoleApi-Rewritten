@@ -9,13 +9,29 @@ using System.Text;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using static DillyzRoleApi_Rewritten.RoleManagerPatch;
 using static UnityEngine.GraphicsBuffer;
 
 namespace DillyzRoleApi_Rewritten
 {
     [HarmonyPatch(typeof(RolesSettingsMenu), nameof(RolesSettingsMenu.Start))]
+    public class RolesSettingsMenuPatch_Start
+    {
+        public static void Postfix(RolesSettingsMenu __instance)
+        {
+            RolesSettingsMenuPatch.cachedsprites.Clear();
+
+
+            foreach (CustomRole role in CustomRole.allRoles) {
+                RolesSettingsMenuPatch.cachedsprites[role.name] = role.settingsSprite;
+            }
+        }
+    }
+
+    [HarmonyPatch(typeof(RolesSettingsMenu), nameof(RolesSettingsMenu.Start))]
     public class RolesSettingsMenuPatch
     {
+        public static Dictionary<string, Sprite> cachedsprites = new Dictionary<string, Sprite>();
         public static void Postfix(RolesSettingsMenu __instance) {
             RoleOptionSetting ogSetting = __instance.AllRoleSettings[0];
             RoleOptionSetting otherSetting = __instance.AllRoleSettings[1];
@@ -45,6 +61,16 @@ namespace DillyzRoleApi_Rewritten
                 GameObject bg = GameObject.Instantiate(og_bg);
                 bg.transform.SetParent(settingParent.transform);
                 bg.layer = og_bg.layer;
+
+                PassiveButton bgpb = bg.AddComponent<PassiveButton>();
+                bgpb.OnDown = bgpb.OnUp = bgpb.OnRepeat = false;
+                bgpb.OnMouseOver = new UnityEngine.UI.Button.ButtonClickedEvent();
+                bgpb.OnMouseOver.AddListener((UnityEngine.Events.UnityAction)bgover);
+                void bgover() {
+                    GameSettingMenu.Instance.RoleName.text = role.name;
+                    GameSettingMenu.Instance.RoleBlurb.text = $"The {role.name} is a role created using DillyzRoleAPI v2\n\ngithub.com/DillyzThe1";
+                    GameSettingMenu.Instance.RoleIcon.sprite = RolesSettingsMenuPatch.cachedsprites[role.name];
+                }
 
                 TextMeshPro og_TMP = ogSetting.transform.Find("Title_TMP").gameObject.GetComponent<TextMeshPro>();
 
@@ -95,6 +121,9 @@ namespace DillyzRoleApi_Rewritten
                     //HarmonyMain.Instance.Log.LogInfo("prank23");
                     tmpButton.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
                     tmpButton.OnClick.AddListener((UnityEngine.Events.UnityAction)callback);
+
+                    tmpButton.OnMouseOver.AddListener((UnityEngine.Events.UnityAction)bgover);
+
                     void callback() {
                         //HarmonyMain.Instance.Log.LogInfo(role.name + "'s " + curTMP.name + " was clicked");
 

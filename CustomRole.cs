@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Hazel;
@@ -59,6 +60,10 @@ namespace DillyzRoleApi_Rewritten
         public int setting_chancePerGame { get { return settingsForRole.roleChance; } set { settingsForRole.roleChance = Math.Min(Math.Max(value, 0), 100); } }
 
         private LobbyRoleSetting settingsForRole;
+        private Assembly settingsSpriteAssembly = Assembly.GetExecutingAssembly();
+        private string settingsSpritePath = "DillyzRoleApi_Rewritten.Assets.settings_genericrole.png";
+        public Sprite settingsSprite => DillyzUtil.getSprite(settingsSpriteAssembly, settingsSpritePath);
+        public void SetSprite(Assembly assembly, string assetPath) { settingsSpriteAssembly = assembly; settingsSpritePath = assetPath; }
 
         public CustomRole(string name, string subtext, bool nameColor, bool nameColorPublic, Color32 roleColor, bool canSeeTeam, 
                             CustomRoleSide side, VentPrivilege ventPrivilege, bool canKill, bool showEjectText) {
@@ -95,7 +100,6 @@ namespace DillyzRoleApi_Rewritten
 
             settingsForRole = new LobbyRoleSetting() { roleName = name, roleCount = 1, roleChance = 50 };
             LobbyConfigManager.lobbyRoleSettings.Add(settingsForRole);
-
         }
 
         public override string ToString() {
