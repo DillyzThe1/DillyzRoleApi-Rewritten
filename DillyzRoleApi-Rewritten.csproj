@@ -477,6 +477,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Assets\settings_genericrole.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="UnityEngine.CoreModule.dll" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

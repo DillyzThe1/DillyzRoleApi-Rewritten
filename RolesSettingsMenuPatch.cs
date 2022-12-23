@@ -2,6 +2,7 @@
 using Hazel;
 using Il2CppSystem;
 using Il2CppSystem.Diagnostics;
+using Steamworks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,22 +40,26 @@ namespace DillyzRoleApi_Rewritten
                 roleNameCopy.transform.position = ogtab.transform.Find("Role Name").position;
 
                 //roleNameCopy.GetComponent<TextMeshPro>().text = role.name;
-                TMPTextForcer tmpforce = roleNameCopy.AddComponent<TMPTextForcer>();
-                tmpforce.textToDo = role.name;
-                tmpforce.tmpToDo = roleNameCopy.GetComponent<TextMeshPro>();
+                TMPTextForce tmpTextForce = roleNameCopy.AddComponent<TMPTextForce>();
+                tmpTextForce.forcedText = role.name;
+                tmpTextForce.tmp = roleNameCopy.GetComponent<TextMeshPro>();
 
                 RolesSettingsMenuPatch_FNFModderReference.customtabs[role.name] = newTab;
             }
         }
-    } 
+    }
 
     [Il2CppItem]
-    class TMPTextForcer : MonoBehaviour {
-        public string textToDo = "";
-        public TextMeshPro tmpToDo = null;
+    public class TMPTextForce : MonoBehaviour
+    {
+        public string forcedText = "";
+        public TextMeshPro tmp;
 
-        void Update() {
-            tmpToDo?.text = textToDo;
+        public void Start() { }
+
+        public void Update() {
+            if (tmp != null)
+                tmp.text = forcedText;
         }
     }
 
