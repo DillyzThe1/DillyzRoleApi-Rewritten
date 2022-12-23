@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Cpp2IL.Core.Analysis.ResultModels;
 using HarmonyLib;
 using Hazel;
 
@@ -14,17 +15,34 @@ namespace DillyzRoleApi_Rewritten
         ResetRoles = 101,       // Takes no arguments. Resets all player roles.
         CustomRoleWin = 102,    // The default jester role's winnning RPC. All jester stuff will move to a standalone mod in the future.
         Assassinate = 103,      // Custom-made assassination.
-        AvailableSpace = 150    // Available spaces for custom RPC. Register your own with DillyzUtil.regRpcCallback("RpcName", delegate(MessageReader reader) {});
+        CustomRPCCall = 104     // Available spaces for custom RPC. Register your own with DillyzUtil.regRpcCallback("RpcName", delegate(MessageReader reader) {});
+    }
+
+    class CustomRpcCallback {
+        public string rpcName;
+        private Action<MessageReader> _callback;
+
+        public CustomRpcCallback(string rpcName, Action<MessageReader> callback)
+        {
+            this.rpcName = rpcName;
+            this._callback = callback;
+        }
+
+        public void InvokeCallback(MessageReader reader) {
+            if (this._callback != null)
+            {
+                this._callback(reader);
+                return;
+            }
+
+            HarmonyMain.Instance.Log.LogError("Callback for RPC \"" + rpcName + "\" not found! (Did you pass a null callback?)" +
+                                                "\n    To add a callback, do \"delegate(MessageReader message) {}\" instead of \"null\".");
+        }
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRpc))]
     class CustomRpcHandler {
-
-        private static byte _rpcByteOffset = 0;
-        public static byte nextRpcByte => (byte)(((byte)CustomRpc.AvailableSpace) + (_rpcByteOffset++));
-        public static bool rpcByteAvailable = ((int)CustomRpc.AvailableSpace + _rpcByteOffset) < 256;
-
-        public static List<Action<MessageReader>> customRpcCallbacks = new List<Action<MessageReader>>();
+        public static List<CustomRpcCallback> customRpcCallbacks = new List<CustomRpcCallback>();
 
         static void Postfix(byte callId, MessageReader reader) {
             switch (callId) {
@@ -42,11 +60,17 @@ namespace DillyzRoleApi_Rewritten
                 case (byte)CustomRpc.Assassinate:
                     DillyzUtil.commitAssassination(DillyzUtil.findPlayerControl(reader.ReadByte()), DillyzUtil.findPlayerControl(reader.ReadByte()));
                     break;
-                default:
-                    if (callId >= (byte)CustomRpc.AvailableSpace)
-                    {
-                        
-                    }
+                case (byte)CustomRpc.CustomRPCCall:
+                    string rpcToGet = reader.ReadString();
+
+                    foreach (CustomRpcCallback callback in customRpcCallbacks)
+                        if (callback.rpcName == rpcToGet)
+                        {
+                            callback.InvokeCallback(reader);
+                            return;
+                        }
+
+                    HarmonyMain.Instance.Log.LogError("Warning! No rpc called " + rpcToGet + " exists! Why did you even call it?!");
                     break;
             }
         }

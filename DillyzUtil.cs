@@ -14,8 +14,8 @@ namespace DillyzRoleApi_Rewritten
 {
     public class DillyzUtil
     {
-        public static void addButton(Assembly epicAssemblyFail, string name, string imageName, float cooldown, bool isTargetButton, string[] allowedRoles, 
-                                                                                    string[] rolesCantTarget, Action<KillButtonCustomData, bool> onClicked) => 
+        public static void addButton(Assembly epicAssemblyFail, string name, string imageName, float cooldown, bool isTargetButton, string[] allowedRoles,
+                                                                                    string[] rolesCantTarget, Action<KillButtonCustomData, bool> onClicked) =>
                                     CustomButton.addButton(epicAssemblyFail, name, imageName, cooldown, isTargetButton, allowedRoles, rolesCantTarget, onClicked);
         public static CustomRole createRole(String name, String subtext, bool nameColor, bool nameColorPublic, Color32 roleColor, bool canSeeTeam, CustomRoleSide side,
                     VentPrivilege ventPrivilege, bool canKill, bool showEjectText) =>
@@ -279,6 +279,32 @@ namespace DillyzRoleApi_Rewritten
                 HarmonyMain.Instance.Log.LogError("Sprite image \"" + spritePath + "\" could not be found!");
 
             return null;
+        }
+
+        public static void AddRpcCall(string rpcName, Action<MessageReader> callback) {
+            HarmonyMain.Instance.Log.LogInfo("Added RPC callback for " + rpcName + ".");
+            CustomRpcHandler.customRpcCallbacks.Add(new CustomRpcCallback(rpcName, callback));
+        }
+
+        public static void InvokeRPCCall(string rpcName, Action<MessageWriter> writingCallback) {
+            if (writingCallback == null)
+            {
+                HarmonyMain.Instance.Log.LogError(rpcName + " had a null writingCallback! (Did you forget delegate(MessageWriter writer) {}, you idiot?)" +
+                    "\n     (Also, in the callback you need to write data with writer.Write(yourvariable);)");
+                return;
+            }
+
+            foreach (CustomRpcCallback callback in CustomRpcHandler.customRpcCallbacks)
+                if (callback.rpcName == rpcName) {
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.CustomRPCCall, SendOption.None, -1);
+                    writer.Write(rpcName);
+                    if (writingCallback != null)
+                        writingCallback(writer);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    return;
+                }
+
+            HarmonyMain.Instance.Log.LogError("Alright, you're trolling. You're. TROLLING. The RPC you're calling is null. " + rpcName + " doesn't EXIST! Are you ok?!");
         }
     }
 }
