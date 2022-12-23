@@ -179,6 +179,7 @@ namespace DillyzRoleApi_Rewritten
                 advancedText.gameObject.transform.SetParent(settingParent.transform);
                 advancedText.name = "More Options";
                 advancedText.text = "Adv";
+                advancedText.enabled = false;
 
                 #region add text button functionality
                 TextMeshPro[] textsToMakeActive = new TextMeshPro[] { countPlusText, countMinusText, chancePlusText, chanceMinusText, advancedText };
