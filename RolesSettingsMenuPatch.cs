@@ -62,15 +62,19 @@ namespace DillyzRoleApi_Rewritten
                 bg.transform.SetParent(settingParent.transform);
                 bg.layer = og_bg.layer;
 
-                PassiveButton bgpb = bg.AddComponent<PassiveButton>();
-                bgpb.OnDown = bgpb.OnUp = bgpb.OnRepeat = false;
-                bgpb.OnMouseOver = new UnityEngine.UI.Button.ButtonClickedEvent();
+                PassiveButton bgpb = settingParent.AddComponent<PassiveButton>();
+                bgpb.OnDown = bgpb.OnRepeat = false;
+                bgpb.OnUp = true;
+                bgpb.OnMouseOut = new UnityEngine.Events.UnityEvent();
+                bgpb.OnMouseOver = new UnityEngine.Events.UnityEvent();
                 bgpb.OnMouseOver.AddListener((UnityEngine.Events.UnityAction)bgover);
                 void bgover() {
                     GameSettingMenu.Instance.RoleName.text = role.name;
                     GameSettingMenu.Instance.RoleBlurb.text = $"The {role.name} is a role created using DillyzRoleAPI v2\n\ngithub.com/DillyzThe1";
                     GameSettingMenu.Instance.RoleIcon.sprite = RolesSettingsMenuPatch.cachedsprites[role.name];
                 }
+                BoxCollider2D btd5 = settingParent.AddComponent<BoxCollider2D>();
+                btd5.size = new Vector2(5.8f, 0.55f);
 
                 TextMeshPro og_TMP = ogSetting.transform.Find("Title_TMP").gameObject.GetComponent<TextMeshPro>();
 
