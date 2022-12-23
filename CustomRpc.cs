@@ -62,6 +62,7 @@ namespace DillyzRoleApi_Rewritten
                     DillyzUtil.commitAssassination(DillyzUtil.findPlayerControl(reader.ReadByte()), DillyzUtil.findPlayerControl(reader.ReadByte()));
                     break;
                 case (byte)CustomRpc.SetSettings:
+                    HarmonyMain.Instance.Log.LogInfo("hey");
                     byte settingsCount = reader.ReadByte();
 
                     for (int i = 0; i < settingsCount; i++) {
@@ -69,20 +70,20 @@ namespace DillyzRoleApi_Rewritten
                         string thevaluelol = reader.ReadString();
 
                         // LOBBY_ROLE_SETTING-Jester-Count
-                        if (settingToSet.StartsWith("LOBBY_ROLE_SETTING-")) {
+                        if (settingToSet.StartsWith("LOBBY_ROLE_SETTING-"))
+                        {
                             //LobbyRoleSetting setting = null;
                             int epictrtoll = settingToSet.IndexOf("-") + 1;
                             string roleToGet_Wthing = settingToSet.Substring(epictrtoll, settingToSet.Length - epictrtoll);
                             string roleToACTAULLYGet = roleToGet_Wthing.Substring(0, roleToGet_Wthing.LastIndexOf("-"));
-                            HarmonyMain.Instance.Log.LogInfo("bruh " + settingToSet);
 
                             foreach (LobbyRoleSetting newsetting in LobbyConfigManager.lobbyRoleSettings)
                             {
                                 if (newsetting.roleName == roleToACTAULLYGet)
                                 {
-                                    if (roleToACTAULLYGet.EndsWith("-Count"))
+                                    if (roleToGet_Wthing.EndsWith("-Count"))
                                         newsetting.roleCount = Int32.Parse(thevaluelol);
-                                    else if (roleToACTAULLYGet.EndsWith("-Chance"))
+                                    else if (roleToGet_Wthing.EndsWith("-Chance"))
                                         newsetting.roleChance = Int32.Parse(thevaluelol);
 
                                     HarmonyMain.Instance.Log.LogInfo($"Settings for {roleToACTAULLYGet} found! (Count: {newsetting.roleCount} Chance: {newsetting.roleChance})");

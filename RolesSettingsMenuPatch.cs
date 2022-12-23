@@ -134,7 +134,7 @@ namespace DillyzRoleApi_Rewritten
                         LobbyConfigManager.Save();
 
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.SetSettings, Hazel.SendOption.None, -1);
-                        writer.Write(2);
+                        writer.Write((byte)2);
                         // LOBBY_ROLE_SETTING-Jester-Count
                         writer.Write($"LOBBY_ROLE_SETTING-{role.name}-Count");
                         writer.Write(role.setting_countPerGame.ToString());
