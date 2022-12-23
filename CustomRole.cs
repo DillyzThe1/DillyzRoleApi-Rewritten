@@ -118,6 +118,7 @@ namespace DillyzRoleApi_Rewritten
     {
         None = 0,     // You possess an inability to use vents.
         Impostor = 1, // You inheret the venting power of an Impostor.
+        [Obsolete("Engineer vents do NOT work at the moment! Please do not attempt to use them! 🤓", true)]
         Engineer = 2  // You inheret the venting power of an Engineer.
     }
 }
