@@ -95,10 +95,16 @@ namespace DillyzRoleApi_Rewritten
                 CustomButton.getButtonByName("Sheriff Kill Button").textOutlineColor = new Color32(255, 185, 30, 255);
             }
 
-            foreach (CustomRole role in CustomRole.allRoles)
-                Log.LogInfo(role.ToString());
+            //foreach (CustomRole role in CustomRole.allRoles)
+            //    Log.LogInfo(role.ToString());
 
             IL2CPPChainloaderPatch.Reg(Assembly.GetExecutingAssembly());
+
+            string[] layers = Enumerable.Range(0, 32).Select(index => LayerMask.LayerToName(index)).Where(l => !string.IsNullOrEmpty(l)).ToArray();
+            string outputLayerStr = "Available Layers: ";
+            for (int i = 0; i < layers.Length; i++)
+                outputLayerStr += layers[i] + (i == layers.Length - 1 ? "." : ", ");
+            Log.LogInfo(outputLayerStr);
         }
     }
 }

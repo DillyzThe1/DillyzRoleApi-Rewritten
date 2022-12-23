@@ -135,8 +135,8 @@ namespace DillyzRoleApi_Rewritten
                 KillButtonCustomData customKillControl = newKill.gameObject.AddComponent<KillButtonCustomData>();
                 customKillControl.Setup(button, newKill);
 
-                Sprite newKillSprite = DillyzUtil.getSprite(Assembly.GetExecutingAssembly(), button.imageName);
-                if (newKillSprite == null)
+                Sprite newKillSprite = DillyzUtil.getSprite(customKillControl.buttonData.epicAssemblyFail, button.imageName);
+                if (newKillSprite != null)
                     newKill.graphic.sprite = newKillSprite;
 
                 PassiveButton pbjsandwich = newKill.gameObject.GetComponent<PassiveButton>();
