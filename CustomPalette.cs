@@ -24,5 +24,9 @@ namespace DillyzRoleApi_Rewritten
         // BUTTONS
         public static Color32 KillButtonTextOutline = new Color32(219, 37, 0, 255);
         public static Color32 PassiveButtonTextOutline = new Color32(0, 0, 0, 255);
+
+        // UI
+        //public static Color32 GameSettingDeselectedColor = new Color32(255, 255, 255, 255);
+        public static Color32 GameSettingSelectedColor = new Color32(0, 255, 0, 255);
     }
 }
