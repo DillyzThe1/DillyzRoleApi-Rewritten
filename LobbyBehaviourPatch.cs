@@ -18,7 +18,8 @@ namespace DillyzRoleApi_Rewritten
             {
                 TextMeshPro gs = DestroyableSingleton<HudManager>.Instance.GameSettings;
                 // cut off the roles settings
-                //gs.text = gs.text.Substring(0, gs.text.Length - gs.text.IndexOf("Scientist"));
+                if (gs.text.Contains("Scientist:"))
+                    gs.text = gs.text.Substring(0, gs.text.IndexOf("Scientist:"));
 
                 Transform gstextalttrans = gs.gameObject.transform.parent.Find("gstextalt");
                 TextMeshPro gstextalt = null;
