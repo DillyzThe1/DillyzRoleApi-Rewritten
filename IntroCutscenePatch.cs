@@ -32,6 +32,8 @@ namespace DillyzRoleApi_Rewritten
             __instance.__4__this.RoleText.text = $"<{colorHex}>{role.name}</color>";
             __instance.__4__this.RoleBlurbText.text = $"<{colorHex}>{role.subtext}</color>";
             __instance.__4__this.YouAreText.text = $"<{colorHex}>Your role is</color>";
+
+            HudManager.Instance.SetHudActive(true);
         }
     }
     [HarmonyPatch(typeof(IntroCutscene._ShowTeam_d__32), nameof(IntroCutscene._ShowTeam_d__32.MoveNext))]

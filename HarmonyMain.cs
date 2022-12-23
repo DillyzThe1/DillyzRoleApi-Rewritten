@@ -33,6 +33,8 @@ namespace DillyzRoleApi_Rewritten
         public const string MOD_NAME = "DillyzRoleApi", MOD_VERSION = "2.0.0", MOD_ID = "com.github.dillyzthe1.dillyzroleapi";
         public static Harmony harmony = new Harmony(HarmonyMain.MOD_ID);
 
+        public static string BEPINEX_CONFIG_FOLDER => BepInEx.Paths.BepInExConfigPath.Replace("BepInEx.cfg","");
+
         public static HarmonyMain Instance;
 
         // https://docs.bepinex.dev/v5.4.21/articles/dev_guide/plugin_tutorial/4_configuration.html
@@ -59,6 +61,8 @@ namespace DillyzRoleApi_Rewritten
                 if (scene.name == "MainMenu") // :happyspongebob:
                     ModManager.Instance.ShowModStamp();
             }));
+
+            LobbyConfigManager.Load();
 
             if (enableDebugJester.Value)
             {
@@ -105,6 +109,8 @@ namespace DillyzRoleApi_Rewritten
             for (int i = 0; i < layers.Length; i++)
                 outputLayerStr += layers[i] + (i == layers.Length - 1 ? "." : ", ");
             Log.LogInfo(outputLayerStr);
+
+            Log.LogInfo(BEPINEX_CONFIG_FOLDER);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using Hazel;
 using Il2CppSystem;
 using Il2CppSystem.Diagnostics;
 using System;
@@ -8,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 namespace DillyzRoleApi_Rewritten
 {
@@ -108,6 +110,9 @@ namespace DillyzRoleApi_Rewritten
                                 break;
                             case "Count Minus_TMP":
                                 role.setting_countPerGame--;
+
+                                if (role.setting_countPerGame == 0)
+                                    role.setting_chancePerGame = 0;
                                 break;
                             case "Chance Plus_TMP":
                                 if (role.setting_countPerGame == 0)
@@ -117,15 +122,25 @@ namespace DillyzRoleApi_Rewritten
                                 break;
                             case "Chance Minus_TMP":
                                 role.setting_chancePerGame -= 10;
+
+                                if (role.setting_chancePerGame == 0)
+                                    role.setting_countPerGame = 0;
                                 break;
                         }
-
-                        if (role.setting_countPerGame == 0)
-                            role.setting_chancePerGame = 0;
 
                         countValueText.text = role.setting_countPerGame.ToString();
                         chanceValueText.text = role.setting_chancePerGame.ToString() + "%";
 
+                        LobbyConfigManager.Save();
+
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.SetSettings, Hazel.SendOption.None, -1);
+                        writer.Write(2);
+                        // LOBBY_ROLE_SETTING-Jester-Count
+                        writer.Write($"LOBBY_ROLE_SETTING-{role.name}-Count");
+                        writer.Write(role.setting_countPerGame.ToString());
+                        writer.Write($"LOBBY_ROLE_SETTING-{role.name}-Chance");
+                        writer.Write(role.setting_chancePerGame.ToString());
+                        AmongUsClient.Instance.FinishRpcImmediately(writer);
                     }
                 }
                 #endregion

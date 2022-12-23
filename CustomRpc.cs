@@ -15,7 +15,8 @@ namespace DillyzRoleApi_Rewritten
         ResetRoles = 101,       // Takes no arguments. Resets all player roles.
         CustomRoleWin = 102,    // The default jester role's winnning RPC. All jester stuff will move to a standalone mod in the future.
         Assassinate = 103,      // Custom-made assassination.
-        CustomRPCCall = 104     // Available spaces for custom RPC. Register your own with DillyzUtil.regRpcCallback("RpcName", delegate(MessageReader reader) {});
+        SetSettings = 104,      // Setting the settings sets the setting settings.
+        CustomRPCCall = 110     // Available spaces for custom RPC. Register your own with DillyzUtil.regRpcCallback("RpcName", delegate(MessageReader reader) {});
     }
 
     class CustomRpcCallback {
@@ -59,6 +60,41 @@ namespace DillyzRoleApi_Rewritten
                     break;
                 case (byte)CustomRpc.Assassinate:
                     DillyzUtil.commitAssassination(DillyzUtil.findPlayerControl(reader.ReadByte()), DillyzUtil.findPlayerControl(reader.ReadByte()));
+                    break;
+                case (byte)CustomRpc.SetSettings:
+                    byte settingsCount = reader.ReadByte();
+
+                    for (int i = 0; i < settingsCount; i++) {
+                        string settingToSet = reader.ReadString();
+                        string thevaluelol = reader.ReadString();
+
+                        // LOBBY_ROLE_SETTING-Jester-Count
+                        if (settingToSet.StartsWith("LOBBY_ROLE_SETTING-")) {
+                            LobbyRoleSetting setting = null;
+                            int epictrtoll = settingToSet.IndexOf("-") + 1;
+                            string roleToGet_Wthing = settingToSet.Substring(epictrtoll, settingToSet.Length - epictrtoll);
+                            string roleToACTAULLYGet = roleToGet_Wthing.Substring(0, roleToGet_Wthing.LastIndexOf("-"));
+                            HarmonyMain.Instance.Log.LogInfo("bruh " + settingToSet);
+
+                            foreach (LobbyRoleSetting newsetting in LobbyConfigManager.lobbyRoleSettings)
+                            {
+                                if (newsetting.roleName == roleToACTAULLYGet)
+                                {
+                                    if (roleToACTAULLYGet.EndsWith("-Count"))
+                                        newsetting.roleCount = Int32.Parse(thevaluelol);
+                                    else if (roleToACTAULLYGet.EndsWith("-Chance"))
+                                        newsetting.roleChance = Int32.Parse(thevaluelol);
+
+                                    HarmonyMain.Instance.Log.LogInfo($"Settings for {roleToACTAULLYGet} found! (Count: {newsetting.roleCount} Chance: {newsetting.roleChance})");
+                                }
+                            }
+
+                            continue;
+                        }
+                    }
+
+                    LobbyConfigManager.Save();
+
                     break;
                 case (byte)CustomRpc.CustomRPCCall:
                     string rpcToGet = reader.ReadString();

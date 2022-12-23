@@ -15,7 +15,7 @@ namespace DillyzRoleApi_Rewritten
     {
         public static List<CustomRole> allRoles = new List<CustomRole>();
         public static void appendRole(CustomRole yourRole) => allRoles.Add(yourRole);
-        public static CustomRole createRole(String name, String subtext, bool nameColor, bool nameColorPublic, Color32 roleColor, bool canSeeTeam, CustomRoleSide side,
+        public static CustomRole createRole(string name, string subtext, bool nameColor, bool nameColorPublic, Color32 roleColor, bool canSeeTeam, CustomRoleSide side,
                     VentPrivilege ventPrivilege, bool canKill, bool showEjectText) {
             foreach (CustomRole role in allRoles)
                 if (role.name == name)
@@ -27,7 +27,7 @@ namespace DillyzRoleApi_Rewritten
             CustomRole.appendRole(rolee);
             return rolee;
         }
-        public static CustomRole getByName(String name)
+        public static CustomRole getByName(string name)
         {
             foreach (CustomRole role in allRoles)
                 if (role.name == name)
@@ -40,8 +40,8 @@ namespace DillyzRoleApi_Rewritten
         public static string getRoleName(byte playerId) => roleNameMap.ContainsKey(playerId) ? roleNameMap[playerId] : "";
         public static void setRoleName(byte playerId, string roleName) => roleNameMap[playerId] = roleName;
 
-        public String name = "Role Text";                       // Your role's name.
-        public String subtext;                                  // The text that appears under.
+        public string name = "Role Text";                       // Your role's name.
+        public string subtext;                                  // The text that appears under.
         public bool nameColorChanges;                           // Determines if your name color is your role color or just red/white.
         public bool nameColorPublic;                            // Determines if your name color is public to all or not.
         public Color32 roleColor;                                 // The current color of your role.
@@ -54,15 +54,13 @@ namespace DillyzRoleApi_Rewritten
         public bool switchToImpostor = false;                   // Will switch a crewmate role to an Impostor role.
         public string a_or_an = "an";                           // "DillyzThe1 was a Jester" vs "DillyzThe1 was an Jester"
 
-        // LOBBY SETTINGS
-        private int _countPerGame = 1;
-        private int _chancePerGame = 50;
-
         // LOBBY SETTINGS (GET & SET)
-        public int setting_countPerGame { get { return _countPerGame; } set { _countPerGame = Math.Min(Math.Max(value, 0), 15); } }
-        public int setting_chancePerGame { get { return _chancePerGame; } set { _chancePerGame = Math.Min(Math.Max(value, 0), 100); } }
+        public int setting_countPerGame { get { return settingsForRole.roleCount; } set { settingsForRole.roleCount = Math.Min(Math.Max(value, 0), 15); } }
+        public int setting_chancePerGame { get { return settingsForRole.roleChance; } set { settingsForRole.roleChance = Math.Min(Math.Max(value, 0), 100); } }
 
-        public CustomRole(String name, String subtext, bool nameColor, bool nameColorPublic, Color32 roleColor, bool canSeeTeam, 
+        private LobbyRoleSetting settingsForRole;
+
+        public CustomRole(string name, string subtext, bool nameColor, bool nameColorPublic, Color32 roleColor, bool canSeeTeam, 
                             CustomRoleSide side, VentPrivilege ventPrivilege, bool canKill, bool showEjectText) {
             this.name = name;
             this.subtext = subtext;
@@ -87,6 +85,17 @@ namespace DillyzRoleApi_Rewritten
                 ejectionText += $"The Impostor.";
                 //ejectionText_bad += $"The Impostor.";
             }
+
+            foreach (LobbyRoleSetting setting in LobbyConfigManager.lobbyRoleSettings)
+                if (setting.roleName == this.name)
+                {
+                    settingsForRole = setting;
+                    return;
+                }
+
+            settingsForRole = new LobbyRoleSetting() { roleName = name, roleCount = 1, roleChance = 50 };
+            LobbyConfigManager.lobbyRoleSettings.Add(settingsForRole);
+
         }
 
         public override string ToString() {

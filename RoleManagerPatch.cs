@@ -40,30 +40,32 @@ namespace DillyzRoleApi_Rewritten
                     else
                         availablePlayers.RemoveAll(x => DillyzUtil.roleSide(x) != role.side);
 
-                    // TODO: CHECK FOR AMOUNT OF PEOPLE ADDED AND USE THE CHANCE VIA ROLE SETTINGS!!!!
-                    // THIS IS THE CHUNK FOR EACH TIME IT LANDS A NEW SPOT!!!
+                    for (int i = 0; i < role.setting_countPerGame; i++) {
+                        if (availablePlayers.Count == 0)
+                            continue;
 
-                    if (availablePlayers.Count == 0)
-                        continue;
-                    int roleIndex = roleRNG.Next(0, availablePlayers.Count);
-                    PlayerControl selectedPlayer = availablePlayers[roleIndex];
-                    availablePlayers.Remove(selectedPlayer);
-                    CustomRole.setRoleName(selectedPlayer.PlayerId, role.name);
+                        if (role.setting_chancePerGame != 100 && UnityEngine.Random.Range(0, 100) >= role.setting_chancePerGame)
+                            return;
 
-                    if (role.switchToImpostor && !selectedPlayer.Data.Role.IsImpostor) {
-                        selectedPlayer.Data.RoleType = AmongUs.GameOptions.RoleTypes.Impostor;
-                        selectedPlayer.Data.Role = new ImpostorRole();
+                        int roleIndex = roleRNG.Next(0, availablePlayers.Count);
+                        PlayerControl selectedPlayer = availablePlayers[roleIndex];
+                        availablePlayers.Remove(selectedPlayer);
+                        CustomRole.setRoleName(selectedPlayer.PlayerId, role.name);
+
+                        if (role.switchToImpostor && !selectedPlayer.Data.Role.IsImpostor)
+                        {
+                            selectedPlayer.Data.RoleType = AmongUs.GameOptions.RoleTypes.Impostor;
+                            selectedPlayer.Data.Role = new ImpostorRole();
+                        }
+
+                        HarmonyMain.Instance.Log.LogInfo($"Hey! {selectedPlayer.name} is now the {role.name} of the game!");
+
+                        // send role packet
+                        writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.SetRole, Hazel.SendOption.None, -1);
+                        writer.Write(selectedPlayer.PlayerId);
+                        writer.Write(role.name);
+                        AmongUsClient.Instance.FinishRpcImmediately(writer);
                     }
-
-                    HarmonyMain.Instance.Log.LogInfo($"Hey! {selectedPlayer.name} is now the {role.name} of the game!");
-
-                    // send role packet
-                    writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.SetRole, Hazel.SendOption.None, -1);
-                    writer.Write(selectedPlayer.PlayerId);
-                    writer.Write(role.name);
-                    AmongUsClient.Instance.FinishRpcImmediately(writer);
-
-                    // END OF CHUNK
                 }
             }
         }
