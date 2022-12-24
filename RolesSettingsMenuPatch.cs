@@ -233,6 +233,7 @@ namespace DillyzRoleApi_Rewritten
                                 plusTMP.gameObject.layer = ogplustmp.gameObject.layer;
                                 plusTMP.transform.localPosition = new Vector3(0f, -0.015f, 0f);
                                 plusTMP.transform.position = new Vector3(ogplustmp.transform.position.x + xoff, plusTMP.transform.position.y, -168f);
+                                plusTMP.text = ">";
 
                                 PassiveButton plusTMPButton = plusTMP.gameObject.GetComponent<PassiveButton>();
                                 plusTMPButton.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
@@ -256,6 +257,7 @@ namespace DillyzRoleApi_Rewritten
                                 minusTMP.gameObject.layer = ogminustmp.gameObject.layer;
                                 minusTMP.transform.localPosition = new Vector3(0f, -0.015f, 0f);
                                 minusTMP.transform.position = new Vector3(ogminustmp.transform.position.x, minusTMP.transform.position.y, -168f);
+                                minusTMP.text = "<";
 
                                 PassiveButton minusTMPButton = minusTMP.gameObject.GetComponent<PassiveButton>();
                                 minusTMPButton.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
