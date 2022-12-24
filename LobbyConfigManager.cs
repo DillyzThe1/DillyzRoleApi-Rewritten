@@ -1,4 +1,5 @@
 ﻿
+using Hazel;
 using Il2CppSystem.Text.Json;
 using Sentry.Protocol.Envelopes;
 using System;
@@ -32,6 +33,19 @@ namespace DillyzRoleApi_Rewritten
                 string json = inputFile.ReadToEnd();
                 _lobbyRoleSettings = JsonSerializer.Deserialize<List<LobbyRoleSetting>>(json);
             }*/
+        }
+
+        public static void UpdateRoleValues() {
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.SetSettings, Hazel.SendOption.None, -1);
+            writer.Write((byte)(CustomRole.allRoles.Count * 2));
+            foreach (CustomRole role in CustomRole.allRoles)
+            {
+                writer.Write($"LOBBY_ROLE_SETTING-{role.name}-Count");
+                writer.Write(role.setting_countPerGame.ToString());
+                writer.Write($"LOBBY_ROLE_SETTING-{role.name}-Chance");
+                writer.Write(role.setting_chancePerGame.ToString());
+            }
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
         }
     }
 

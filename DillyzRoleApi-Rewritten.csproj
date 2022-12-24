@@ -40,6 +40,7 @@
     <Compile Include="CustomRole.cs" />
     <Compile Include="LobbyBehaviourPatch.cs" />
     <Compile Include="LobbyConfigManager.cs" />
+    <Compile Include="PlayerControlPatch.cs" />
     <Compile Include="RolesSettingsMenuPatch.cs" />
     <Compile Include="CustomRpc.cs" />
     <Compile Include="DillyzUtil.cs" />
