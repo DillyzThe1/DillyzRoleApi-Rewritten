@@ -109,7 +109,7 @@ namespace DillyzRoleApi_Rewritten
 
     public class CustomBooleanSetting : CustomSetting
     {
-        public bool _value;
+        private bool _value;
         private bool _defaultValue;
         public bool settingValue { 
             get

@@ -2,6 +2,7 @@
 using Hazel;
 using Il2CppSystem;
 using Il2CppSystem.Diagnostics;
+using Sentry;
 using Steamworks;
 using System;
 using System.Collections.Generic;
@@ -23,9 +24,24 @@ namespace DillyzRoleApi_Rewritten
             RolesSettingsMenuPatch.cachedsprites.Clear();
             RolesSettingsMenuPatch_FNFModderReference.customtabs.Clear();
 
-            GameObject ogtab = __instance.AllAdvancedSettingTabs[0].Tab;
+            GameObject ogtab = null;
+            GameObject shapshiftnumopt = null;
 
-            foreach (CustomRole role in CustomRole.allRoles) {
+            foreach (AdvancedRoleSettingsButton ad in __instance.AllAdvancedSettingTabs)
+                if (ad.Tab.name == "GA Settings")
+                    ogtab = ad.Tab;
+                else if (ad.Tab.name == "Shapeshifter Settings")
+                    shapshiftnumopt = ad.Tab.transform.Find("NumberOption").gameObject;
+
+            GameObject ogBoolOpt = ogtab.transform.Find("ToggleOption").gameObject;
+            GameObject ogNumbOpt = ogtab.transform.Find("NumberOption").gameObject;
+
+            Vector3 ogSettingPos = shapshiftnumopt.transform.position;//new Vector3(-4.35f, 2.875f, -160f);
+            float ymultlol = 0; // ymultlol * -0.475
+
+            foreach (CustomRole role in CustomRole.allRoles)
+            {
+                ymultlol = 0f;
                 RolesSettingsMenuPatch.cachedsprites[role.name] = role.settingsSprite;
 
                 GameObject newTab = new GameObject();
@@ -45,6 +61,97 @@ namespace DillyzRoleApi_Rewritten
                 tmpTextForce.tmp = roleNameCopy.GetComponent<TextMeshPro>();
 
                 RolesSettingsMenuPatch_FNFModderReference.customtabs[role.name] = newTab;
+
+                HarmonyMain.Instance.Log.LogInfo("h");
+                foreach (CustomSetting setting in role.advancedSettings)
+                {
+                    GameObject newSettingParent = new GameObject();
+                    newSettingParent.gameObject.layer = ogtab.gameObject.layer;
+                    newSettingParent.name = setting.title + "Setting";
+                    newSettingParent.transform.SetParent(newTab.transform);
+                    newSettingParent.transform.position = ogSettingPos + (new Vector3(0, -0.475f, 0) * ymultlol);
+
+                    System.Action<GameObject> value = delegate (GameObject obj) { 
+                        HarmonyMain.Instance.Log.LogInfo(obj.name + " child");
+                    };
+                    ogBoolOpt.ForEachChild(value);
+
+                    GameObject ogbg = ogBoolOpt.transform.Find("Background").gameObject;
+                    GameObject newSettingBG = GameObject.Instantiate(ogbg);
+                    newSettingBG.transform.SetParent(newSettingParent.transform);
+                    newSettingBG.transform.localPosition = Vector3.zero;
+                    newSettingBG.gameObject.layer = ogbg.gameObject.layer;
+
+                    GameObject ogtmp = ogBoolOpt.transform.Find("Title_TMP").gameObject;
+                    TextMeshPro titleTMP = GameObject.Instantiate(ogtmp).GetComponent<TextMeshPro>();
+                    titleTMP.transform.SetParent(newSettingParent.transform);
+                    titleTMP.transform.localPosition = new Vector3(0f, -0.015f, 0f);
+                    titleTMP.transform.position = new Vector3(ogtmp.transform.position.x, titleTMP.transform.position.y, -168f);
+                    titleTMP.text = setting.title;
+                    titleTMP.gameObject.layer = ogtmp.gameObject.layer;
+
+                    switch (setting.settingType) {
+                        case CustomSettingType.Boolean:
+                            CustomBooleanSetting boolSetting = setting as CustomBooleanSetting;
+
+                            GameObject ogcheck = ogBoolOpt.transform.Find("CheckBox").gameObject;
+                            GameObject checkmarkDupe = GameObject.Instantiate(ogcheck);
+                            checkmarkDupe.transform.SetParent(newSettingParent.transform);
+                            checkmarkDupe.transform.localPosition = new Vector3(1.65f, 0, 0);
+                            checkmarkDupe.gameObject.layer = ogcheck.gameObject.layer;
+
+                            GameObject thecheckmarkitself = checkmarkDupe.transform.Find("CheckMark").gameObject;
+                            thecheckmarkitself.gameObject.SetActive(boolSetting.settingValue);
+                            thecheckmarkitself.gameObject.layer = ogcheck.gameObject.layer;
+
+                            checkmarkDupe.AddComponent<BoxCollider2D>();
+                            PassiveButton pb = checkmarkDupe.AddComponent<PassiveButton>();
+                            pb.OnDown = true;
+                            pb.OnRepeat = false;
+                            pb.OnUp = false;
+                            pb.OnMouseOut = new UnityEngine.Events.UnityEvent();
+                            pb.OnMouseOut.AddListener((UnityEngine.Events.UnityAction)checkmarkOut);
+                            void checkmarkOut()
+                            {
+                                checkmarkDupe.GetComponent<SpriteRenderer>().material.SetFloat("_Outline", 0f);
+                                checkmarkDupe.GetComponent<SpriteRenderer>().material.SetColor("_OutlineColor", Color.clear);
+                            }
+                            pb.OnMouseOver = new UnityEngine.Events.UnityEvent();
+                            pb.OnMouseOver.AddListener((UnityEngine.Events.UnityAction)checkmarkHover);
+                            void checkmarkHover() {
+                                foreach (AudioSource audioSource in SoundManager.Instance.allSources.Values)
+                                {
+                                    HarmonyMain.Instance.Log.LogInfo(audioSource.name + " is playing " + audioSource.clip.name);
+                                }
+
+                                //SoundManager.Instance.PlaySound(, false, 0.8f, null);
+
+                                checkmarkDupe.GetComponent<SpriteRenderer>().material.SetFloat("_Outline", 1f);
+                                checkmarkDupe.GetComponent<SpriteRenderer>().material.SetColor("_OutlineColor", DillyzUtil.color32ToColor(CustomPalette.CheckboxSelectedColor));
+                            }
+                            GameObject checkmarkobj = thecheckmarkitself.gameObject;
+                            pb.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
+                            pb.OnClick.AddListener((UnityEngine.Events.UnityAction)checkmarkClicked);
+                            void checkmarkClicked()
+                            {
+                                // inverse
+                                boolSetting.settingValue = !boolSetting.settingValue;
+                                checkmarkobj.SetActive(boolSetting.settingValue);
+                            }
+
+
+                            break;
+                        case CustomSettingType.Integer:
+                            CustomNumberSetting intSetting = setting as CustomNumberSetting;
+                            break;
+                        case CustomSettingType.String:
+                            CustomStringSetting strSetting = setting as CustomStringSetting;
+                            break;
+                    }
+
+                    newSettingParent.transform.localScale = Vector3.one;
+                    ymultlol++;
+                }
             }
         }
     }
