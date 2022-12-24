@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace DillyzRoleApi_Rewritten
 {
@@ -17,6 +18,16 @@ namespace DillyzRoleApi_Rewritten
                                                                                                 $" (Did you forget to do DillyzUtil.RpcCommitAssassination()?)");
                 DillyzUtil.commitAssassination(__instance, target);
                 return false;
+            }
+        }
+
+        [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.ToggleHighlight))]
+        public class PlayerControlPatch_ToggleHighlight
+        {
+            public static void Postfix(PlayerControl __instance, bool active, RoleTeamTypes targeterTeam)
+            {
+                if (active)
+                    __instance.cosmetics.currentBodySprite.BodySprite.material.SetColor("_OutlineColor", DillyzUtil.color32ToColor(DillyzUtil.roleColor(PlayerControl.LocalPlayer, true)));
             }
         }
 

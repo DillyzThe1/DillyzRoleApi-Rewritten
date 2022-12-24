@@ -368,5 +368,10 @@ namespace DillyzRoleApi_Rewritten
 
             HarmonyMain.Instance.Log.LogError("Alright, you're trolling. You're. TROLLING. The RPC you're calling is null. " + rpcName + " doesn't EXIST! Are you ok?!");
         }
+
+        public static Color color32ToColor(Color32 color32)
+        {
+            return new Color(color32.r / 255f, color32.g / 255f, color32.b / 255f, 1f);
+        }
     }
 }

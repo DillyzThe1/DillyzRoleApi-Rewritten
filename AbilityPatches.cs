@@ -144,5 +144,17 @@ namespace DillyzRoleApi_Rewritten
                 return false;
             }
         }
+
+        // not really an ability, however, i don't care.
+        [HarmonyPatch(typeof(Vent), nameof(Vent.SetOutline))]
+        public class VentPatch_SetOutline
+        {
+            public static void Postfix(Vent __instance, bool on, bool mainTarget)
+            {
+                Color color = DillyzUtil.color32ToColor(DillyzUtil.roleColor(PlayerControl.LocalPlayer, true));
+                __instance.myRend.material.SetColor("_OutlineColor", color);
+                __instance.myRend.material.SetColor("_AddColor", mainTarget ? color : Color.clear);
+            }
+        }
     }
 }
