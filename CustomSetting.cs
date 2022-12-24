@@ -7,13 +7,13 @@ using static Il2CppSystem.Linq.Expressions.Interpreter.CastInstruction.CastInstr
 
 namespace DillyzRoleApi_Rewritten
 {
-    class CustomSetting {
+    public class CustomSetting {
         public CustomSettingType settingType = CustomSettingType.None;
         public string title = "Invalid";
         public string curRole = "Jester";
     }
 
-    class CustomNumberSetting : CustomSetting
+    public class CustomNumberSetting : CustomSetting
     {
         private int _value;
         private int _defaultValue;
@@ -54,7 +54,7 @@ namespace DillyzRoleApi_Rewritten
         }
     }
 
-    class CustomStringSetting : CustomSetting
+    public class CustomStringSetting : CustomSetting
     {
         private int _curIndex;
         private string _defaultValue;
@@ -107,7 +107,7 @@ namespace DillyzRoleApi_Rewritten
         }
     }
 
-    class CustomBooleanSetting : CustomSetting
+    public class CustomBooleanSetting : CustomSetting
     {
         public bool _value;
         private bool _defaultValue;
@@ -141,7 +141,7 @@ namespace DillyzRoleApi_Rewritten
         }
     }
 
-    enum CustomSettingType { 
+    public enum CustomSettingType { 
         None,
         Integer,
         String,

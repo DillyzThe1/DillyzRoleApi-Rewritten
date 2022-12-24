@@ -67,6 +67,7 @@ namespace DillyzRoleApi_Rewritten
         public Func<WinConditionState>  returnWinConditionState;// You can return a WinConditionState here. Can set to "delegate() { return WinConditionState.None; }".
         public Func<PlayerControl> rwcsPlayer;                  // A player return for the above just incase.
         private List<CustomSetting> _advancedSettings;          // A list of custom setting data to use.
+        public List<CustomSetting> advancedSettings => _advancedSettings;
 
         // LOBBY SETTINGS (GET & SET)
         public int setting_countPerGame { get { return settingsForRole.roleCount; } set { settingsForRole.roleCount = Math.Min(Math.Max(value, 0), 15); } }
@@ -114,6 +115,8 @@ namespace DillyzRoleApi_Rewritten
             settingsForRole = new LobbyRoleSetting() { roleName = name, roleCount = 1, roleChance = 50 };
             LobbyConfigManager.lobbyRoleSettings.Add(settingsForRole);
             rwcsPlayer = delegate() { return null; };
+
+            _advancedSettings = new List<CustomSetting>();
         }
 
         public override string ToString() {

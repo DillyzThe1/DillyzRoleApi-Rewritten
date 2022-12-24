@@ -24,7 +24,7 @@ namespace DillyzRoleApi_Rewritten
             set {
                 _cooldown = value;
             } 
-        };
+        }
         public bool targetButton = false;
         public bool buttonForGhosts = false;
         public bool buttonTargetsGhosts = false;
