@@ -19,7 +19,7 @@ namespace DillyzRoleApi_Rewritten
             }
         }
 
-        [HarmonyPatch(typeof(FindGameButton), nameof(FindGameButton.OnClick))]
+        /*[HarmonyPatch(typeof(FindGameButton), nameof(FindGameButton.OnClick))]
         public static class FindGameDisablePatch
         {
             public static bool Prefix(FindGameButton __instance)
@@ -29,6 +29,6 @@ namespace DillyzRoleApi_Rewritten
                 AmongUsClient.Instance.HandleDisconnect(AmongUsClient.Instance.LastDisconnectReason, AmongUsClient.Instance.LastCustomDisconnect);
                 return false;
             }
-        }
+        }*/
     }
 }

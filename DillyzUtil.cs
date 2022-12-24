@@ -32,9 +32,13 @@ namespace DillyzRoleApi_Rewritten
 
             switch (player.Data.RoleType)
             {
-                case RoleTypes.Crewmate | RoleTypes.CrewmateGhost:
+                case RoleTypes.Crewmate:
                     return "Crewmate";
-                case RoleTypes.Impostor | RoleTypes.ImpostorGhost:
+                case RoleTypes.CrewmateGhost:
+                    return "Crewmate";
+                case RoleTypes.Impostor:
+                    return "Impostor";
+                case RoleTypes.ImpostorGhost:
                     return "Impostor";
                 case RoleTypes.Scientist:
                     return "Scientist";
@@ -71,7 +75,9 @@ namespace DillyzRoleApi_Rewritten
                 return CustomRole.getByName(CustomRole.getRoleName(player.PlayerId)).roleColor;
 
             switch (player.Data.RoleType) {
-                case RoleTypes.Impostor | RoleTypes.ImpostorGhost:
+                case RoleTypes.Impostor:
+                    return CustomPalette.ImpostorRed;
+                case  RoleTypes.ImpostorGhost:
                     return CustomPalette.ImpostorRed;
                 case RoleTypes.Shapeshifter:
                     return CustomPalette.ShapeShifterCrimson;
@@ -89,9 +95,9 @@ namespace DillyzRoleApi_Rewritten
         public static string roleText(PlayerControl player)
         {
             if (player == null)
-                return "";
-            if (player == null || player.Data == null)
-                return "You're a Crewmate.";
+                return "\n\nInvalid Player! (1)";
+            if (player.Data == null)
+                return "\n\nInvalid Player! (2)";
             string rc = colorToHex(roleColor(player, false));
 
             if (CustomRole.getRoleName(player.PlayerId) != "" && CustomRole.getRoleName(player.PlayerId) != null)
@@ -103,8 +109,10 @@ namespace DillyzRoleApi_Rewritten
 
             switch (player.Data.RoleType)
             {
-                case RoleTypes.Impostor | RoleTypes.ImpostorGhost:
+                case RoleTypes.Impostor:
                     return $"\n\n<{rc}>You're an Impostor.</color>";
+                case RoleTypes.ImpostorGhost:
+                    return "";
                 case RoleTypes.Shapeshifter:
                     return $"\n\n<{rc}>You're a Shapeshifter. Shapeshift to decieve the crew.</color>";
                 case RoleTypes.Engineer:
@@ -113,9 +121,11 @@ namespace DillyzRoleApi_Rewritten
                     return $"\n\n<{rc}>You're a Scientist. Use vitals to track the crew.</color>";
                 case RoleTypes.GuardianAngel:
                     return $"\n\n<{rc}>You're a Guardian Angel. Protect the crew from kills.</color>";
+                case RoleTypes.CrewmateGhost:
+                    return "";
             }
 
-            return "You're a Crewmate.";
+            return "\n\nYou're a Crewmate.";
         }
 
         public static bool templateRole(PlayerControl player) {

@@ -32,7 +32,7 @@ namespace DillyzRoleApi_Rewritten
                 else
                     gstextalt = gstextalttrans.gameObject.GetComponent<TextMeshPro>();
 
-                gstextalt.gameObject.SetActive(true);
+                gstextalt.gameObject.SetActive(gs.isActiveAndEnabled);
                 gstextalt.transform.position = new Vector3(HudManager.Instance.transform.Find("Buttons").Find("TopRight").Find("MenuButton").transform.position.x - 2.75f, gs.transform.position.y + 0.8f, gs.transform.position.z);
                 //gs.transform.position + new Vector3(4.8f, 0.8f, 0f);
 

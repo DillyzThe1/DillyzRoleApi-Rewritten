@@ -13,7 +13,7 @@ namespace DillyzRoleApi_Rewritten
     {
         [HarmonyPatch(typeof(Vent), nameof(Vent.CanUse))]
         public class VentPatch {
-            public static void Postfix(Vent __instance, GameData.PlayerInfo pc, ref bool canUse, ref bool couldUse, ref float __result) {
+            public static bool Prefix(Vent __instance, GameData.PlayerInfo pc, ref bool canUse, ref bool couldUse, ref float __result) {
                 float dist = float.MaxValue;
                 var obj = pc.Object;
                 canUse = couldUse = (obj.CanMove || obj.inVent) && roleCanVent(obj);
@@ -25,6 +25,7 @@ namespace DillyzRoleApi_Rewritten
                     canUse &= (dist <= __instance.UsableDistance);
                 }
                 __result = dist;
+                return false;
             }
             public static bool roleCanVent(PlayerControl player)
             {
@@ -61,32 +62,12 @@ namespace DillyzRoleApi_Rewritten
         public class MurderPatch {
             public static bool Prefix(PlayerControl __instance, PlayerControl target)
             {
-                CustomRole role = CustomRole.getByName(DillyzUtil.getRoleName(__instance));
-                if (((__instance.Data.RoleType == RoleTypes.Impostor || __instance.Data.RoleType == RoleTypes.Shapeshifter)
-                    && !(target.Data.RoleType == RoleTypes.Impostor || target.Data.RoleType == RoleTypes.Shapeshifter))
-                    || (role != null && role.switchToImpostor && role.canKill))
+                string rolename = DillyzUtil.getRoleName(__instance);
+                CustomRole role = CustomRole.getByName(rolename);
+                if (rolename == "Impostor" || rolename == "ShapeShifter" || (role != null && (role.side == CustomRoleSide.Impostor || role.switchToImpostor) && role.canKill))
                     return true;
-                if (role != null && role.canKill)
-                {
-                    __instance.Data.RoleType = RoleTypes.Impostor;
-                    __instance.Data.Role = new ImpostorRole();
-                    return true;
-                }
                 // don't kill em
                 return false;
-            }
-            public static void Postfix(PlayerControl __instance, PlayerControl target)
-            {
-                CustomRole role = CustomRole.getByName(DillyzUtil.getRoleName(__instance));
-                if ((__instance.Data.RoleType == RoleTypes.Impostor || __instance.Data.RoleType == RoleTypes.Shapeshifter)
-                                                                    || (role != null && role.switchToImpostor && role.canKill))
-                    return;
-                if (role != null && role.canKill)
-                {
-                    __instance.Data.RoleType = RoleTypes.Crewmate;
-                    __instance.Data.Role = new CrewmateRole();
-                    return;
-                }
             }
         }
 
@@ -147,10 +128,10 @@ namespace DillyzRoleApi_Rewritten
                 if (PlayerControl.LocalPlayer.Data.IsDead || !PlayerControl.LocalPlayer.CanMove || __instance.currentTarget == null || __instance.isCoolingDown)
                     return false;
 
-                if (rolename == "Impostor" || rolename == "ShapeShifter" || rolename == "GuardianAngel" || (role != null && role.switchToImpostor))
+                if (rolename == "GuardianAngel")
                     return true;
 
-                if (role == null || !role.canKill)
+                if (role != null && !role.canKill)
                     return false;
 
                 HudManagerPatch.lastKillThingForCustoms = DateTime.UtcNow;
