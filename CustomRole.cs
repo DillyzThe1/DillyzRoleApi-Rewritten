@@ -15,6 +15,14 @@ namespace DillyzRoleApi_Rewritten
 {
     public class CustomRole
     {
+        public static List<string> allRoleNames {
+            get { 
+                List<string> strlist = new List<string>();
+                foreach (CustomRole role in allRoles)
+                    strlist.Add(role.name);
+                return strlist;
+            }
+        }
         public static List<CustomRole> allRoles = new List<CustomRole>();
         public static void appendRole(CustomRole yourRole) => allRoles.Add(yourRole);
         public static CustomRole createRole(string name, string subtext, bool nameColor, bool nameColorPublic, Color32 roleColor, bool canSeeTeam, CustomRoleSide side,

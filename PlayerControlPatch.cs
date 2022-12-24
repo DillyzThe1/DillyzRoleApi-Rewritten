@@ -43,6 +43,14 @@ namespace DillyzRoleApi_Rewritten
 
                 LobbyConfigManager.UpdateNormalValues();
                 LobbyConfigManager.UpdateRoleValues();
+
+                List<string> allRoles = CustomRole.allRoleNames;
+
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.RoleCheck, Hazel.SendOption.None, -1);
+                writer.Write(CustomRole.allRoleNames.Count);
+                foreach (string str in allRoles)
+                    writer.Write(str);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
             }
         }
     }

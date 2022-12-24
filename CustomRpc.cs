@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Cpp2IL.Core.Analysis.ResultModels;
 using HarmonyLib;
 using Hazel;
+using Il2CppSystem.Text.Json;
+using Sentry;
 
 namespace DillyzRoleApi_Rewritten
 {
@@ -16,6 +18,7 @@ namespace DillyzRoleApi_Rewritten
         CustomRoleWin = 102,    // The default jester role's winnning RPC. All jester stuff will move to a standalone mod in the future.
         Assassinate = 103,      // Custom-made assassination.
         SetSettings = 104,      // Setting the settings sets the setting settings.
+        RoleCheck = 105,        // A role check for me to do. If you're missing any roles or have too many, you're kicked out.
         CustomRPCCall = 110     // Available spaces for custom RPC. Register your own with DillyzUtil.regRpcCallback("RpcName", delegate(MessageReader reader) {});
     }
 
@@ -48,11 +51,17 @@ namespace DillyzRoleApi_Rewritten
         static void Postfix(byte callId, MessageReader reader) {
             switch (callId) {
                 case (byte)CustomRpc.SetRole:
+                    if (AmongUsClient.Instance.AmHost)
+                        return;
+
                     byte playerId = reader.ReadByte();
                     string roleName = reader.ReadString();
                     CustomRole.setRoleName(playerId, roleName);
                     break;
                 case (byte)CustomRpc.ResetRoles:
+                    if (AmongUsClient.Instance.AmHost)
+                        return;
+
                     CustomRole.roleNameMap.Clear();
                     break;
                 case (byte)CustomRpc.CustomRoleWin:
@@ -62,6 +71,9 @@ namespace DillyzRoleApi_Rewritten
                     DillyzUtil.commitAssassination(DillyzUtil.findPlayerControl(reader.ReadByte()), DillyzUtil.findPlayerControl(reader.ReadByte()));
                     break;
                 case (byte)CustomRpc.SetSettings:
+                    if (AmongUsClient.Instance.AmHost)
+                        return;
+
                     byte settingsCount = reader.ReadByte();
 
                     for (int i = 0; i < settingsCount; i++)
@@ -136,6 +148,83 @@ namespace DillyzRoleApi_Rewritten
                     }
 
                     LobbyConfigManager.Save();
+                    break;
+                case (byte)CustomRpc.RoleCheck:
+                    if (AmongUsClient.Instance.AmHost)
+                        return;
+
+                    int rolesToConstruct = reader.ReadInt32();
+                    List<string> hostRoles = new List<string>();
+                    for (int i = 0; i < rolesToConstruct; i++)
+                        hostRoles.Add(reader.ReadString());
+
+                    List<string> clientRoles = CustomRole.allRoleNames;
+
+
+                    List<string> missingRoles = new List<string>();
+                    List<string> extraRoles = new List<string>();
+
+                    /*if (hostRoles.Count != clientRoles.Count) {
+                        AmongUsClient.Instance.LastDisconnectReason = DisconnectReasons.Custom;
+                        AmongUsClient.Instance.LastCustomDisconnect = "Your role's count did <#FF6A00>not match</color> the host's amount.\n(Is a DLL <#FF0000>missing</color>?)";
+                        AmongUsClient.Instance.HandleDisconnect(AmongUsClient.Instance.LastDisconnectReason, AmongUsClient.Instance.LastCustomDisconnect);
+                        return;
+                    }*/
+
+                    foreach (string r in hostRoles)
+                        if (!clientRoles.Contains(r))
+                            missingRoles.Add(r);
+                    foreach (string r in clientRoles)
+                        if (!hostRoles.Contains(r))
+                            extraRoles.Add(r);
+
+                    bool missedRoles = missingRoles.Count != 0, moreRoles = extraRoles.Count != 0;
+                    if (missedRoles || moreRoles) {
+                        AmongUsClient.Instance.LastDisconnectReason = DisconnectReasons.Custom;
+                        AmongUsClient.Instance.LastCustomDisconnect = "Your roles <#FF6A00><b>do not</b></color> match the host's.\n";
+
+                        if (missedRoles)
+                        {
+                            switch (missingRoles.Count)
+                            {
+                                case 1:
+                                    AmongUsClient.Instance.LastCustomDisconnect += "\n<b><#FF0000>Missing</color> role:</b>\n";
+                                    AmongUsClient.Instance.LastCustomDisconnect += $"{missingRoles[0]}.";
+                                    break;
+                                case 2:
+                                    AmongUsClient.Instance.LastCustomDisconnect += "\n<b><#FF0000>Missing</color> roles:</b>\n";
+                                    AmongUsClient.Instance.LastCustomDisconnect += $"{missingRoles[0]} & {missingRoles[1]}.";
+                                    break;
+                                default:
+                                    AmongUsClient.Instance.LastCustomDisconnect += "\n<b><#FF0000>Missing</color> roles:</b>\n";
+                                    for (int i = 0; i < missingRoles.Count; i++)
+                                        AmongUsClient.Instance.LastCustomDisconnect += (i == missingRoles.Count - 1) ? $"& {missingRoles[i]}." : $"{missingRoles[i]}, ";
+                                    break;
+                            }
+                        }
+                        if (moreRoles)
+                        {
+                            switch (extraRoles.Count) {
+                                case 1:
+                                    AmongUsClient.Instance.LastCustomDisconnect += "\n<b><#6400FF>Extra</color> role:</b>\n";
+                                    AmongUsClient.Instance.LastCustomDisconnect += $"{extraRoles[0]}.";
+                                    break;
+                                case 2:
+                                    AmongUsClient.Instance.LastCustomDisconnect += "\n<b><#6400FF>Extra</color> roles:</b>\n";
+                                    AmongUsClient.Instance.LastCustomDisconnect += $"{extraRoles[0]} & {extraRoles[1]}.";
+                                    break;
+                                default:
+                                    AmongUsClient.Instance.LastCustomDisconnect += "\n<b><#6400FF>Extra</color> roles:</b>\n";
+                                    for (int i = 0; i < extraRoles.Count; i++)
+                                        AmongUsClient.Instance.LastCustomDisconnect += (i == extraRoles.Count - 1) ? $"& {extraRoles[i]}." : $"{extraRoles[i]}, ";
+                                    break;
+                            }
+                        }
+
+                        AmongUsClient.Instance.HandleDisconnect(AmongUsClient.Instance.LastDisconnectReason, AmongUsClient.Instance.LastCustomDisconnect);
+                        return;
+                    }
+
                     break;
                 case (byte)CustomRpc.CustomRPCCall:
                     string rpcToGet = reader.ReadString();
