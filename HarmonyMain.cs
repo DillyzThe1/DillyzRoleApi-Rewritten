@@ -124,7 +124,11 @@ namespace DillyzRoleApi_Rewritten
 
                     List<PlayerControl> goofy = PlayerControl.AllPlayerControls.ToArray().ToList();
                     goofy.RemoveAll(x => x.Data.IsDead);
-                    if (goofy.Count < 3) {
+
+                    if (goobers.Count == 1 && goofy.Count == 1)
+                        hitmanRole.WinGame(goofy[0]);
+
+                    if (goofy.Count == 2) {
                         string rolename_1 = DillyzUtil.getRoleName(goofy[0]);
                         string rolename_2 = DillyzUtil.getRoleName(goofy[1]);
 

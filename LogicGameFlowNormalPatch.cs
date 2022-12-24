@@ -16,7 +16,7 @@ namespace DillyzRoleApi_Rewritten
                 return false;
 
             // SABOTAGE WINS (no force check needed
-            ISystemType systemType;
+            /*ISystemType systemType;
             if (ShipStatus.Instance.Systems.TryGetValue(SystemTypes.LifeSupp, out systemType))
             {
                 LifeSuppSystemType lifeSuppSystemType = systemType.TryCast<LifeSuppSystemType>();
@@ -37,7 +37,7 @@ namespace DillyzRoleApi_Rewritten
                     criticalSabotage.ClearSabotage();
                     return false;
                 }
-            }
+            }*/
 
             foreach (CustomRole role in CustomRole.allRoles)
                 if (role.returnWinConditionState != null)
