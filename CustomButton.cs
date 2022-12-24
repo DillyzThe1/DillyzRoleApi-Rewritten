@@ -17,7 +17,14 @@ namespace DillyzRoleApi_Rewritten
         public string name = "OtherKill";
         public string imageName = "DillyzRoleApi_Rewritten.Assets.kill.png";
         private float _cooldown = 30;
-        public float cooldown => _cooldown >= 0 ? _cooldown : GameOptionsManager.Instance.currentNormalGameOptions.KillCooldown * Math.Abs(_cooldown);
+        public float cooldown { 
+            get { 
+                return _cooldown >= 0 ? _cooldown : GameOptionsManager.Instance.currentNormalGameOptions.KillCooldown * Math.Abs(_cooldown); 
+            } 
+            set {
+                _cooldown = value;
+            } 
+        };
         public bool targetButton = false;
         public bool buttonForGhosts = false;
         public bool buttonTargetsGhosts = false;
@@ -40,7 +47,7 @@ namespace DillyzRoleApi_Rewritten
 
         public static Dictionary<string, CustomButton> buttonMap = new Dictionary<string, CustomButton>();
         public static CustomButton getButtonByName(string name) => buttonMap.ContainsKey(name) ? buttonMap[name] : null;
-        public static void addButton(Assembly epicAssemblyFail, string name, string imageName, float cooldown, bool isTargetButton, string[] allowedRoles, 
+        public static CustomButton addButton(Assembly epicAssemblyFail, string name, string imageName, float cooldown, bool isTargetButton, string[] allowedRoles, 
             string[] rolesCantTarget, Action<KillButtonCustomData, bool> onClicked) => 
                             buttonMap[name] = new CustomButton(epicAssemblyFail, name, imageName, cooldown, isTargetButton, allowedRoles, rolesCantTarget, onClicked);
         public static List<CustomButton> AllCustomButtons => buttonMap.Values.ToArray().ToList();

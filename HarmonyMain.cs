@@ -81,13 +81,15 @@ namespace DillyzRoleApi_Rewritten
             if (enableDebugSheriff.Value)
             {
                 Log.LogInfo("Adding a Sheriff!");
-                DillyzUtil.createRole("Sheriff", "Kill the impostor or suicide.", true, true, new Color32(255, 185, 30, 255), false,
+                CustomRole sheriffRole = DillyzUtil.createRole("Sheriff", "Kill the impostor or suicide.", true, true, new Color32(255, 185, 30, 255), false,
                                                                         CustomRoleSide.Crewmate, VentPrivilege.None, false, true);
-                CustomRole.getByName("Sheriff").a_or_an = "a";
-                CustomRole.getByName("Sheriff").SetSprite(Assembly.GetExecutingAssembly(), "DillyzRoleApi_Rewritten.Assets.sheriff_kill.png");
+                sheriffRole.a_or_an = "a";
+                sheriffRole.SetSprite(Assembly.GetExecutingAssembly(), "DillyzRoleApi_Rewritten.Assets.sheriff_kill.png");
+
+                bool killoncrewkill = true;
 
                 Log.LogInfo("Adding a Sheriff button!");
-                DillyzUtil.addButton(Assembly.GetExecutingAssembly(), "Sheriff Kill Button", "DillyzRoleApi_Rewritten.Assets.sheriff_kill.png", -1f, true,
+                CustomButton sheriffButton = DillyzUtil.addButton(Assembly.GetExecutingAssembly(), "Sheriff Kill Button", "DillyzRoleApi_Rewritten.Assets.sheriff_kill.png", -1f, true,
                 new string[] { "Sheriff" }, new string[] { }, delegate (KillButtonCustomData button, bool success)
                 {
                     if (!success)
@@ -97,7 +99,7 @@ namespace DillyzRoleApi_Rewritten
 
                     DillyzUtil.RpcCommitAssassination(PlayerControl.LocalPlayer, button.killButton.currentTarget);
 
-                    if (DillyzUtil.roleSide(button.killButton.currentTarget) == CustomRoleSide.Crewmate)
+                    if (killoncrewkill && DillyzUtil.roleSide(button.killButton.currentTarget) == CustomRoleSide.Crewmate)
                     {
                         HarmonyMain.Instance.Log.LogInfo("Advice Taking");
                         DillyzUtil.RpcCommitAssassination(PlayerControl.LocalPlayer, PlayerControl.LocalPlayer);
@@ -105,8 +107,20 @@ namespace DillyzRoleApi_Rewritten
 
                 });
 
-                CustomButton.getButtonByName("Sheriff Kill Button").buttonText = "Kill";
-                CustomButton.getButtonByName("Sheriff Kill Button").textOutlineColor = new Color32(255, 185, 30, 255);
+                sheriffButton.buttonText = "Kill";
+                sheriffButton.textOutlineColor = new Color32(255, 185, 30, 255);
+
+                sheriffRole.AddAdvancedSetting_Boolean("Punished", true, delegate(bool newvalue) {
+                    killoncrewkill = newvalue;
+                });
+                sheriffRole.AddAdvancedSetting_Int("Kill Cooldown", 30, 5, 90, 5, delegate (int newvalue) {
+                    sheriffButton.cooldown = newvalue;
+                });
+                sheriffRole.AddAdvancedSetting_String("spingbings", "sadspingbing", new string[] { 
+                    "sadspingbing", "happyspingbing", "mrkrap", "squeezedword", "sandheweaks", "oak planks", "4", "partake", "old fox main jean cans", "dishonest partake"
+                }, delegate (string newvalue) {
+                    Log.LogInfo("You're waisting your time, " + newvalue + ".");
+                });
             }
 
             if (enableDebugHitman.Value) {

@@ -66,6 +66,7 @@ namespace DillyzRoleApi_Rewritten
         public string a_or_an = "an";                           // "DillyzThe1 was a Jester" vs "DillyzThe1 was an Jester"
         public Func<WinConditionState>  returnWinConditionState;// You can return a WinConditionState here. Can set to "delegate() { return WinConditionState.None; }".
         public Func<PlayerControl> rwcsPlayer;                  // A player return for the above just incase.
+        private List<CustomSetting> _advancedSettings;          // A list of custom setting data to use.
 
         // LOBBY SETTINGS (GET & SET)
         public int setting_countPerGame { get { return settingsForRole.roleCount; } set { settingsForRole.roleCount = Math.Min(Math.Max(value, 0), 15); } }
@@ -119,6 +120,16 @@ namespace DillyzRoleApi_Rewritten
             return $"DillyzRoleApi_Rewritten.CustomRole [name: {this.name}, subtext: {this.subtext}, nameColorChanges: {this.nameColorChanges}, " +
                    $"roleColor: [{this.roleColor.r}, {this.roleColor.g}, {this.roleColor.b}, teamCanSeeYou: {this.teamCanSeeYou}, side: {this.side}, " +
                    $"ventPrivilege: {this.ventPrivilege}, canKill: {this.canKill}]";
+        }
+
+        public void AddAdvancedSetting_Int(string name, int defaultValue, int minimum, int maximum, int increment, Action<int> onChanged) {
+            _advancedSettings.Add(new CustomNumberSetting(name, this.name, defaultValue, minimum, maximum, increment, onChanged));
+        }
+        public void AddAdvancedSetting_String(string name, string defaultValue, string[] allValues, Action<string> onChanged) {
+            _advancedSettings.Add(new CustomStringSetting(name, this.name, defaultValue, allValues.ToList(), onChanged));
+        }
+        public void AddAdvancedSetting_Boolean(string name, bool defaultValue, Action<bool> onChanged) {
+            _advancedSettings.Add(new CustomBooleanSetting(name, this.name, defaultValue, onChanged));
         }
 
         public void WinGame(PlayerControl cause) {
