@@ -94,7 +94,10 @@ namespace DillyzRoleApi_Rewritten
                     DillyzUtil.RpcCommitAssassination(PlayerControl.LocalPlayer, button.killButton.currentTarget);
 
                     if (DillyzUtil.roleSide(button.killButton.currentTarget) == CustomRoleSide.Crewmate)
+                    {
+                        HarmonyMain.Instance.Log.LogInfo("Advice Taking");
                         DillyzUtil.RpcCommitAssassination(PlayerControl.LocalPlayer, PlayerControl.LocalPlayer);
+                    }
 
                 });
 
