@@ -19,7 +19,8 @@ namespace DillyzRoleApi_Rewritten
         private int _defaultValue;
         private int _minimumValue;
         private int _maximumValue;
-        private int _incremete;
+        private int _increment;
+        public int increment => _increment;
         public int settingValue {
             get {
                 return _value;
@@ -42,7 +43,7 @@ namespace DillyzRoleApi_Rewritten
             this._defaultValue = defaultValue;
             this._minimumValue = min;
             this._maximumValue = max;
-            this._incremete = increment;
+            this._increment = increment;
 
             this.settingValue = defaultValue;
 

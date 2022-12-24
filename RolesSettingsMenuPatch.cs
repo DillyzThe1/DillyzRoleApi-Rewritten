@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using static DillyzRoleApi_Rewritten.RoleManagerPatch;
+using static Il2CppSystem.Net.TimerThread;
 using static UnityEngine.GraphicsBuffer;
 
 namespace DillyzRoleApi_Rewritten
@@ -71,10 +72,10 @@ namespace DillyzRoleApi_Rewritten
                     newSettingParent.transform.SetParent(newTab.transform);
                     newSettingParent.transform.position = ogSettingPos + (new Vector3(0, -0.475f, 0) * ymultlol);
 
-                    System.Action<GameObject> value = delegate (GameObject obj) { 
+                    /*System.Action<GameObject> value = delegate (GameObject obj) { 
                         HarmonyMain.Instance.Log.LogInfo(obj.name + " child");
                     };
-                    ogBoolOpt.ForEachChild(value);
+                    ogNumbOpt.ForEachChild(value);*/
 
                     GameObject ogbg = ogBoolOpt.transform.Find("Background").gameObject;
                     GameObject newSettingBG = GameObject.Instantiate(ogbg);
@@ -92,63 +93,120 @@ namespace DillyzRoleApi_Rewritten
 
                     switch (setting.settingType) {
                         case CustomSettingType.Boolean:
-                            CustomBooleanSetting boolSetting = setting as CustomBooleanSetting;
-
-                            GameObject ogcheck = ogBoolOpt.transform.Find("CheckBox").gameObject;
-                            GameObject checkmarkDupe = GameObject.Instantiate(ogcheck);
-                            checkmarkDupe.transform.SetParent(newSettingParent.transform);
-                            checkmarkDupe.transform.localPosition = new Vector3(1.65f, 0, 0);
-                            checkmarkDupe.gameObject.layer = ogcheck.gameObject.layer;
-
-                            GameObject thecheckmarkitself = checkmarkDupe.transform.Find("CheckMark").gameObject;
-                            thecheckmarkitself.gameObject.SetActive(boolSetting.settingValue);
-                            thecheckmarkitself.gameObject.layer = ogcheck.gameObject.layer;
-
-                            checkmarkDupe.AddComponent<BoxCollider2D>();
-                            PassiveButton pb = checkmarkDupe.AddComponent<PassiveButton>();
-                            pb.OnDown = true;
-                            pb.OnRepeat = false;
-                            pb.OnUp = false;
-                            pb.OnMouseOut = new UnityEngine.Events.UnityEvent();
-                            pb.OnMouseOut.AddListener((UnityEngine.Events.UnityAction)checkmarkOut);
-                            void checkmarkOut()
                             {
-                                checkmarkDupe.GetComponent<SpriteRenderer>().material.SetFloat("_Outline", 0f);
-                                checkmarkDupe.GetComponent<SpriteRenderer>().material.SetColor("_OutlineColor", Color.clear);
-                            }
-                            pb.OnMouseOver = new UnityEngine.Events.UnityEvent();
-                            pb.OnMouseOver.AddListener((UnityEngine.Events.UnityAction)checkmarkHover);
-                            void checkmarkHover() {
-                                foreach (AudioSource audioSource in SoundManager.Instance.allSources.Values)
+                                CustomBooleanSetting boolSetting = setting as CustomBooleanSetting;
+
+                                GameObject ogcheck = ogBoolOpt.transform.Find("CheckBox").gameObject;
+                                GameObject checkmarkDupe = GameObject.Instantiate(ogcheck);
+                                checkmarkDupe.transform.SetParent(newSettingParent.transform);
+                                checkmarkDupe.transform.localPosition = new Vector3(1.65f, 0, 0);
+                                checkmarkDupe.gameObject.layer = ogcheck.gameObject.layer;
+
+                                GameObject thecheckmarkitself = checkmarkDupe.transform.Find("CheckMark").gameObject;
+                                thecheckmarkitself.gameObject.SetActive(boolSetting.settingValue);
+                                thecheckmarkitself.gameObject.layer = ogcheck.gameObject.layer;
+
+                                checkmarkDupe.AddComponent<BoxCollider2D>();
+                                PassiveButton pb = checkmarkDupe.AddComponent<PassiveButton>();
+                                pb.OnDown = true;
+                                pb.OnRepeat = false;
+                                pb.OnUp = false;
+                                pb.OnMouseOut = new UnityEngine.Events.UnityEvent();
+                                pb.OnMouseOut.AddListener((UnityEngine.Events.UnityAction)checkmarkOut);
+                                void checkmarkOut()
                                 {
-                                    HarmonyMain.Instance.Log.LogInfo(audioSource.name + " is playing " + audioSource.clip.name);
+                                    checkmarkDupe.GetComponent<SpriteRenderer>().material.SetFloat("_Outline", 0f);
+                                    checkmarkDupe.GetComponent<SpriteRenderer>().material.SetColor("_OutlineColor", Color.clear);
+                                }
+                                pb.OnMouseOver = new UnityEngine.Events.UnityEvent();
+                                pb.OnMouseOver.AddListener((UnityEngine.Events.UnityAction)checkmarkHover);
+                                void checkmarkHover()
+                                {
+                                    foreach (AudioSource audioSource in SoundManager.Instance.allSources.Values)
+                                    {
+                                        HarmonyMain.Instance.Log.LogInfo(audioSource.name + " is playing " + audioSource.clip.name);
+                                    }
+
+                                    //SoundManager.Instance.PlaySound(, false, 0.8f, null);
+
+                                    checkmarkDupe.GetComponent<SpriteRenderer>().material.SetFloat("_Outline", 1f);
+                                    checkmarkDupe.GetComponent<SpriteRenderer>().material.SetColor("_OutlineColor", DillyzUtil.color32ToColor(CustomPalette.CheckboxSelectedColor));
+                                }
+                                GameObject checkmarkobj = thecheckmarkitself.gameObject;
+                                pb.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
+                                pb.OnClick.AddListener((UnityEngine.Events.UnityAction)checkmarkClicked);
+                                void checkmarkClicked()
+                                {
+                                    // inverse
+                                    boolSetting.settingValue = !boolSetting.settingValue;
+                                    checkmarkobj.SetActive(boolSetting.settingValue);
+
+                                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.SetSettings, Hazel.SendOption.None, -1);
+                                    writer.Write((byte)1);
+                                    writer.Write($"LOBBY_ARS-{role.name}-{setting.title}");
+                                    writer.Write(boolSetting.settingValue);
+                                    AmongUsClient.Instance.FinishRpcImmediately(writer);
                                 }
 
-                                //SoundManager.Instance.PlaySound(, false, 0.8f, null);
-
-                                checkmarkDupe.GetComponent<SpriteRenderer>().material.SetFloat("_Outline", 1f);
-                                checkmarkDupe.GetComponent<SpriteRenderer>().material.SetColor("_OutlineColor", DillyzUtil.color32ToColor(CustomPalette.CheckboxSelectedColor));
                             }
-                            GameObject checkmarkobj = thecheckmarkitself.gameObject;
-                            pb.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
-                            pb.OnClick.AddListener((UnityEngine.Events.UnityAction)checkmarkClicked);
-                            void checkmarkClicked()
-                            {
-                                // inverse
-                                boolSetting.settingValue = !boolSetting.settingValue;
-                                checkmarkobj.SetActive(boolSetting.settingValue);
-
-                                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.SetSettings, Hazel.SendOption.None, -1);
-                                writer.Write((byte)1);
-                                writer.Write($"LOBBY_ARS-{role.name}-{setting.title}");
-                                writer.Write(boolSetting.settingValue);
-                                AmongUsClient.Instance.FinishRpcImmediately(writer);
-                            }
-
-
                             break;
                         case CustomSettingType.Integer:
-                            CustomNumberSetting intSetting = setting as CustomNumberSetting;
+                            {
+                                CustomNumberSetting intSetting = setting as CustomNumberSetting;
+
+                                GameObject ogvaluetmp = ogNumbOpt.transform.Find("Value_TMP").gameObject;
+                                TextMeshPro valueTMP = GameObject.Instantiate(ogvaluetmp).GetComponent<TextMeshPro>();
+                                valueTMP.transform.SetParent(newSettingParent.transform);
+                                valueTMP.transform.localPosition = new Vector3(0f, -0.015f, 0f);
+                                valueTMP.transform.position = new Vector3(ogvaluetmp.transform.position.x, valueTMP.transform.position.y, -168f);
+                                valueTMP.gameObject.layer = ogvaluetmp.gameObject.layer;
+                                valueTMP.text = intSetting.settingValue.ToString();
+
+                                GameObject ogplustmp = ogNumbOpt.transform.Find("Plus_TMP").gameObject;
+                                TextMeshPro plusTMP = GameObject.Instantiate(ogplustmp).GetComponent<TextMeshPro>();
+                                plusTMP.transform.SetParent(newSettingParent.transform);
+                                plusTMP.transform.localPosition = new Vector3(0f, -0.015f, 0f);
+                                plusTMP.transform.position = new Vector3(ogplustmp.transform.position.x, plusTMP.transform.position.y, -168f);
+                                plusTMP.gameObject.layer = ogplustmp.gameObject.layer;
+
+                                PassiveButton plusTMPButton = plusTMP.gameObject.GetComponent<PassiveButton>();
+                                plusTMPButton.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
+                                plusTMPButton.OnClick.AddListener((UnityEngine.Events.UnityAction)callback_1);
+                                void callback_1()
+                                {
+                                    intSetting.settingValue += intSetting.increment;
+                                    valueTMP.text = intSetting.settingValue.ToString();
+
+                                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.SetSettings, Hazel.SendOption.None, -1);
+                                    writer.Write((byte)1);
+                                    writer.Write($"LOBBY_ARS-{role.name}-{setting.title}");
+                                    writer.Write(intSetting.settingValue);
+                                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                                }
+
+
+                                GameObject ogminustmp = ogNumbOpt.transform.Find("Minus_TMP").gameObject;
+                                TextMeshPro minusTMP = GameObject.Instantiate(ogminustmp).GetComponent<TextMeshPro>();
+                                minusTMP.transform.SetParent(newSettingParent.transform);
+                                minusTMP.transform.localPosition = new Vector3(0f, -0.015f, 0f);
+                                minusTMP.transform.position = new Vector3(ogminustmp.transform.position.x, minusTMP.transform.position.y, -168f);
+                                minusTMP.gameObject.layer = ogminustmp.gameObject.layer;
+
+                                PassiveButton minusTMPButton = minusTMP.gameObject.GetComponent<PassiveButton>();
+                                minusTMPButton.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
+                                minusTMPButton.OnClick.AddListener((UnityEngine.Events.UnityAction)callback_2);
+                                void callback_2()
+                                {
+                                    intSetting.settingValue -= intSetting.increment;
+                                    valueTMP.text = intSetting.settingValue.ToString();
+
+                                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.SetSettings, Hazel.SendOption.None, -1);
+                                    writer.Write((byte)1);
+                                    writer.Write($"LOBBY_ARS-{role.name}-{setting.title}");
+                                    writer.Write(intSetting.settingValue);
+                                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                                }
+                            }
                             break;
                         case CustomSettingType.String:
                             CustomStringSetting strSetting = setting as CustomStringSetting;
