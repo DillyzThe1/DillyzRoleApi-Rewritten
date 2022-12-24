@@ -182,7 +182,8 @@ namespace DillyzRoleApi_Rewritten
 
             if (roleFilters != null)
                 welcomeOldPlayers.RemoveAll(x => roleFilters.Contains(getRoleName(x)));
-            welcomeOldPlayers.RemoveAll(x => x.Data.IsDead == shouldBeAlive);
+            welcomeOldPlayers.RemoveAll(x => x.Data.IsDead == shouldBeAlive)
+            welcomeOldPlayers.RemoveAll(x => x.inVent);
 
             foreach (PlayerControl player in welcomeOldPlayers)
             {
