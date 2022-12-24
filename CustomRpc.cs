@@ -113,17 +113,17 @@ namespace DillyzRoleApi_Rewritten
                                         case CustomSettingType.Boolean:
                                             CustomBooleanSetting boolsetting = rolesetting as CustomBooleanSetting;
                                             boolsetting.settingValue = reader.ReadBoolean();
-                                            HarmonyMain.Instance.Log.LogInfo(typeToActaullyGet + " = " + boolsetting.settingValue);
+                                            //HarmonyMain.Instance.Log.LogInfo(typeToActaullyGet + " = " + boolsetting.settingValue);
                                             break;
                                         case CustomSettingType.Integer:
                                             CustomNumberSetting intsetting = rolesetting as CustomNumberSetting;
                                             intsetting.settingValue = reader.ReadInt32();
-                                            HarmonyMain.Instance.Log.LogInfo(typeToActaullyGet + " = " + intsetting.settingValue);
+                                            //HarmonyMain.Instance.Log.LogInfo(typeToActaullyGet + " = " + intsetting.settingValue);
                                             break;
                                         case CustomSettingType.String:
                                             CustomStringSetting strsetting = rolesetting as CustomStringSetting;
                                             strsetting.settingValue = reader.ReadString();
-                                            HarmonyMain.Instance.Log.LogInfo(typeToActaullyGet + " = " + strsetting.settingValue);
+                                            //HarmonyMain.Instance.Log.LogInfo(typeToActaullyGet + " = " + strsetting.settingValue);
                                             break;
                                     }
                                 }
