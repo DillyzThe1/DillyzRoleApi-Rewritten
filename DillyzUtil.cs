@@ -220,8 +220,8 @@ namespace DillyzRoleApi_Rewritten
             if (target.protectedByGuardian)
             {
                 target.protectedByGuardianThisRound = true;
-                bool isguardian = PlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.GuardianAngel;
-                if (isKiller || isguardian)
+                string rolename = DillyzUtil.getRoleName(PlayerControl.LocalPlayer);
+                if (isKiller || rolename == "GuardianAngel")
                 {
                     target.ShowFailedMurder();
                     assassinator.SetKillTimer(GameOptionsManager.Instance.CurrentGameOptions.GetFloat(FloatOptionNames.KillCooldown) / 2f);
@@ -229,7 +229,7 @@ namespace DillyzRoleApi_Rewritten
                 else
                     target.RemoveProtection();
 
-                if (isguardian)
+                if (rolename == "GuardianAngel")
                     DestroyableSingleton<AchievementManager>.Instance.OnProtectACrewmate();
                 return;
             }
@@ -244,8 +244,6 @@ namespace DillyzRoleApi_Rewritten
 
             //CustomRoleSide roleSideUrOn = DillyzUtil.roleSide(target);
             KillAnimation kil = assassinator.KillAnimations[UnityEngine.Random.Range(0, assassinator.KillAnimations.Length - 1)];
-
-            target.gameObject.layer = LayerMask.NameToLayer("Ghost");
 
             if (isVictim) {
                 if (Minigame.Instance != null) {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AmongUs.GameOptions;
 using HarmonyLib;
 using Hazel;
 
@@ -40,7 +41,8 @@ namespace DillyzRoleApi_Rewritten
                     else
                         availablePlayers.RemoveAll(x => DillyzUtil.roleSide(x) != role.side);
 
-                    for (int i = 0; i < role.setting_countPerGame; i++) {
+                    for (int i = 0; i < role.setting_countPerGame; i++)
+                    {
                         if (availablePlayers.Count == 0)
                             continue;
 
@@ -67,6 +69,45 @@ namespace DillyzRoleApi_Rewritten
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
                     }
                 }
+            }
+        }
+
+
+
+        [HarmonyPatch(typeof(RoleManager), nameof(RoleManager.AssignRoleOnDeath))]
+        public class RoleManagerPatch_AssignRoleOnDeath
+        {
+            public static bool Prefix(RoleManager __instance, PlayerControl player, bool specialRolesAllowed)
+            {
+                if (player == null || !player.Data.IsDead)
+                    return false;
+
+                RoleTypes roleTheyWant = RoleTypes.CrewmateGhost;
+                CustomRoleSide rs = DillyzUtil.roleSide(player);
+
+                if (rs == CustomRoleSide.Impostor)
+                    roleTheyWant = RoleTypes.ImpostorGhost;
+                else if (specialRolesAllowed) 
+                {
+                    RoleTypes guardRole = RoleTypes.GuardianAngel;
+                    List<PlayerControl> pc = PlayerControl.AllPlayerControls.ToArray().ToList();
+                    pc.RemoveAll(x => x.Data.IsDead && DillyzUtil.roleSide(x) != CustomRoleSide.Impostor);
+                    int num = pc.Count;
+                    IRoleOptionsCollection roleOptions = GameOptionsManager.Instance.CurrentGameOptions.RoleOptions;
+                    if (AmongUsClient.Instance.NetworkMode == NetworkModes.FreePlay)
+                        roleTheyWant = guardRole;
+                    else if (num <= roleOptions.GetNumPerGame(guardRole))
+                    {
+                        int chancePerGame = roleOptions.GetChancePerGame(guardRole);
+
+                        if (HashRandom.Next(101) < chancePerGame)
+                            roleTheyWant = guardRole;
+                    }
+                }
+
+                player.RpcSetRole(roleTheyWant);
+
+                return false;
             }
         }
     }
