@@ -138,6 +138,9 @@ namespace DillyzRoleApi_Rewritten
                 DillyzUtil.RpcCommitAssassination(PlayerControl.LocalPlayer, __instance.currentTarget);
                 __instance.SetTarget(null);
 
+                if (rolename == "Impostor" || rolename == "ShapeShifter")
+                    PlayerControl.LocalPlayer.SetKillTimer(GameOptionsManager.Instance.CurrentGameOptions.GetFloat(FloatOptionNames.KillCooldown));
+
                 return false;
             }
         }

@@ -80,6 +80,7 @@ namespace DillyzRoleApi_Rewritten
                 DillyzUtil.createRole("Sheriff", "Kill the impostor or suicide.", true, true, new Color32(255, 185, 30, 255), false,
                                                                         CustomRoleSide.Crewmate, VentPrivilege.None, false, true);
                 CustomRole.getByName("Sheriff").a_or_an = "a";
+                CustomRole.getByName("Sheriff").SetSprite(Assembly.GetExecutingAssembly(), "DillyzRoleApi_Rewritten.Assets.sheriff_kill.png");
 
                 Log.LogInfo("Adding a sherrif button!");
                 DillyzUtil.addButton(Assembly.GetExecutingAssembly(), "Sheriff Kill Button", "DillyzRoleApi_Rewritten.Assets.sheriff_kill.png", -1f, true,
@@ -88,7 +89,7 @@ namespace DillyzRoleApi_Rewritten
                     if (!success)
                         return;
 
-                    Log.LogInfo(button.killButton.currentTarget.name + " was targetted by fred!");
+                    Log.LogInfo(button.killButton.currentTarget.name + " was targetted by " + PlayerControl.LocalPlayer.name + "!");
 
                     DillyzUtil.RpcCommitAssassination(PlayerControl.LocalPlayer, button.killButton.currentTarget);
 
@@ -96,7 +97,6 @@ namespace DillyzRoleApi_Rewritten
                         DillyzUtil.RpcCommitAssassination(PlayerControl.LocalPlayer, PlayerControl.LocalPlayer);
 
                 });
-                CustomRole.getByName("Sheriff").SetSprite(Assembly.GetExecutingAssembly(), "DillyzRoleApi_Rewritten.Assets.sheriff_kill.png");
 
                 CustomButton.getButtonByName("Sheriff Kill Button").buttonText = "Kill";
                 CustomButton.getButtonByName("Sheriff Kill Button").textOutlineColor = new Color32(255, 185, 30, 255);
