@@ -64,9 +64,9 @@ namespace DillyzRoleApi_Rewritten
                 case (byte)CustomRpc.SetSettings:
                     byte settingsCount = reader.ReadByte();
 
-                    for (int i = 0; i < settingsCount; i++) {
+                    for (int i = 0; i < settingsCount; i++)
+                    {
                         string settingToSet = reader.ReadString();
-                        string thevaluelol = reader.ReadString();
 
                         if (settingToSet.StartsWith("LOBBY_ROLE_SETTING-"))
                         {
@@ -74,6 +74,7 @@ namespace DillyzRoleApi_Rewritten
                             string roleToGet_Wthing = settingToSet.Substring(epictrtoll, settingToSet.Length - epictrtoll);
                             string roleToACTAULLYGet = roleToGet_Wthing.Substring(0, roleToGet_Wthing.LastIndexOf("-"));
 
+                            string thevaluelol = reader.ReadString();
                             foreach (LobbyRoleSetting newsetting in LobbyConfigManager.lobbyRoleSettings)
                             {
                                 if (newsetting.roleName == roleToACTAULLYGet)
@@ -86,6 +87,51 @@ namespace DillyzRoleApi_Rewritten
                             }
                             continue;
                         }
+
+                        // LOBBY_ARS-Sheriff-Punished
+                        if (settingToSet.StartsWith("LOBBY_ARS-"))
+                        {
+                            int epictrtoll = settingToSet.IndexOf("-") + 1;
+                            string roleToGet_Wthing = settingToSet.Substring(epictrtoll, settingToSet.Length - epictrtoll);
+                            string roleToACTAULLYGet = roleToGet_Wthing.Substring(0, roleToGet_Wthing.LastIndexOf("-"));
+                            int welcomeold = roleToGet_Wthing.LastIndexOf("-") + 1;
+                            string typeToActaullyGet = roleToGet_Wthing.Substring(welcomeold, roleToGet_Wthing.Length - welcomeold);
+
+                            CustomRole role = CustomRole.getByName(roleToACTAULLYGet);
+
+                            //HarmonyMain.Instance.Log.LogInfo("funny " + roleToACTAULLYGet + " with " + typeToActaullyGet);
+
+                            if (role == null)
+                                continue;
+
+                            foreach (CustomSetting rolesetting in role.advancedSettings)
+                            {
+                                if (rolesetting.title == typeToActaullyGet)
+                                {
+                                    switch (rolesetting.settingType)
+                                    {
+                                        case CustomSettingType.Boolean:
+                                            CustomBooleanSetting boolsetting = rolesetting as CustomBooleanSetting;
+                                            boolsetting.settingValue = reader.ReadBoolean();
+                                            HarmonyMain.Instance.Log.LogInfo(typeToActaullyGet + " = " + boolsetting.settingValue);
+                                            break;
+                                        case CustomSettingType.Integer:
+                                            CustomNumberSetting intsetting = rolesetting as CustomNumberSetting;
+                                            intsetting.settingValue = reader.ReadInt32();
+                                            HarmonyMain.Instance.Log.LogInfo(typeToActaullyGet + " = " + intsetting.settingValue);
+                                            break;
+                                        case CustomSettingType.String:
+                                            CustomStringSetting strsetting = rolesetting as CustomStringSetting;
+                                            strsetting.settingValue = reader.ReadString();
+                                            HarmonyMain.Instance.Log.LogInfo(typeToActaullyGet + " = " + strsetting.settingValue);
+                                            break;
+                                    }
+                                }
+                            }
+                            continue;
+                        }
+
+                        HarmonyMain.Instance.Log.LogError("bad rpc " + settingToSet);
                     }
 
                     LobbyConfigManager.Save();

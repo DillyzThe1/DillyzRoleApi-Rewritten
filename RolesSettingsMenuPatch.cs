@@ -137,6 +137,12 @@ namespace DillyzRoleApi_Rewritten
                                 // inverse
                                 boolSetting.settingValue = !boolSetting.settingValue;
                                 checkmarkobj.SetActive(boolSetting.settingValue);
+
+                                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.SetSettings, Hazel.SendOption.None, -1);
+                                writer.Write((byte)1);
+                                writer.Write($"LOBBY_ARS-{role.name}-{setting.title}");
+                                writer.Write(boolSetting.settingValue);
+                                AmongUsClient.Instance.FinishRpcImmediately(writer);
                             }
 
 

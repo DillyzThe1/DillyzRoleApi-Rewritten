@@ -41,6 +41,7 @@ namespace DillyzRoleApi_Rewritten
 
                 HarmonyMain.Instance.Log.LogInfo("bruh " + __instance.__4__this.name);
 
+                LobbyConfigManager.UpdateNormalValues();
                 LobbyConfigManager.UpdateRoleValues();
             }
         }

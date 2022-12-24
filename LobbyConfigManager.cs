@@ -47,6 +47,31 @@ namespace DillyzRoleApi_Rewritten
             }
             AmongUsClient.Instance.FinishRpcImmediately(writer);
         }
+
+        public static void UpdateNormalValues()
+        {
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.SetSettings, Hazel.SendOption.None, -1);
+            writer.Write((byte)CustomRole.allRoles.Count);
+            foreach (CustomRole role in CustomRole.allRoles)
+            {
+                foreach (CustomSetting setting in role.advancedSettings)
+                {
+                    writer.Write($"LOBBY_ARS-{role.name}-{setting.title}");
+                    switch (setting.settingType) {
+                        case CustomSettingType.Boolean:
+                            writer.Write((setting as CustomBooleanSetting).settingValue);
+                            break;
+                        case CustomSettingType.Integer:
+                            writer.Write((setting as CustomNumberSetting).settingValue);
+                            break;
+                        case CustomSettingType.String:
+                            writer.Write((setting as CustomStringSetting).settingValue);
+                            break;
+                    }
+                }
+            }
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+        }
     }
 
     public class LobbyRoleSetting { 
