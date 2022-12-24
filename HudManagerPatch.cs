@@ -193,6 +193,12 @@ namespace DillyzRoleApi_Rewritten
                     __instance.KillButton.SetTarget(DillyzUtil.getClosestPlayer(PlayerControl.LocalPlayer));
                 }
             }
+            else {
+                string rolename = DillyzUtil.getRoleName(PlayerControl.LocalPlayer);
+                bool impostorbuttons = (rolename == "Impostor" || rolename == "ShapeShifter") && !udiededed;
+                __instance.ImpostorVentButton.gameObject.active = impostorbuttons;
+                __instance.KillButton.gameObject.SetActive(impostorbuttons);
+            }
 
             if (AllKillButtons != null && AllKillButtons.Count > 0)
             {
