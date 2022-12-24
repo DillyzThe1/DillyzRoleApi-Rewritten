@@ -131,7 +131,8 @@ namespace DillyzRoleApi_Rewritten
                             continue;
                         }
 
-                        HarmonyMain.Instance.Log.LogError("bad rpc " + settingToSet);
+                        HarmonyMain.Instance.Log.LogError($"Bad setting RPC \"{settingToSet}\" found! (Terminating setting RPC)");
+                        return;
                     }
 
                     LobbyConfigManager.Save();
