@@ -62,17 +62,14 @@ namespace DillyzRoleApi_Rewritten
                     DillyzUtil.commitAssassination(DillyzUtil.findPlayerControl(reader.ReadByte()), DillyzUtil.findPlayerControl(reader.ReadByte()));
                     break;
                 case (byte)CustomRpc.SetSettings:
-                    HarmonyMain.Instance.Log.LogInfo("hey");
                     byte settingsCount = reader.ReadByte();
 
                     for (int i = 0; i < settingsCount; i++) {
                         string settingToSet = reader.ReadString();
                         string thevaluelol = reader.ReadString();
 
-                        // LOBBY_ROLE_SETTING-Jester-Count
                         if (settingToSet.StartsWith("LOBBY_ROLE_SETTING-"))
                         {
-                            //LobbyRoleSetting setting = null;
                             int epictrtoll = settingToSet.IndexOf("-") + 1;
                             string roleToGet_Wthing = settingToSet.Substring(epictrtoll, settingToSet.Length - epictrtoll);
                             string roleToACTAULLYGet = roleToGet_Wthing.Substring(0, roleToGet_Wthing.LastIndexOf("-"));
@@ -85,17 +82,13 @@ namespace DillyzRoleApi_Rewritten
                                         newsetting.roleCount = Int32.Parse(thevaluelol);
                                     else if (roleToGet_Wthing.EndsWith("-Chance"))
                                         newsetting.roleChance = Int32.Parse(thevaluelol);
-
-                                    HarmonyMain.Instance.Log.LogInfo($"Settings for {roleToACTAULLYGet} found! (Count: {newsetting.roleCount} Chance: {newsetting.roleChance})");
                                 }
                             }
-
                             continue;
                         }
                     }
 
                     LobbyConfigManager.Save();
-
                     break;
                 case (byte)CustomRpc.CustomRPCCall:
                     string rpcToGet = reader.ReadString();
