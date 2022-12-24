@@ -27,18 +27,25 @@ namespace DillyzRoleApi_Rewritten
 
             GameObject ogtab = null;
             GameObject shapshiftnumopt = null;
+            GameObject shapshiftnumopt_2 = null;
 
             foreach (AdvancedRoleSettingsButton ad in __instance.AllAdvancedSettingTabs)
                 if (ad.Tab.name == "GA Settings")
                     ogtab = ad.Tab;
                 else if (ad.Tab.name == "Shapeshifter Settings")
+                {
                     shapshiftnumopt = ad.Tab.transform.Find("NumberOption").gameObject;
+                    shapshiftnumopt_2 = ad.Tab.transform.Find("NumberOption (1)").gameObject;
+                }
 
             GameObject ogBoolOpt = ogtab.transform.Find("ToggleOption").gameObject;
             GameObject ogNumbOpt = ogtab.transform.Find("NumberOption").gameObject;
 
             Vector3 ogSettingPos = shapshiftnumopt.transform.position;//new Vector3(-4.35f, 2.875f, -160f);
+            float ySpace = shapshiftnumopt_2.transform.position.y - shapshiftnumopt.transform.position.y;
             float ymultlol = 0; // ymultlol * -0.475
+
+            float xoff = 0.25f;//0.75f;
 
             foreach (CustomRole role in CustomRole.allRoles)
             {
@@ -70,7 +77,7 @@ namespace DillyzRoleApi_Rewritten
                     newSettingParent.gameObject.layer = ogtab.gameObject.layer;
                     newSettingParent.name = setting.title + "Setting";
                     newSettingParent.transform.SetParent(newTab.transform);
-                    newSettingParent.transform.position = ogSettingPos + (new Vector3(0, -0.475f, 0) * ymultlol);
+                    newSettingParent.transform.position = ogSettingPos + (new Vector3(0, ySpace, 0) * ymultlol);
 
                     /*System.Action<GameObject> value = delegate (GameObject obj) { 
                         HarmonyMain.Instance.Log.LogInfo(obj.name + " child");
@@ -158,16 +165,16 @@ namespace DillyzRoleApi_Rewritten
                                 TextMeshPro valueTMP = GameObject.Instantiate(ogvaluetmp).GetComponent<TextMeshPro>();
                                 valueTMP.transform.SetParent(newSettingParent.transform);
                                 valueTMP.transform.localPosition = new Vector3(0f, -0.015f, 0f);
-                                valueTMP.transform.position = new Vector3(ogvaluetmp.transform.position.x, valueTMP.transform.position.y, -168f);
+                                valueTMP.transform.position = new Vector3(ogvaluetmp.transform.position.x + (xoff/2f), valueTMP.transform.position.y, -168f);
                                 valueTMP.gameObject.layer = ogvaluetmp.gameObject.layer;
                                 valueTMP.text = intSetting.settingValue.ToString();
 
                                 GameObject ogplustmp = ogNumbOpt.transform.Find("Plus_TMP").gameObject;
                                 TextMeshPro plusTMP = GameObject.Instantiate(ogplustmp).GetComponent<TextMeshPro>();
                                 plusTMP.transform.SetParent(newSettingParent.transform);
-                                plusTMP.transform.localPosition = new Vector3(0f, -0.015f, 0f);
-                                plusTMP.transform.position = new Vector3(ogplustmp.transform.position.x, plusTMP.transform.position.y, -168f);
                                 plusTMP.gameObject.layer = ogplustmp.gameObject.layer;
+                                plusTMP.transform.localPosition = new Vector3(0f, -0.015f, 0f);
+                                plusTMP.transform.position = new Vector3(ogplustmp.transform.position.x + xoff, plusTMP.transform.position.y, -168f);
 
                                 PassiveButton plusTMPButton = plusTMP.gameObject.GetComponent<PassiveButton>();
                                 plusTMPButton.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
@@ -188,9 +195,9 @@ namespace DillyzRoleApi_Rewritten
                                 GameObject ogminustmp = ogNumbOpt.transform.Find("Minus_TMP").gameObject;
                                 TextMeshPro minusTMP = GameObject.Instantiate(ogminustmp).GetComponent<TextMeshPro>();
                                 minusTMP.transform.SetParent(newSettingParent.transform);
+                                minusTMP.gameObject.layer = ogminustmp.gameObject.layer;
                                 minusTMP.transform.localPosition = new Vector3(0f, -0.015f, 0f);
                                 minusTMP.transform.position = new Vector3(ogminustmp.transform.position.x, minusTMP.transform.position.y, -168f);
-                                minusTMP.gameObject.layer = ogminustmp.gameObject.layer;
 
                                 PassiveButton minusTMPButton = minusTMP.gameObject.GetComponent<PassiveButton>();
                                 minusTMPButton.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
@@ -209,7 +216,62 @@ namespace DillyzRoleApi_Rewritten
                             }
                             break;
                         case CustomSettingType.String:
-                            CustomStringSetting strSetting = setting as CustomStringSetting;
+                            {
+                                CustomStringSetting strSetting = setting as CustomStringSetting;
+
+                                GameObject ogvaluetmp = ogNumbOpt.transform.Find("Value_TMP").gameObject;
+                                TextMeshPro valueTMP = GameObject.Instantiate(ogvaluetmp).GetComponent<TextMeshPro>();
+                                valueTMP.transform.SetParent(newSettingParent.transform);
+                                valueTMP.transform.localPosition = new Vector3(0f, -0.015f, 0f);
+                                valueTMP.transform.position = new Vector3(ogvaluetmp.transform.position.x + (xoff/2f), valueTMP.transform.position.y, -168f);
+                                valueTMP.gameObject.layer = ogvaluetmp.gameObject.layer;
+                                valueTMP.text = strSetting.settingValue;
+
+                                GameObject ogplustmp = ogNumbOpt.transform.Find("Plus_TMP").gameObject;
+                                TextMeshPro plusTMP = GameObject.Instantiate(ogplustmp).GetComponent<TextMeshPro>();
+                                plusTMP.transform.SetParent(newSettingParent.transform);
+                                plusTMP.gameObject.layer = ogplustmp.gameObject.layer;
+                                plusTMP.transform.localPosition = new Vector3(0f, -0.015f, 0f);
+                                plusTMP.transform.position = new Vector3(ogplustmp.transform.position.x + xoff, plusTMP.transform.position.y, -168f);
+
+                                PassiveButton plusTMPButton = plusTMP.gameObject.GetComponent<PassiveButton>();
+                                plusTMPButton.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
+                                plusTMPButton.OnClick.AddListener((UnityEngine.Events.UnityAction)callback_1);
+                                void callback_1()
+                                {
+                                    strSetting.curIndex++;
+                                    valueTMP.text = strSetting.settingValue;
+
+                                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.SetSettings, Hazel.SendOption.None, -1);
+                                    writer.Write((byte)1);
+                                    writer.Write($"LOBBY_ARS-{role.name}-{setting.title}");
+                                    writer.Write(strSetting.settingValue);
+                                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                                }
+
+
+                                GameObject ogminustmp = ogNumbOpt.transform.Find("Minus_TMP").gameObject;
+                                TextMeshPro minusTMP = GameObject.Instantiate(ogminustmp).GetComponent<TextMeshPro>();
+                                minusTMP.transform.SetParent(newSettingParent.transform);
+                                minusTMP.gameObject.layer = ogminustmp.gameObject.layer;
+                                minusTMP.transform.localPosition = new Vector3(0f, -0.015f, 0f);
+                                minusTMP.transform.position = new Vector3(ogminustmp.transform.position.x, minusTMP.transform.position.y, -168f);
+
+                                PassiveButton minusTMPButton = minusTMP.gameObject.GetComponent<PassiveButton>();
+                                minusTMPButton.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
+                                minusTMPButton.OnClick.AddListener((UnityEngine.Events.UnityAction)callback_2);
+                                void callback_2()
+                                {
+                                    strSetting.curIndex--;
+                                    valueTMP.text = strSetting.settingValue;
+
+                                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.SetSettings, Hazel.SendOption.None, -1);
+                                    writer.Write((byte)1);
+                                    writer.Write($"LOBBY_ARS-{role.name}-{setting.title}");
+                                    writer.Write(strSetting.settingValue);
+                                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                                }
+                            }
                             break;
                     }
 

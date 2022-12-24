@@ -58,6 +58,7 @@ namespace DillyzRoleApi_Rewritten
     public class CustomStringSetting : CustomSetting
     {
         private int _curIndex;
+        public int curIndex { get { return _curIndex; } set { this._curIndex = (value >= 0) ? ((value >= _allValues.Count - 1) ? 0 : value) : (_allValues.Count - 1); } }
         private string _defaultValue;
         private List<string> _allValues;
 
