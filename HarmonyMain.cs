@@ -111,7 +111,8 @@ namespace DillyzRoleApi_Rewritten
 
             if (enableDebugHitman.Value) {
                 Log.LogInfo("Adding a Hitman!");
-                DillyzUtil.createRole("Hitman", "You must work alone to succeed.", true, false, new Color32(75,65,85,255), false, CustomRoleSide.LoneWolf, VentPrivilege.Impostor, false, true);
+                DillyzUtil.createRole("Hitman", "You must work alone to succeed.", true, false, new Color32(75,65,85,255), false, 
+                                                                     CustomRoleSide.LoneWolf,  VentPrivilege.Impostor, false, true);
                 CustomRole hitmanRole = CustomRole.getByName("Hitman");
                 hitmanRole.a_or_an = "a";
                 hitmanRole.SetSprite(Assembly.GetExecutingAssembly(), "DillyzRoleApi_Rewritten.Assets.hitman_kill.png");
