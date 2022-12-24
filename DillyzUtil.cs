@@ -139,6 +139,9 @@ namespace DillyzRoleApi_Rewritten
         }
 
         public static PlayerControl findPlayerControl(byte playerId) {
+            if (playerId == 255)
+                return null;
+
             foreach (PlayerControl player in PlayerControl.AllPlayerControls)
                 if (player.PlayerId == playerId)
                     return player;

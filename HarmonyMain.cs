@@ -42,6 +42,7 @@ namespace DillyzRoleApi_Rewritten
         // https://docs.bepinex.dev/v5.4.21/articles/dev_guide/plugin_tutorial/4_configuration.html
         public ConfigEntry<bool> enableDebugJester;
         public ConfigEntry<bool> enableDebugSheriff;
+        public ConfigEntry<bool> enableDebugHitman;
 
         public override void Load()
         {
@@ -52,6 +53,9 @@ namespace DillyzRoleApi_Rewritten
                 "https://github.com/DillyzThe1/DillyzRoleApi-Rewritten/Packages.md");
             enableDebugSheriff = Config.Bind("Debug", "Debug Sheriff", false,
                 "Enables the Debug Sheriff built into the API.\nThis functions normally, but you may want to use the official package here:\n" +
+                "https://github.com/DillyzThe1/DillyzRoleApi-Rewritten/Packages.md");
+            enableDebugHitman = Config.Bind("Debug", "Debug Hitman", false,
+                "Enables the Debug Hitman built into the API.\nThis functions normally, but you may want to use the official package here:\n" +
                 "https://github.com/DillyzThe1/DillyzRoleApi-Rewritten/Packages.md");
 
             Log.LogInfo($"{HarmonyMain.MOD_NAME} v{HarmonyMain.MOD_VERSION} loaded. Hooray!");
@@ -82,7 +86,7 @@ namespace DillyzRoleApi_Rewritten
                 CustomRole.getByName("Sheriff").a_or_an = "a";
                 CustomRole.getByName("Sheriff").SetSprite(Assembly.GetExecutingAssembly(), "DillyzRoleApi_Rewritten.Assets.sheriff_kill.png");
 
-                Log.LogInfo("Adding a sherrif button!");
+                Log.LogInfo("Adding a Sheriff button!");
                 DillyzUtil.addButton(Assembly.GetExecutingAssembly(), "Sheriff Kill Button", "DillyzRoleApi_Rewritten.Assets.sheriff_kill.png", -1f, true,
                 new string[] { "Sheriff" }, new string[] { }, delegate (KillButtonCustomData button, bool success)
                 {
@@ -103,6 +107,58 @@ namespace DillyzRoleApi_Rewritten
 
                 CustomButton.getButtonByName("Sheriff Kill Button").buttonText = "Kill";
                 CustomButton.getButtonByName("Sheriff Kill Button").textOutlineColor = new Color32(255, 185, 30, 255);
+            }
+
+            if (enableDebugHitman.Value) {
+                Log.LogInfo("Adding a Hitman!");
+                DillyzUtil.createRole("Hitman", "You must work alone to succeed.", true, false, new Color32(75,65,85,255), false, CustomRoleSide.LoneWolf, VentPrivilege.Impostor, false, true);
+                CustomRole hitmanRole = CustomRole.getByName("Hitman");
+                hitmanRole.a_or_an = "a";
+                hitmanRole.SetSprite(Assembly.GetExecutingAssembly(), "DillyzRoleApi_Rewritten.Assets.hitman_kill.png");
+                hitmanRole.returnWinConditionState = delegate () {
+                    List<PlayerControl> goobers = hitmanRole.AllPlayersWithRole;
+                    goobers.RemoveAll(x => x.Data.IsDead);
+
+                    if (goobers.Count <= 0)
+                        return WinConditionState.None;
+
+                    List<PlayerControl> goofy = PlayerControl.AllPlayerControls.ToArray().ToList();
+                    goofy.RemoveAll(x => x.Data.IsDead);
+                    if (goofy.Count < 3) {
+                        string rolename_1 = DillyzUtil.getRoleName(goofy[0]);
+                        string rolename_2 = DillyzUtil.getRoleName(goofy[1]);
+
+                        CustomRoleSide roleside_1 = DillyzUtil.roleSide(goofy[0]);
+                        CustomRoleSide roleside_2 = DillyzUtil.roleSide(goofy[1]);
+
+                        if (rolename_1 != "Hitman" && roleside_1 != CustomRoleSide.Impostor && rolename_2 != "Hitman" && roleside_2 != CustomRoleSide.Impostor)
+                            return WinConditionState.None;
+
+                        if (rolename_1 != "Hitman" && rolename_2 != "Hitman")
+                            return WinConditionState.None;
+
+                        if (rolename_2 != "Hitman" && roleside_2 != CustomRoleSide.Impostor && rolename_1 == "Hitman")
+                            hitmanRole.WinGame(goofy[0]);
+
+                        if (rolename_1 != "Hitman" && roleside_1 != CustomRoleSide.Impostor && rolename_2 == "Hitman")
+                            hitmanRole.WinGame(goofy[1]);
+                    }
+
+                     return WinConditionState.Hold; 
+                };
+
+                DillyzUtil.addButton(Assembly.GetExecutingAssembly(), "Hitman Kill Button", "DillyzRoleApi_Rewritten.Assets.hitman_kill.png", -0.75f, true,
+                new string[] { "Hitman" }, new string[] { }, delegate (KillButtonCustomData button, bool success)
+                {
+                    if (!success)
+                        return;
+
+                    Log.LogInfo(button.killButton.currentTarget.name + " was targetted by " + PlayerControl.LocalPlayer.name + "!");
+
+                    DillyzUtil.RpcCommitAssassination(PlayerControl.LocalPlayer, button.killButton.currentTarget);
+                });
+                CustomButton.getButtonByName("Hitman Kill Button").buttonText = "Kill";
+                CustomButton.getButtonByName("Hitman Kill Button").textOutlineColor = new Color32(75, 65, 85, 255);
             }
 
             //foreach (CustomRole role in CustomRole.allRoles)

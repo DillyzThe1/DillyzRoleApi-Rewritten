@@ -40,6 +40,7 @@
     <Compile Include="CustomRole.cs" />
     <Compile Include="LobbyBehaviourPatch.cs" />
     <Compile Include="LobbyConfigManager.cs" />
+    <Compile Include="LogicGameFlowNormalPatch.cs" />
     <Compile Include="PlayerControlPatch.cs" />
     <Compile Include="RolesSettingsMenuPatch.cs" />
     <Compile Include="CustomRpc.cs" />
@@ -480,6 +481,7 @@
     <EmbeddedResource Include="Assets\settings_genericrole.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Assets\hitman_kill.png" />
     <Content Include="UnityEngine.CoreModule.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

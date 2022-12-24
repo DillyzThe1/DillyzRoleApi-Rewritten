@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Hazel;
+using Il2CppSystem.Xml;
 using UnityEngine;
 
 // the idea here is that you'll instiate this class for your own purposes
@@ -41,11 +42,20 @@ namespace DillyzRoleApi_Rewritten
         public static string getRoleName(byte playerId) => roleNameMap.ContainsKey(playerId) ? roleNameMap[playerId] : "";
         public static void setRoleName(byte playerId, string roleName) => roleNameMap[playerId] = roleName;
 
+        public List<PlayerControl> AllPlayersWithRole {
+            get
+            {
+                List<PlayerControl> bbbb = PlayerControl.AllPlayerControls.ToArray().ToList();
+                bbbb.RemoveAll(x => getRoleName(x.PlayerId) != this.name);
+                return bbbb;
+            }
+        }
+
         public string name = "Role Text";                       // Your role's name.
         public string subtext;                                  // The text that appears under.
         public bool nameColorChanges;                           // Determines if your name color is your role color or just red/white.
         public bool nameColorPublic;                            // Determines if your name color is public to all or not.
-        public Color32 roleColor;                                 // The current color of your role.
+        public Color32 roleColor;                               // The current color of your role.
         public bool teamCanSeeYou;                              // Determines if your team can see you.
         public CustomRoleSide side;                             // Determines who you work with.
         //public bool commitsTaxFraud { get; }                  // 192.512.3.62
@@ -54,6 +64,8 @@ namespace DillyzRoleApi_Rewritten
         public string ejectionText;                             // "DillyzThe1 was The Jester"
         public bool switchToImpostor = false;                   // Will switch a crewmate role to an Impostor role.
         public string a_or_an = "an";                           // "DillyzThe1 was a Jester" vs "DillyzThe1 was an Jester"
+        public Func<WinConditionState>  returnWinConditionState;// You can return a WinConditionState here. Can set to "delegate() { return WinConditionState.None; }".
+        public Func<PlayerControl> rwcsPlayer;                  // A player return for the above just incase.
 
         // LOBBY SETTINGS (GET & SET)
         public int setting_countPerGame { get { return settingsForRole.roleCount; } set { settingsForRole.roleCount = Math.Min(Math.Max(value, 0), 15); } }
@@ -100,6 +112,7 @@ namespace DillyzRoleApi_Rewritten
 
             settingsForRole = new LobbyRoleSetting() { roleName = name, roleCount = 1, roleChance = 50 };
             LobbyConfigManager.lobbyRoleSettings.Add(settingsForRole);
+            rwcsPlayer = delegate() { return null; };
         }
 
         public override string ToString() {
@@ -121,7 +134,7 @@ namespace DillyzRoleApi_Rewritten
             }
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.CustomRoleWin, Hazel.SendOption.None, -1);
             writer.Write(this.name);
-            writer.Write(cause.PlayerId);
+            writer.Write(cause != null ? cause.PlayerId : 255);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
             GameOverPatch.SetAllToWin(this.name, cause, true);
             GameManager.Instance.RpcEndGame(GameOverReason.ImpostorByKill, false);
@@ -141,5 +154,12 @@ namespace DillyzRoleApi_Rewritten
         Impostor = 1, // You inheret the venting power of an Impostor.
         [Obsolete("Engineer vents do NOT work at the moment! Please do not attempt to use them! 🤓", true)]
         Engineer = 2  // You inheret the venting power of an Engineer.
+    }
+
+    public enum WinConditionState
+    {
+        None = 0,       // Nothing happens.
+        GameOver = 1,   // You win the game.
+        Hold = 2        // You hold off the game. (does not override sabotages)
     }
 }
