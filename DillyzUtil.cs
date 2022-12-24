@@ -1,12 +1,17 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using AmongUs.GameOptions;
+using BepInEx.IL2CPP.Utils;
+using GooglePlayGames.BasicApi.SavedGame;
 using Hazel;
+using Il2CppSystem.Collections.Generic;
 using MS.Internal.Xml.XPath;
 using UnityEngine;
 using static Il2CppSystem.Globalization.CultureInfo;
@@ -167,8 +172,8 @@ namespace DillyzRoleApi_Rewritten
             return getClosestPlayer(centerPlayer, null, mindist, true, false);
         }
 
-        public static PlayerControl getClosestPlayer(PlayerControl centerPlayer, List<String> roleFilters, double mindist, bool shouldBeAlive, bool canTargetSelf) {
-            List<PlayerControl> welcomeOldPlayers = PlayerControl.AllPlayerControls.ToArray().ToList();
+        public static PlayerControl getClosestPlayer(PlayerControl centerPlayer, System.Collections.Generic.List<String> roleFilters, double mindist, bool shouldBeAlive, bool canTargetSelf) {
+            System.Collections.Generic.List<PlayerControl> welcomeOldPlayers = PlayerControl.AllPlayerControls.ToArray().ToList();
             PlayerControl close = canTargetSelf ? PlayerControl.LocalPlayer : null;
             double playerDist = mindist;
 
@@ -199,67 +204,102 @@ namespace DillyzRoleApi_Rewritten
             writer.Write(target.PlayerId);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
         }
-
         public static void commitAssassination(PlayerControl assassinator, PlayerControl target)
         {
-            HarmonyMain.Instance.Log.LogInfo(assassinator.KillAnimations.Length + " kill anims");
-            foreach (KillAnimation killanim in assassinator.KillAnimations)
-                HarmonyMain.Instance.Log.LogInfo("Kill animation " + killanim.name + " found!");
+            //HarmonyMain.Instance.Log.LogInfo(assassinator.KillAnimations.Length + " kill anims");
+            ///foreach (KillAnimation killanim in assassinator.KillAnimations)
+            //    HarmonyMain.Instance.Log.LogInfo("Kill animation " + killanim.name + " found!");
+            HarmonyMain.Instance.Log.LogInfo(assassinator.name + " " + target.name);
 
-            // for the advice takers
-            if (assassinator != target)
-            {
-                RoleTypes oldroletype = assassinator.Data.RoleType;
-                RoleBehaviour oldrole = assassinator.Data.Role;
-                assassinator.Data.RoleType = RoleTypes.Impostor;
-                assassinator.Data.Role = new ImpostorRole();
-
-                RoleTypes oldroletype_target = target.Data.RoleType;
-                RoleBehaviour oldrole_target = target.Data.Role;
-                target.Data.RoleType = RoleTypes.Crewmate;
-                target.Data.Role = new CrewmateRole();
-
-                assassinator.MurderPlayer(target);
-
-                assassinator.Data.RoleType = oldroletype;
-                assassinator.Data.Role = oldrole;
-
-                target.Data.RoleType = oldroletype_target;
-                target.Data.Role = oldrole_target;
-                return;
-            }
+            bool isKiller = assassinator.PlayerId == PlayerControl.LocalPlayer.PlayerId;
+            bool isVictim = target.PlayerId == PlayerControl.LocalPlayer.PlayerId;
 
             if (target.protectedByGuardian)
             {
                 target.protectedByGuardianThisRound = true;
-                target.ShowFailedMurder();
-                assassinator.SetKillTimer(GameOptionsManager.Instance.CurrentGameOptions.GetFloat(FloatOptionNames.KillCooldown) / 2f);
-                target.RemoveProtection();
+                bool isguardian = PlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.GuardianAngel;
+                if (isKiller || isguardian)
+                {
+                    target.ShowFailedMurder();
+                    assassinator.SetKillTimer(GameOptionsManager.Instance.CurrentGameOptions.GetFloat(FloatOptionNames.KillCooldown) / 2f);
+                }
+                else
+                    target.RemoveProtection();
+
+                if (isguardian)
+                    DestroyableSingleton<AchievementManager>.Instance.OnProtectACrewmate();
                 return;
             }
+            if (isKiller)
+            {
+                if (Constants.ShouldPlaySfx())
+                    SoundManager.Instance.PlaySound(assassinator.KillSfx, false, 0.8f, null);
+
+                assassinator.SetKillTimer(GameOptionsManager.Instance.CurrentGameOptions.GetFloat(FloatOptionNames.KillCooldown));
+            }
+
 
             //CustomRoleSide roleSideUrOn = DillyzUtil.roleSide(target);
-            KillAnimation kil = assassinator.KillAnimations[0];
+            KillAnimation kil = assassinator.KillAnimations[UnityEngine.Random.Range(0, assassinator.KillAnimations.Length - 1)];
 
             target.gameObject.layer = LayerMask.NameToLayer("Ghost");
 
-            DeadBody deadBody = GameObject.Instantiate(kil.bodyPrefab);
-            deadBody.enabled = true;
-            deadBody.ParentId = target.PlayerId;
-            target.SetPlayerMaterialColors(deadBody.bodyRenderer);
-            target.SetPlayerMaterialColors(deadBody.bloodSplatter);
-            Vector3 vector = target.transform.position + kil.BodyOffset;
-            vector.z = vector.y / 1000f;
-            deadBody.transform.position = vector;
-            target.Die(DeathReason.Kill, true);
-
-            if (PlayerControl.LocalPlayer.PlayerId == target.PlayerId)
-            {
+            if (isVictim) {
+                if (Minigame.Instance != null) {
+                    try {
+                        Minigame.Instance.Close();
+                        Minigame.Instance.Close();
+                    } catch { }
+                }
                 DestroyableSingleton<HudManager>.Instance.KillOverlay.ShowKillAnimation(assassinator.Data, target.Data);
                 DestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(false);
                 target.cosmetics.SetNameMask(false);
                 target.RpcSetScanner(false);
             }
+
+            assassinator.MyPhysics.StartCoroutine(DoCustomKill(kil, assassinator, target));
+        }
+
+        private static IEnumerator DoCustomKill(KillAnimation killanim, PlayerControl assassinator, PlayerControl target) {
+            FollowerCamera curCamera = Camera.main.GetComponent<FollowerCamera>();
+            bool involved = PlayerControl.LocalPlayer.PlayerId == assassinator.PlayerId || PlayerControl.LocalPlayer.PlayerId == target.PlayerId;
+
+            // no move
+            KillAnimation.SetMovement(assassinator, false);
+            KillAnimation.SetMovement(target, false);
+
+            // ded body
+            DeadBody deadBody = GameObject.Instantiate(killanim.bodyPrefab);
+            deadBody.enabled = false;
+            deadBody.ParentId = target.PlayerId;
+            target.SetPlayerMaterialColors(deadBody.bodyRenderer);
+            target.SetPlayerMaterialColors(deadBody.bloodSplatter);
+            Vector3 vector = target.transform.position + killanim.BodyOffset;
+            vector.z = vector.y / 1000f;
+            deadBody.transform.position = vector;
+
+            if (involved) {
+                curCamera.Locked = true;
+                ConsoleJoystick.SetMode_Task();
+                if (PlayerControl.LocalPlayer.AmOwner)
+                    PlayerControl.LocalPlayer.MyPhysics.inputHandler.enabled = true;
+            }
+
+            target.Die(DeathReason.Kill, true);
+
+            yield return assassinator.MyPhysics.Animations.CoPlayCustomAnimation(killanim.BlurAnim);
+
+            assassinator.NetTransform.SnapTo(target.transform.position);
+            assassinator.MyPhysics.Animations.PlayIdleAnimation();
+
+            // move
+            KillAnimation.SetMovement(assassinator, true);
+            KillAnimation.SetMovement(target, true);
+
+            deadBody.enabled = true;
+            if (involved)
+                curCamera.Locked = false;
+            yield break;
         }
 
         public static double getDist(Vector2 p1, Vector2 p2)
@@ -271,6 +311,10 @@ namespace DillyzRoleApi_Rewritten
         public static bool InFreeplay()
         {
             return AmongUsClient.Instance.NetworkMode == NetworkModes.FreePlay;
+        }
+        public static bool InGame()
+        {
+            return AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Started;
         }
 
         // Make sure your sprite is an Embedded Resource, compile, then check the console. You'll get a sprite path.
