@@ -32,6 +32,8 @@ namespace DillyzRoleApi_Rewritten
                 // assign roles
                 foreach (CustomRole role in CustomRole.allRoles)
                 {
+                    if (role.decoy)
+                        continue;
                     HarmonyMain.Instance.Log.LogInfo($"Let's check out {role.name}.");
                     List<PlayerControl> availablePlayers = PlayerControl.AllPlayerControls.ToArray().ToList();
                     availablePlayers.RemoveAll(x => !DillyzUtil.templateRole(x));

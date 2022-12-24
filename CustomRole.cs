@@ -75,6 +75,8 @@ namespace DillyzRoleApi_Rewritten
         public Func<WinConditionState>  returnWinConditionState;// You can return a WinConditionState here. Can set to "delegate() { return WinConditionState.None; }".
         public Func<PlayerControl> rwcsPlayer;                  // A player return for the above just incase.
         private List<CustomSetting> _advancedSettings;          // A list of custom setting data to use.
+        public bool decoy = false;                              // If this role isn't actaully meant for gameplay. Use this if you have no real roles to make.
+
         public List<CustomSetting> advancedSettings => _advancedSettings;
 
         // LOBBY SETTINGS (GET & SET)

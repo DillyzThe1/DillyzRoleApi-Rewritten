@@ -49,6 +49,8 @@ namespace DillyzRoleApi_Rewritten
 
             foreach (CustomRole role in CustomRole.allRoles)
             {
+                if (role.decoy)
+                    continue;
                 ymultlol = 0f;
                 RolesSettingsMenuPatch.cachedsprites[role.name] = role.settingsSprite;
 
