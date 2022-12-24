@@ -302,6 +302,9 @@ namespace DillyzRoleApi_Rewritten
             deadBody.enabled = true;
             if (involved)
                 curCamera.Locked = false;
+
+            CustomRole.setRoleName(target.PlayerId, "");
+
             yield break;
         }
 
