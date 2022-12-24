@@ -77,11 +77,19 @@ namespace DillyzRoleApi_Rewritten
         private List<CustomSetting> _advancedSettings;          // A list of custom setting data to use.
         public bool decoy = false;                              // If this role isn't actaully meant for gameplay. Use this if you have no real roles to make.
 
+        // settings stuff
+        private int _countMin = 0, _countMax = 15;
+        private int _chanceMin = 0, _chanceMax = 100;
+        public int countMin { get { return _countMin; } set { _countMin = Math.Min(Math.Max(value, 0),countMax); } }
+        public int countMax { get { return _countMax; } set { _countMax = Math.Min(Math.Max(value, 1), countMin); } }
+        public int chanceMin { get { return _chanceMin; } set { _chanceMin = Math.Min(Math.Max(value, 0), chanceMax); } }
+        public int chanceMax { get { return _chanceMax; } set { _chanceMax = Math.Min(Math.Max(value, 10), chanceMin); } }
+
         public List<CustomSetting> advancedSettings => _advancedSettings;
 
         // LOBBY SETTINGS (GET & SET)
-        public int setting_countPerGame { get { return settingsForRole.roleCount; } set { settingsForRole.roleCount = Math.Min(Math.Max(value, 0), 15); } }
-        public int setting_chancePerGame { get { return settingsForRole.roleChance; } set { settingsForRole.roleChance = Math.Min(Math.Max(value, 0), 100); } }
+        public int setting_countPerGame { get { return settingsForRole.roleCount; } set { settingsForRole.roleCount = Math.Min(Math.Max(value, countMin), countMax); } }
+        public int setting_chancePerGame { get { return settingsForRole.roleChance; } set { settingsForRole.roleChance = Math.Min(Math.Max(value, chanceMin), chanceMax); } }
 
         private LobbyRoleSetting settingsForRole;
         private Assembly settingsSpriteAssembly = Assembly.GetExecutingAssembly();
