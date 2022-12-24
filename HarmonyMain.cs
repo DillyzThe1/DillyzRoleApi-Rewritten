@@ -115,7 +115,7 @@ namespace DillyzRoleApi_Rewritten
 
             Log.LogInfo(BEPINEX_CONFIG_FOLDER);
 
-            var regions = ServerManager.DefaultRegions.ToList();
+            /*var regions = ServerManager.DefaultRegions.ToList();
             string iptouse = "localhost";
             /*if (Uri.CheckHostName(iptouse).ToString() == "Dns")
                 foreach (IPAddress address in Dns.GetHostAddresses(iptouse))
@@ -123,8 +123,12 @@ namespace DillyzRoleApi_Rewritten
                     {
                         iptouse = address.ToString();
                         break;
-                    }*/
-            regions.Insert(0, new StaticHttpRegionInfo("Localhost", StringNames.NoneLabel, "localhost", new ServerInfo[] { new ServerInfo("",iptouse,22023,false) }));
+                    }*
+
+            IRegionInfo reg = new IRegionInfo() { Name = "" };
+
+            regions.Insert(0, reg);*/
         }
+
     }
 }
