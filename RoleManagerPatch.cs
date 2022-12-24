@@ -91,7 +91,7 @@ namespace DillyzRoleApi_Rewritten
                 {
                     RoleTypes guardRole = RoleTypes.GuardianAngel;
                     List<PlayerControl> pc = PlayerControl.AllPlayerControls.ToArray().ToList();
-                    pc.RemoveAll(x => x.Data.IsDead && DillyzUtil.roleSide(x) != CustomRoleSide.Impostor);
+                    pc.RemoveAll(x => !x.Data.IsDead || DillyzUtil.roleSide(x) != CustomRoleSide.Crewmate);
                     int num = pc.Count;
                     IRoleOptionsCollection roleOptions = GameOptionsManager.Instance.CurrentGameOptions.RoleOptions;
                     if (AmongUsClient.Instance.NetworkMode == NetworkModes.FreePlay)
