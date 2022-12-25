@@ -24,13 +24,5 @@ namespace DillyzRoleApi_Rewritten
             __instance.completeString = role.ejectionText.Replace("[0]", exiled.PlayerName);
         }
     }
-    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Exiled))]
-    class PlayerExilePatch
-    {
-        public static void Prefix(PlayerControl __instance)
-        {
-            if (DillyzRoleApiMain.Instance.enableDebugJester.Value && DillyzUtil.getRoleName(__instance) == "Jester")
-                CustomRole.getByName("Jester").WinGame(__instance);
-        }
-    }
 }
+ 

@@ -40,20 +40,12 @@ namespace DillyzRoleApi_Rewritten
         public static DillyzRoleApiMain Instance;
 
         // https://docs.bepinex.dev/v5.4.21/articles/dev_guide/plugin_tutorial/4_configuration.html
-        public ConfigEntry<bool> enableDebugJester;
-        public ConfigEntry<bool> enableDebugSheriff;
         public ConfigEntry<bool> enableDebugHitman;
 
         public override void Load()
         {
             Instance = this;
 
-            enableDebugJester = Config.Bind("Debug", "Debug Jester", false,
-                "Enables the Debug Jester built into the API.\nThis functions normally, but you may want to use the official package here:\n" +
-                "https://github.com/DillyzThe1/DillyzRoleApi-Rewritten/Packages.md");
-            enableDebugSheriff = Config.Bind("Debug", "Debug Sheriff", false,
-                "Enables the Debug Sheriff built into the API.\nThis functions normally, but you may want to use the official package here:\n" +
-                "https://github.com/DillyzThe1/DillyzRoleApi-Rewritten/Packages.md");
             enableDebugHitman = Config.Bind("Debug", "Debug Hitman", false,
                 "Enables the Debug Hitman built into the API.\nThis functions normally, but you may want to use the official package here:\n" +
                 "https://github.com/DillyzThe1/DillyzRoleApi-Rewritten/Packages.md");
@@ -69,59 +61,6 @@ namespace DillyzRoleApi_Rewritten
             }));
 
             LobbyConfigManager.Load();
-
-            if (enableDebugJester.Value)
-            {
-                Log.LogInfo("Adding a Jester!");
-                DillyzUtil.createRole("Jester", "Get voted out to win.", true, false, new Color32(90, 50, 200, 255), false,
-                                                                        CustomRoleSide.LoneWolf, VentPrivilege.None, false, true);
-                CustomRole.getByName("Jester").a_or_an = "a";
-            }
-
-            if (enableDebugSheriff.Value)
-            {
-                Log.LogInfo("Adding a Sheriff!");
-                CustomRole sheriffRole = DillyzUtil.createRole("Sheriff", "Kill the impostor or suicide.", true, true, new Color32(255, 185, 30, 255), false,
-                                                                        CustomRoleSide.Crewmate, VentPrivilege.None, false, true);
-                sheriffRole.a_or_an = "a";
-                sheriffRole.SetSprite(Assembly.GetExecutingAssembly(), "DillyzRoleApi_Rewritten.Assets.sheriff_kill.png");
-
-                bool killoncrewkill = true;
-
-                Log.LogInfo("Adding a Sheriff button!");
-                CustomButton sheriffButton = DillyzUtil.addButton(Assembly.GetExecutingAssembly(), "Sheriff Kill Button", "DillyzRoleApi_Rewritten.Assets.sheriff_kill.png", -1f, true,
-                new string[] { "Sheriff" }, new string[] { }, delegate (KillButtonCustomData button, bool success)
-                {
-                    if (!success)
-                        return;
-
-                    Log.LogInfo(button.killButton.currentTarget.name + " was targetted by " + PlayerControl.LocalPlayer.name + "!");
-
-                    DillyzUtil.RpcCommitAssassination(PlayerControl.LocalPlayer, button.killButton.currentTarget);
-
-                    if (killoncrewkill && DillyzUtil.roleSide(button.killButton.currentTarget) == CustomRoleSide.Crewmate)
-                    {
-                        DillyzRoleApiMain.Instance.Log.LogInfo("Advice Taking");
-                        DillyzUtil.RpcCommitAssassination(PlayerControl.LocalPlayer, PlayerControl.LocalPlayer);
-                    }
-
-                });
-
-                sheriffButton.buttonText = "Kill";
-                sheriffButton.textOutlineColor = new Color32(255, 185, 30, 255);
-
-                sheriffRole.AddAdvancedSetting_Boolean("Punished", true, delegate(bool newvalue) {
-                    killoncrewkill = newvalue;
-                });
-                sheriffRole.AddAdvancedSetting_Int("Kill Cooldown", 30, 5, 90, 5, delegate (int newvalue) {
-                    sheriffButton.cooldown = newvalue;
-                });
-                sheriffRole.AddAdvancedSetting_String("spingbings", "sadspingbing", new string[] { 
-                    "sadspingbing", "happyspingbing", "mrkrap", "squeezedword", "sandheweaks", "oak planks", "4", "partake", "old fox main jean cans", "dishonest partake"
-                }, delegate (string newvalue) {
-                    Log.LogInfo("You're waisting your time, " + newvalue + ".");
-                });
-            }
 
             if (enableDebugHitman.Value) {
                 Log.LogInfo("Adding a Hitman!");
