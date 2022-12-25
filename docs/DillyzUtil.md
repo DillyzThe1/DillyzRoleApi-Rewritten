@@ -1,10 +1,8 @@
 # DillyzUtil
 This is the documentation of <a href="https://github.com/DillyzThe1/DillyzRoleApi-Rewritten/blob/main/DillyzUtil.cs">DillyzUtil.cs</a>'s functions.
 
-### addButton
+## addButton
 Returns <a href="https://github.com/DillyzThe1/DillyzRoleApi-Rewritten/blob/main/CustomButton.cs">`CustomButton`</a>.<br>
-<br>
-
 Arguments:
 - `Assembly` epicAssemblyFail >> You should pass `System.Reference.Assembly.GetExecutingAssembly()`, as it needs it to load resources.
 - `string` name >> The name of your button. By default, it will display this as the buttontext.
@@ -18,10 +16,8 @@ Arguments:
 <br>
 Creates a new CustomButton and returns it for modification.
 
-### createRole
+## createRole
 Returns <a href="https://github.com/DillyzThe1/DillyzRoleApi-Rewritten/blob/main/CustomRole.cs">`CustomRole`</a>.<br>
-<br>
-
 Arguments:
 - `string` name >> The name of the role. Displays on reveal, exile, task list, settings, etc.
 - `string` subtext >> The subtext/description of the role. Displays on reveal & task list.
@@ -37,30 +33,24 @@ Arguments:
 <br>
 Creates a new CustomRole and returns it for modification.
 
-### getRoleName
+## getRoleName
 Returns `string`.<br>
-<br>
-
 Arguments:
 - `PlayerControl` player >> The player you want the role name of.
 
 <br>
 Can return `Crewmate`, `Impostor`, `Scientist`, `Engineer`, `GuardianAngel`, `ShapeShifter`, or your own custom role's name.
 
-### roleSide
+## roleSide
 Returns <a href="https://github.com/DillyzThe1/DillyzRoleApi-Rewritten/blob/main/CustomRole.cs#L176">`CustomRoleSide`</a>.<br>
-<br>
-
 Arguments:
 - `PlayerControl` player >> The player you want the role side of.
 
 <br>
 Will return `Impostor`, `Crewmate`, `Independent`, or `LoneWolf`.
 
-### roleColor
+## roleColor
 Returns `Color32`.<br>
-<br>
-
 Arguments:
 - `PlayerControl` player >> The player you want the role color of.
 - `bool` nameText >> Pretty much determines if crewmates are `White` or `CrewmateBlue`.
@@ -68,70 +58,56 @@ Arguments:
 <br>
 Finds the role color.
 
-### roleText
+## roleText
 Returns `string`.<br>
-<br>
-
 Arguments:
 - `PlayerControl` player >> The player you want the role text of.
 
 <br>
 Will return the Task Menu text of the player.
 
-### templateRole
+## templateRole
 Returns `bool`.<br>
-<br>
-
 Arguments:
 - `PlayerControl` player >> The player you want to test for a template role.
 
 <br>
 Determines if the player is only an `Impostor` or `Crewmate` according to base game roles.
 
-### findPlayerControl
+## findPlayerControl
 Returns `PlayerControl`.<br>
-<br>
-
 Arguments:
 - `byte` playerId >> The player id you want to find the `PlayerControl` of.
 
 <br>
 Finds the `PlayerControl` by byte id.
 
-### copyColor
+## copyColor
 Returns `Color32`.<br>
-<br>
-
 Arguments:
 - `Color32` ogColor >> The `Color32` you want to copy into a `Color`.
 
 <br>
 Makes a duplicate Color of the Color32.
 
-### convDigitToHexNum
+## convDigitToHexNum
 Returns `string`.<br>
-<br>
-
 Arguments:
 - `byte` num >> The number to convert.
 
 <br>
 Converts a number to a hexidecimal digit.
 
-### convNumToHexNum
+## convNumToHexNum
 Returns `string`.<br>
-<br>
-
 Arguments:
 - `byte` num >> The number to convert.
 
 <br>
 Converts a number into a double digit hexidecimal value.
 
-### colorToHex
+## colorToHex
 Returns `string`.<br>
-<br>
-
 Arguments:
 - `Color32` ogColor >> The `Color32` you want to convert.
 
@@ -139,20 +115,16 @@ Arguments:
 Converts a `Color32` to a hex value.<br>
 Example: `new Color32(255, 0, 0, 255)` -> `"#FF0000"`
 
-### getClosestPlayer
+## getClosestPlayer
 Returns `PlayerControl`.<br>
-<br>
-
 Arguments:
 - `PlayerControl` centerPlayer >> The player you want to get the closest other player to.
 
 <br>
 Returns the closest player to `centerPlayer`.
 
-### getClosestPlayer
+## getClosestPlayer
 Returns `PlayerControl`.<br>
-<br>
-
 Arguments:
 - `PlayerControl` centerPlayer >> The player you want to get the closest other player to.
 - `double` mindist >> The distance allowed for the detection.
@@ -160,10 +132,8 @@ Arguments:
 <br>
 Returns the closest player to `centerPlayer` in the distance of `mindist`.
 
-### getClosestPlayer
+## getClosestPlayer
 Returns `PlayerControl`.<br>
-<br>
-
 Arguments:
 - `PlayerControl` centerPlayer >> The player you want to get the closest other player to.
 - `System.Collections.Generic.List<String>` roleFilters >> The roles you don't want to target. Set `null` to ignore.
@@ -174,8 +144,7 @@ Arguments:
 <br>
 Returns the closest player to `centerPlayer` in the distance of `mindist`.
 
-### RpcCommitAssassination
-
+## RpcCommitAssassination
 Arguments:
 - `PlayerControl` assassinator >> The player commiting the murder.
 - `PlayerControl` target >> The player targeted in the murder.
@@ -183,8 +152,7 @@ Arguments:
 <br>
 Announces to all games to call `commitAssassination` on the 2 players.
 
-### commitAssassination
-
+## commitAssassination
 Arguments:
 - `PlayerControl` assassinator >> The player commiting the murder.
 - `PlayerControl` target >> The player targeted in the murder.
@@ -192,10 +160,8 @@ Arguments:
 <br>
 Does a custom port of a murder, causing `assassinator` to murder `target`.
 
-### DoCustomKill
+## DoCustomKill
 Returns `IEnumerator`.<br>
-<br>
-
 Arguments:
 - `KillAnimation` killanim >> The current KillAnimation instance you wish to use.
 - `PlayerControl` assassinator >> The player commiting the murder.
@@ -205,10 +171,8 @@ Arguments:
 Does a the actual custom port of a murder, causing `assassinator` to murder `target`.<br>
 *(NOTE: DO NOT CALL THIS FUNCTION; USE COMMITASSASSINATION INSTEAD!)*
 
-### getDist
+## getDist
 Returns `double`.<br>
-<br>
-
 Arguments:
 - `Vector2` p1 >> The first position to use.
 - `Vector2` p2 >> The second position to use.
@@ -216,38 +180,32 @@ Arguments:
 <br>
 Gets the distance between 2 points.
 
-### InFreeplay
+## InFreeplay
 Returns `bool`.<br>
 <br>
 Returns a `bool` based on if the game is in Freeplay or not.
 
-### InGame
+## InGame
 Returns `bool`.<br>
 <br>
 Returns a `bool` based on if the game is in a game or not.
 
-### getSprite
+## getSprite
 Returns `Sprite`.<br>
-<br>
-
 Arguments:
 - `Assembly` assembly >> Your current assembly for texture loading. Pass `System.Reference.Assembly.GetExecutingAssembly()`.
 - `string` spritePath >> The path of your asset. Set the image as an Embedded Resource and boot up the game whilst checking the console.
 
-<br>
 Returns a Sprite of the path provided. If no sprite is found, it returns null.
 
-### AddRpcCall
-
+## AddRpcCall
 Arguments:
 - `string` rpcName >> The name of your custom RPC.
 - `Action<MessageReader>` callback >> The callback activated when the RPC is recieved. Pass `delegate(MessageReader reader) {}`.
 
-<br>
 Adds and RPC call to my custom system and invokes the `callback` when done.
 
-### InvokeRPCCall
-
+## InvokeRPCCall
 Arguments:
 - `string` rpcName >> The name of your custom RPC. Must match an RPC given in AddRpcCall.
 - `Action<MessageWriter>` writingCallback >> The callback invoked when data is ready to be written. Pass `delegate(MessageWriter writer) {}`.
@@ -255,9 +213,8 @@ Arguments:
 <br>
 Gets ready to use RPC in my custom RPC call system and invoked the `writingCallback` when ready to write data.
 
-### color32ToColor
+## color32ToColor
 Returns `Color`.<br>
-<br>
 Arguments:
 - `Color32` color32 >> The `Color32` you want to convert.
 <br>
