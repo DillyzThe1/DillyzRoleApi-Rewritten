@@ -11,9 +11,9 @@ Arguments:
 - `bool` isTargetButton >> Determines if your button targets players or gets clicked standalone.
 - `string[]` allowedRoles >> A string array of every role allowed to use it. Setting to nothing pretty much means Freeplay only.
 - `string[]` roleCantTarget >> Any roles that the button is NOT allowed to target. (Ex: Impostor can't execute `Impostor`s or `ShapeShifter`s.
-- `Action<KillButtonCustomData, bool>` onClicked >> A custom return for being clicked. Pass the following code: `delegate(KillButtonCustomData button, bool success) {if (!success) return;}`.
+- `Action<<a href="https://github.com/DillyzThe1/DillyzRoleApi-Rewritten/blob/main/CustomButton.cs#L112">KillButtonCustomData</a>, bool>` onClicked >> A custom return for being clicked. Pass the following code: `delegate(<a href="https://github.com/DillyzThe1/DillyzRoleApi-Rewritten/blob/main/CustomButton.cs#L112">KillButtonCustomData</a> button, bool success) {if (!success) return;}`.
 
-Creates a new `CustomButton` and returns it for modification.
+Creates a new <a href="https://github.com/DillyzThe1/DillyzRoleApi-Rewritten/blob/main/CustomButton.cs">`CustomButton`</a> and returns it for modification.
 
 ## createRole
 Returns <a href="https://github.com/DillyzThe1/DillyzRoleApi-Rewritten/blob/main/CustomRole.cs">`CustomRole`</a>.<br>
@@ -24,12 +24,12 @@ Arguments:
 - `bool` nameColorPublic >> Determines if everyone in the game can see the role color or not.
 - `Color32` roleColor >> The color of the role used everywhere. Make a new one with `new Color32(255, 255, 255, 255)`. (Order: RGBA)
 - `bool` canSeeTeam >> Determines if your entire team can see your color or not.
-- `CustomRoleSide` side >> An enum determining what team you're on. `CustomRoleSide` contains `Impostor` , `Crewmate` , `Independent` , & `LoneWolf`.
-- `VentPrivilege` ventPrivilege >> determines how powerful the venting capabilities of the role are. Please only use `Impostor` or `None` for now.
+- <a href="https://github.com/DillyzThe1/DillyzRoleApi-Rewritten/blob/main/CustomRole.cs#L176">`CustomRoleSide`</a> side >> An enum determining what team you're on. <a href="https://github.com/DillyzThe1/DillyzRoleApi-Rewritten/blob/main/CustomRole.cs#L176">`CustomRoleSide`</a> contains `Impostor` , `Crewmate` , `Independent` , & `LoneWolf`.
+- <a href="https://github.com/DillyzThe1/DillyzRoleApi-Rewritten/blob/main/CustomRole.cs#L183">`VentPrivilege`</a> ventPrivilege >> determines how powerful the venting capabilities of the role are. Please only use `Impostor` or `None` for now.
 - `bool` canKill >> Determines if the role can use the default kill or not.
 - `bool` showEjectText >> Determines if the ejection text should be "was not The Impostor" or "was The Jester".
 
-Creates a new `CustomRole` and returns it for modification.<br>
+Creates a new <a href="https://github.com/DillyzThe1/DillyzRoleApi-Rewritten/blob/main/CustomRole.cs">`CustomRole`</a> and returns it for modification.<br>
 
 ## getRoleName
 Returns `string`.<br>
