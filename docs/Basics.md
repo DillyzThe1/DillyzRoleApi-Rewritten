@@ -98,3 +98,6 @@ Yes! This is what we've been waiting for!<br>
 Now let's get the `CustomRole` instance and call the `WinGame` function on it, passing `__instance` as the cause!<br>
 ![GitHub Logo](/docs/assets/pcp-exile-patch.png)<br>
 <br>
+After a quick compile, look! The Jester wins after being voted out! Wonderful!<br>
+![GitHub Logo](/docs/assets/jester-vote-out.png)<br>
+<br>
