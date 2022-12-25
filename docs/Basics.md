@@ -1,6 +1,10 @@
 # API Basics
 NOTE!!!!!! THIS WAS WRITTEN BEFORE I COULD TEST GETTING DOTNET FROM GITHUB.COM, SO IK IT'S A BIT WONKY RN!!!!!!!<br>
-THE WIKI VERSION WILL ACTAULLY BE MORE POLISHED AND WHATEVER THAN THIS!!!!!!
+THE WIKI VERSION WILL ACTAULLY BE MORE POLISHED AND WHATEVER THAN THIS!!!!!!<br>
+<br>
+ANY PROBLEMS YOU HAVE SHOULD BE COMPLAINED ABOUT ON THE <a href="https://github.com/DillyzThe1/DillyzRoleApi-Rewritten/issues/">ISSUES PAGE</a> OR TALKED ABOUT IN MY <a href="https://discord.gg/49NFTwcYgZ">DISCORD SERVER</a>.<br>
+THANK YOU FOR CHOOSING MY API, I'LL BE HAPPY TO HELP YOU USE IT!<br>
+*just please don't bother me during december 25th unless i have myself set to online*
 
 ## Introduction
 So, you've stumbled upon my API and wish to use it for your mods.<br>
@@ -41,6 +45,10 @@ Launch the game and close it immediantly upon seeing the loading screen solve.<b
 Pick up the latest DLL from the <a href="https://github.com/DillyzThe1/DillyzRoleApi-Rewritten/releases/latest/">releases page</a> and put it in the `BepInEx/plugins` folder of Among Us.<br>
 <br>
 Finally, open the folder your project was cloned into and double click the CSProj.<br>
+Click on HarmonyMain.cs in Visual Studio & change MOD_NAME, MOD_VERSION, & MOD_ID to your liking. Don't classify it under me.<br>
+Change the namespace at the top from `DillyzRoleTemplate` to something like `Top10RolePackage`.<br>
+You may also close Visual Studio, rename the .csproj, then boot it up back up with a double click.<br>
+Now right clikc the CsProj in Visual Studio & change both the Assembly Name & Default Namespace to `Top10RolePackage` or whatever you had.<br>
 At the top of the window of Visual Studio, hit Build -> Build Solution!<br>
 <br>
 <i><b>Congratulations!!!!</b></i><br>
@@ -48,3 +56,4 @@ You've now made a basic among us mod setup that has all dependent DLLS. You may 
 If you are having a problem so far, please <a href="https://github.com/DillyzThe1/DillyzRoleApi-Rewritten/issues/new/">submit an issue on Github</a>.
 
 ## S2 - Jester
+Now for educational experience, let's make the Jester role in your new mod setup!<br>
