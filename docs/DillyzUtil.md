@@ -13,8 +13,7 @@ Arguments:
 - `string[]` roleCantTarget >> Any roles that the button is NOT allowed to target. (Ex: Impostor can't execute `Impostor`s or `ShapeShifter`s.
 - `Action<KillButtonCustomData, bool>` onClicked >> A custom return for being clicked. Pass the following code: `delegate(KillButtonCustomData button, bool success) {if (!success) return;}`.
 
-<br>
-Creates a new CustomButton and returns it for modification.
+Creates a new `CustomButton` and returns it for modification.
 
 ## createRole
 Returns <a href="https://github.com/DillyzThe1/DillyzRoleApi-Rewritten/blob/main/CustomRole.cs">`CustomRole`</a>.<br>
@@ -30,15 +29,13 @@ Arguments:
 - `bool` canKill >> Determines if the role can use the default kill or not.
 - `bool` showEjectText >> Determines if the ejection text should be "was not The Impostor" or "was The Jester".
 
-<br>
-Creates a new CustomRole and returns it for modification.
+Creates a new `CustomRole` and returns it for modification.<br>
 
 ## getRoleName
 Returns `string`.<br>
 Arguments:
 - `PlayerControl` player >> The player you want the role name of.
 
-<br>
 Can return `Crewmate` , `Impostor` , `Scientist` , `Engineer` , `GuardianAngel` , `ShapeShifter` , or your own custom role's name.
 
 ## roleSide
@@ -46,7 +43,6 @@ Returns <a href="https://github.com/DillyzThe1/DillyzRoleApi-Rewritten/blob/main
 Arguments:
 - `PlayerControl` player >> The player you want the role side of.
 
-<br>
 Will return `Impostor` , `Crewmate` , `Independent` , or `LoneWolf`.
 
 ## roleColor
@@ -55,7 +51,6 @@ Arguments:
 - `PlayerControl` player >> The player you want the role color of.
 - `bool` nameText >> Pretty much determines if crewmates are `White` or `CrewmateBlue`.
 
-<br>
 Finds the role color.
 
 ## roleText
@@ -63,7 +58,6 @@ Returns `string`.<br>
 Arguments:
 - `PlayerControl` player >> The player you want the role text of.
 
-<br>
 Will return the Task Menu text of the player.
 
 ## templateRole
@@ -71,7 +65,6 @@ Returns `bool`.<br>
 Arguments:
 - `PlayerControl` player >> The player you want to test for a template role.
 
-<br>
 Determines if the player is only an `Impostor` or `Crewmate` according to base game roles.
 
 ## findPlayerControl
@@ -79,7 +72,6 @@ Returns `PlayerControl`.<br>
 Arguments:
 - `byte` playerId >> The player id you want to find the `PlayerControl` of.
 
-<br>
 Finds the `PlayerControl` by byte id.
 
 ## copyColor
@@ -87,7 +79,6 @@ Returns `Color32`.<br>
 Arguments:
 - `Color32` ogColor >> The `Color32` you want to copy into a `Color`.
 
-<br>
 Makes a duplicate Color of the Color32.
 
 ## convDigitToHexNum
@@ -95,7 +86,6 @@ Returns `string`.<br>
 Arguments:
 - `byte` num >> The number to convert.
 
-<br>
 Converts a number to a hexidecimal digit.
 
 ## convNumToHexNum
@@ -103,7 +93,6 @@ Returns `string`.<br>
 Arguments:
 - `byte` num >> The number to convert.
 
-<br>
 Converts a number into a double digit hexidecimal value.
 
 ## colorToHex
@@ -111,7 +100,6 @@ Returns `string`.<br>
 Arguments:
 - `Color32` ogColor >> The `Color32` you want to convert.
 
-<br>
 Converts a `Color32` to a hex value.<br>
 Example: `new Color32(255, 0, 0, 255)` -> `"#FF0000"`
 
@@ -120,7 +108,6 @@ Returns `PlayerControl`.<br>
 Arguments:
 - `PlayerControl` centerPlayer >> The player you want to get the closest other player to.
 
-<br>
 Returns the closest player to `centerPlayer`.
 
 ## getClosestPlayer
@@ -129,7 +116,6 @@ Arguments:
 - `PlayerControl` centerPlayer >> The player you want to get the closest other player to.
 - `double` mindist >> The distance allowed for the detection.
 
-<br>
 Returns the closest player to `centerPlayer` in the distance of `mindist`.
 
 ## getClosestPlayer
@@ -141,7 +127,6 @@ Arguments:
 - `bool` shouldBeAlive >> Determines if you wanna target ghosts or living people.
 - `bool` canTargetSelf >> Determines if you will target yourself. Will be removed in the future.
 
-<br>
 Returns the closest player to `centerPlayer` in the distance of `mindist`.
 
 ## RpcCommitAssassination
@@ -149,7 +134,6 @@ Arguments:
 - `PlayerControl` assassinator >> The player commiting the murder.
 - `PlayerControl` target >> The player targeted in the murder.
 
-<br>
 Announces to all games to call `commitAssassination` on the 2 players.
 
 ## commitAssassination
@@ -157,7 +141,6 @@ Arguments:
 - `PlayerControl` assassinator >> The player commiting the murder.
 - `PlayerControl` target >> The player targeted in the murder.
 
-<br>
 Does a custom port of a murder, causing `assassinator` to murder `target`.
 
 ## DoCustomKill
@@ -167,7 +150,6 @@ Arguments:
 - `PlayerControl` assassinator >> The player commiting the murder.
 - `PlayerControl` target >> The player targeted in the murder.
 
-<br>
 Does a the actual custom port of a murder, causing `assassinator` to murder `target`.<br>
 *(NOTE: DO NOT CALL THIS FUNCTION; USE COMMITASSASSINATION INSTEAD!)*
 
@@ -177,17 +159,14 @@ Arguments:
 - `Vector2` p1 >> The first position to use.
 - `Vector2` p2 >> The second position to use.
 
-<br>
 Gets the distance between 2 points.
 
 ## InFreeplay
 Returns `bool`.<br>
-<br>
 Returns a `bool` based on if the game is in Freeplay or not.
 
 ## InGame
 Returns `bool`.<br>
-<br>
 Returns a `bool` based on if the game is in a game or not.
 
 ## getSprite
@@ -196,7 +175,7 @@ Arguments:
 - `Assembly` assembly >> Your current assembly for texture loading. Pass `System.Reference.Assembly.GetExecutingAssembly()`.
 - `string` spritePath >> The path of your asset. Set the image as an Embedded Resource and boot up the game whilst checking the console.
 
-Returns a Sprite of the path provided. If no sprite is found, it returns null.
+Returns a `Sprite` of the path provided. If no `Sprite` is found, it returns null.
 
 ## AddRpcCall
 Arguments:
@@ -210,12 +189,11 @@ Arguments:
 - `string` rpcName >> The name of your custom RPC. Must match an RPC given in AddRpcCall.
 - `Action<MessageWriter>` writingCallback >> The callback invoked when data is ready to be written. Pass `delegate(MessageWriter writer) {}`.
 
-<br>
 Gets ready to use RPC in my custom RPC call system and invoked the `writingCallback` when ready to write data.
 
 ## color32ToColor
 Returns `Color`.<br>
 Arguments:
 - `Color32` color32 >> The `Color32` you want to convert.
-<br>
+
 Converts a `Color32` to a `Color`.
