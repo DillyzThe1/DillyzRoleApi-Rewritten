@@ -63,7 +63,7 @@ namespace DillyzRoleApi_Rewritten
                                                         string[] rolesCantTarget, Action<KillButtonCustomData, bool> onClicked)
         {
             this.globalId = topGlobalId++;
-            HarmonyMain.Instance.Log.LogInfo($"Button ID {this.globalId} exists under {name}.");
+            DillyzRoleApiMain.Instance.Log.LogInfo($"Button ID {this.globalId} exists under {name}.");
 
             this.epicAssemblyFail = epicAssemblyFail;
             this.buttonText = this.name = name;

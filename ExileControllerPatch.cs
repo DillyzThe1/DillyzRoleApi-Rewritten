@@ -29,7 +29,7 @@ namespace DillyzRoleApi_Rewritten
     {
         public static void Prefix(PlayerControl __instance)
         {
-            if (HarmonyMain.Instance.enableDebugJester.Value && DillyzUtil.getRoleName(__instance) == "Jester")
+            if (DillyzRoleApiMain.Instance.enableDebugJester.Value && DillyzUtil.getRoleName(__instance) == "Jester")
                 CustomRole.getByName("Jester").WinGame(__instance);
         }
     }

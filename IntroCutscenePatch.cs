@@ -23,12 +23,12 @@ namespace DillyzRoleApi_Rewritten
                 __instance.__4__this.RoleText.text = $"<{colorHex}>{__instance.__4__this.RoleText.text}</color>";
                 __instance.__4__this.RoleBlurbText.text = $"<{colorHex}>{__instance.__4__this.RoleBlurbText.text}</color>";
                 __instance.__4__this.YouAreText.text = $"<{colorHex}>Your role is</color>";
-                //HarmonyMain.Instance.Log.LogInfo((DillyzUtil.roleSide(PlayerControl.LocalPlayer) == CustomRoleSide.Crewmate) + " " + colorHex);
+                //DillyzRoleApiMain.Instance.Log.LogInfo((DillyzUtil.roleSide(PlayerControl.LocalPlayer) == CustomRoleSide.Crewmate) + " " + colorHex);
                 return;
             }
 
             colorHex = DillyzUtil.colorToHex(role.roleColor);
-            HarmonyMain.Instance.Log.LogInfo(role.roleColor + " " + colorHex);
+            DillyzRoleApiMain.Instance.Log.LogInfo(role.roleColor + " " + colorHex);
             __instance.__4__this.RoleText.text = $"<{colorHex}>{role.name}</color>";
             __instance.__4__this.RoleBlurbText.text = $"<{colorHex}>{role.subtext}</color>";
             __instance.__4__this.YouAreText.text = $"<{colorHex}>Your role is</color>";
@@ -63,7 +63,7 @@ namespace DillyzRoleApi_Rewritten
     {
         public static bool Prefix(IntroCutscene __instance, Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam)
         {
-            HarmonyMain.Instance.Log.LogInfo("Flabbergasted Impostor");
+            DillyzRoleApiMain.Instance.Log.LogInfo("Flabbergasted Impostor");
             IntroCutscenePatch_BeginImpostor.calcTeam();
             __instance.ShowTeam(IntroCutscenePatch_BeginImpostor.playersToShow, 3);
             return false;
@@ -101,9 +101,9 @@ namespace DillyzRoleApi_Rewritten
     {
         public static void Prefix(IntroCutscene __instance, ref Il2CppSystem.Collections.Generic.List<PlayerControl> teamToShow, float duration)
         {
-            HarmonyMain.Instance.Log.LogInfo("Flabbergasted Team " + teamToShow.ToString() + " " + duration);
+            DillyzRoleApiMain.Instance.Log.LogInfo("Flabbergasted Team " + teamToShow.ToString() + " " + duration);
             foreach (PlayerControl i in teamToShow)
-                HarmonyMain.Instance.Log.LogInfo(i.name + " is FLABBERGASTED right now!");
+                DillyzRoleApiMain.Instance.Log.LogInfo(i.name + " is FLABBERGASTED right now!");
 
             IntroCutscenePatch_BeginImpostor.calcTeam();
 

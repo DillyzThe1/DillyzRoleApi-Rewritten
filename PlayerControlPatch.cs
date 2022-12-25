@@ -14,7 +14,7 @@ namespace DillyzRoleApi_Rewritten
         [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.MurderPlayer))]
         public class PlayerControlPatch_MurderPlayer {
             public static bool Prefix(PlayerControl __instance, PlayerControl target) {
-                HarmonyMain.Instance.Log.LogWarning($"{__instance.name} tried to kill {target.name} using the normal PlayerControl.MurderPlayer() function!" +
+                DillyzRoleApiMain.Instance.Log.LogWarning($"{__instance.name} tried to kill {target.name} using the normal PlayerControl.MurderPlayer() function!" +
                                                                                                 $" (Did you forget to do DillyzUtil.RpcCommitAssassination()?)");
                 DillyzUtil.commitAssassination(__instance, target);
                 return false;
@@ -39,7 +39,7 @@ namespace DillyzRoleApi_Rewritten
                 if (!AmongUsClient.Instance.AmHost || __instance.__4__this.name == "Player(Clone)")
                     return;
 
-                HarmonyMain.Instance.Log.LogInfo("bruh " + __instance.__4__this.name);
+                DillyzRoleApiMain.Instance.Log.LogInfo("bruh " + __instance.__4__this.name);
 
                 LobbyConfigManager.UpdateNormalValues();
                 LobbyConfigManager.UpdateRoleValues();

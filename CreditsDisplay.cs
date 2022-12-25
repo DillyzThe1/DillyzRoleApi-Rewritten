@@ -16,8 +16,8 @@ namespace DillyzRoleApi_Rewritten
         {
             public static void Postfix(VersionShower __instance)
             {
-                __instance.text.text += $"\n<#F6FF00>{HarmonyMain.MOD_NAME}</color> v{HarmonyMain.MOD_VERSION} by <#3AA3D9>DillyzThe1</color>";
-                HarmonyMain.Instance.Log.LogInfo("pos" + __instance.transform.position);
+                __instance.text.text += $"\n<#F6FF00>{DillyzRoleApiMain.MOD_NAME}</color> v{DillyzRoleApiMain.MOD_VERSION} by <#3AA3D9>DillyzThe1</color>";
+                DillyzRoleApiMain.Instance.Log.LogInfo("pos" + __instance.transform.position);
                 __instance.transform.position = new Vector3(__instance.transform.position.x,
                                                             __instance.transform.position.y - 0.15f, __instance.transform.position.z);
             }
@@ -28,7 +28,7 @@ namespace DillyzRoleApi_Rewritten
         {
             public static void Postfix(PingTracker __instance)
             {
-                __instance.text.text += $"\n<#F6FF00>{HarmonyMain.MOD_NAME}</color> v{HarmonyMain.MOD_VERSION}\n<#3AA3D9>github.com/DillyzThe1</color>";
+                __instance.text.text += $"\n<#F6FF00>{DillyzRoleApiMain.MOD_NAME}</color> v{DillyzRoleApiMain.MOD_VERSION}\n<#3AA3D9>github.com/DillyzThe1</color>";
             }
         }
     }

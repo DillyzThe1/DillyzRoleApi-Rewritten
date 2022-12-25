@@ -14,7 +14,7 @@ using static DillyzRoleApi_Rewritten.Il2CppItemAttribute;
 
 namespace DillyzRoleApi_Rewritten
 {
-    [BepInPlugin(HarmonyMain.MOD_ID, HarmonyMain.MOD_NAME, HarmonyMain.MOD_VERSION)]
+    [BepInPlugin(DillyzRoleApiMain.MOD_ID, DillyzRoleApiMain.MOD_NAME, DillyzRoleApiMain.MOD_VERSION)]
     [BepInProcess("Among Us.exe")]
     [BepInProcess("Among Us2.exe")]
     [BepInProcess("Among Us3.exe")]
@@ -30,14 +30,14 @@ namespace DillyzRoleApi_Rewritten
     [BepInProcess("Among Us13.exe")]
     [BepInProcess("Among Us14.exe")]
     [BepInProcess("Among Us15.exe")]
-    public class HarmonyMain : BasePlugin
+    public class DillyzRoleApiMain : BasePlugin
     {
         public const string MOD_NAME = "DillyzRoleApi", MOD_VERSION = "2.0.0", MOD_ID = "com.github.dillyzthe1.dillyzroleapi";
-        public static Harmony harmony = new Harmony(HarmonyMain.MOD_ID);
+        public static Harmony harmony = new Harmony(DillyzRoleApiMain.MOD_ID);
 
         public static string BEPINEX_CONFIG_FOLDER => BepInEx.Paths.BepInExConfigPath.Replace("BepInEx.cfg","");
 
-        public static HarmonyMain Instance;
+        public static DillyzRoleApiMain Instance;
 
         // https://docs.bepinex.dev/v5.4.21/articles/dev_guide/plugin_tutorial/4_configuration.html
         public ConfigEntry<bool> enableDebugJester;
@@ -58,7 +58,7 @@ namespace DillyzRoleApi_Rewritten
                 "Enables the Debug Hitman built into the API.\nThis functions normally, but you may want to use the official package here:\n" +
                 "https://github.com/DillyzThe1/DillyzRoleApi-Rewritten/Packages.md");
 
-            Log.LogInfo($"{HarmonyMain.MOD_NAME} v{HarmonyMain.MOD_VERSION} loaded. Hooray!");
+            Log.LogInfo($"{DillyzRoleApiMain.MOD_NAME} v{DillyzRoleApiMain.MOD_VERSION} loaded. Hooray!");
             harmony.PatchAll();
 
             SceneManager.add_sceneLoaded((System.Action<Scene, LoadSceneMode>)((scene, loadscenemode) =>
@@ -101,7 +101,7 @@ namespace DillyzRoleApi_Rewritten
 
                     if (killoncrewkill && DillyzUtil.roleSide(button.killButton.currentTarget) == CustomRoleSide.Crewmate)
                     {
-                        HarmonyMain.Instance.Log.LogInfo("Advice Taking");
+                        DillyzRoleApiMain.Instance.Log.LogInfo("Advice Taking");
                         DillyzUtil.RpcCommitAssassination(PlayerControl.LocalPlayer, PlayerControl.LocalPlayer);
                     }
 

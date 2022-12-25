@@ -39,7 +39,7 @@ namespace DillyzRoleApi_Rewritten
                 return;
             }
 
-            HarmonyMain.Instance.Log.LogError("Callback for RPC \"" + rpcName + "\" not found! (Did you pass a null callback?)" +
+            DillyzRoleApiMain.Instance.Log.LogError("Callback for RPC \"" + rpcName + "\" not found! (Did you pass a null callback?)" +
                                                 "\n    To add a callback, do \"delegate(MessageReader message) {}\" instead of \"null\".");
         }
     }
@@ -111,7 +111,7 @@ namespace DillyzRoleApi_Rewritten
 
                             CustomRole role = CustomRole.getByName(roleToACTAULLYGet);
 
-                            //HarmonyMain.Instance.Log.LogInfo("funny " + roleToACTAULLYGet + " with " + typeToActaullyGet);
+                            //DillyzRoleApiMain.Instance.Log.LogInfo("funny " + roleToACTAULLYGet + " with " + typeToActaullyGet);
 
                             if (role == null)
                                 continue;
@@ -125,17 +125,17 @@ namespace DillyzRoleApi_Rewritten
                                         case CustomSettingType.Boolean:
                                             CustomBooleanSetting boolsetting = rolesetting as CustomBooleanSetting;
                                             boolsetting.settingValue = reader.ReadBoolean();
-                                            //HarmonyMain.Instance.Log.LogInfo(typeToActaullyGet + " = " + boolsetting.settingValue);
+                                            //DillyzRoleApiMain.Instance.Log.LogInfo(typeToActaullyGet + " = " + boolsetting.settingValue);
                                             break;
                                         case CustomSettingType.Integer:
                                             CustomNumberSetting intsetting = rolesetting as CustomNumberSetting;
                                             intsetting.settingValue = reader.ReadInt32();
-                                            //HarmonyMain.Instance.Log.LogInfo(typeToActaullyGet + " = " + intsetting.settingValue);
+                                            //DillyzRoleApiMain.Instance.Log.LogInfo(typeToActaullyGet + " = " + intsetting.settingValue);
                                             break;
                                         case CustomSettingType.String:
                                             CustomStringSetting strsetting = rolesetting as CustomStringSetting;
                                             strsetting.settingValue = reader.ReadString();
-                                            //HarmonyMain.Instance.Log.LogInfo(typeToActaullyGet + " = " + strsetting.settingValue);
+                                            //DillyzRoleApiMain.Instance.Log.LogInfo(typeToActaullyGet + " = " + strsetting.settingValue);
                                             break;
                                     }
                                 }
@@ -143,7 +143,7 @@ namespace DillyzRoleApi_Rewritten
                             continue;
                         }
 
-                        HarmonyMain.Instance.Log.LogError($"Bad setting RPC \"{settingToSet}\" found! (Terminating setting RPC)");
+                        DillyzRoleApiMain.Instance.Log.LogError($"Bad setting RPC \"{settingToSet}\" found! (Terminating setting RPC)");
                         return;
                     }
 
@@ -236,7 +236,7 @@ namespace DillyzRoleApi_Rewritten
                             return;
                         }
 
-                    HarmonyMain.Instance.Log.LogError("Warning! No rpc called " + rpcToGet + " exists! Why did you even call it?!");
+                    DillyzRoleApiMain.Instance.Log.LogError("Warning! No rpc called " + rpcToGet + " exists! Why did you even call it?!");
                     break;
             }
         }

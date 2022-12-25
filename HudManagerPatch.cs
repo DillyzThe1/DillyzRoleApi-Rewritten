@@ -146,7 +146,7 @@ namespace DillyzRoleApi_Rewritten
                 pbjsandwich.OnClick.AddListener((UnityEngine.Events.UnityAction)listener);
 
                 void listener() {
-                    HarmonyMain.Instance.Log.LogInfo("epic clickenining");
+                    DillyzRoleApiMain.Instance.Log.LogInfo("epic clickenining");
 
                     if (!newKill.isActiveAndEnabled || (newKill.currentTarget == null && customKillControl.buttonData.targetButton) || newKill.isCoolingDown ||
                          PlayerControl.LocalPlayer.Data.IsDead != customKillControl.buttonData.buttonForGhosts || (customKillControl.buttonData.caresAboutMoving 
@@ -165,7 +165,7 @@ namespace DillyzRoleApi_Rewritten
 
                 AllKillButtons.Add(customKillControl);
             }
-            HarmonyMain.Instance.Log.LogInfo("bruh moment123456789D");
+            DillyzRoleApiMain.Instance.Log.LogInfo("bruh moment123456789D");
         }
 
         public static void displayActionButton(HudManager __instance, CustomRole localRole, bool udiededed) {

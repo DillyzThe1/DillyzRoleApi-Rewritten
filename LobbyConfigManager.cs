@@ -14,8 +14,8 @@ namespace DillyzRoleApi_Rewritten
 {
     public class LobbyConfigManager
     {
-        public static string OUTPUT_FILE => HarmonyMain.BEPINEX_CONFIG_FOLDER + "dillyzroleapi-lobby-settings.json";
-        public static string OUTPUT_FILE_ROLES => HarmonyMain.BEPINEX_CONFIG_FOLDER + "dillyzroleapi-role-settings.json";
+        public static string OUTPUT_FILE => DillyzRoleApiMain.BEPINEX_CONFIG_FOLDER + "dillyzroleapi-lobby-settings.json";
+        public static string OUTPUT_FILE_ROLES => DillyzRoleApiMain.BEPINEX_CONFIG_FOLDER + "dillyzroleapi-role-settings.json";
 
         private static List<LobbyRoleSetting> _lobbyRoleSettings = new List<LobbyRoleSetting>();
         public static List<LobbyRoleSetting> lobbyRoleSettings => _lobbyRoleSettings;

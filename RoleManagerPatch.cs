@@ -17,8 +17,8 @@ namespace DillyzRoleApi_Rewritten
         {
             public static void Postfix(RoleManager __instance)
             {
-                HarmonyMain.Instance.Log.LogInfo("DO I SELECT ROLES NOW?");
-                //HarmonyMain.Instance.Log.LogInfo(PlayerControl.AllPlayerControls);
+                DillyzRoleApiMain.Instance.Log.LogInfo("DO I SELECT ROLES NOW?");
+                //DillyzRoleApiMain.Instance.Log.LogInfo(PlayerControl.AllPlayerControls);
 
                 // send reset roles packet
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.ResetRoles, Hazel.SendOption.None, -1);
@@ -28,13 +28,13 @@ namespace DillyzRoleApi_Rewritten
                 // rng
                 Random roleRNG = new Random();
 
-                HarmonyMain.Instance.Log.LogInfo($"Right now, we've got {CustomRole.allRoles.Count} roles to assign.");
+                DillyzRoleApiMain.Instance.Log.LogInfo($"Right now, we've got {CustomRole.allRoles.Count} roles to assign.");
                 // assign roles
                 foreach (CustomRole role in CustomRole.allRoles)
                 {
                     if (role.decoy)
                         continue;
-                    HarmonyMain.Instance.Log.LogInfo($"Let's check out {role.name}.");
+                    DillyzRoleApiMain.Instance.Log.LogInfo($"Let's check out {role.name}.");
                     List<PlayerControl> availablePlayers = PlayerControl.AllPlayerControls.ToArray().ToList();
                     availablePlayers.RemoveAll(x => !DillyzUtil.templateRole(x));
 
@@ -62,7 +62,7 @@ namespace DillyzRoleApi_Rewritten
                             selectedPlayer.Data.Role = new ImpostorRole();
                         }
 
-                        HarmonyMain.Instance.Log.LogInfo($"Hey! {selectedPlayer.name} is now the {role.name} of the game!");
+                        DillyzRoleApiMain.Instance.Log.LogInfo($"Hey! {selectedPlayer.name} is now the {role.name} of the game!");
 
                         // send role packet
                         writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.SetRole, Hazel.SendOption.None, -1);

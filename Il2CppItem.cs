@@ -37,11 +37,11 @@ namespace DillyzRoleApi_Rewritten
             try
             {
                 RegisterTypeOptions options = new RegisterTypeOptions() { Interfaces = interfaces };
-                HarmonyMain.Instance.Log.LogInfo($"Registering Class {type.FullDescription()}");
+                DillyzRoleApiMain.Instance.Log.LogInfo($"Registering Class {type.FullDescription()}");
                 ClassInjector.RegisterTypeInIl2Cpp(type, options);
             }
             catch (Exception e) {
-                HarmonyMain.Instance.Log.LogError($"Cannot register {type.FullDescription()}! ({e})");
+                DillyzRoleApiMain.Instance.Log.LogError($"Cannot register {type.FullDescription()}! ({e})");
             }
         }
 
@@ -49,7 +49,7 @@ namespace DillyzRoleApi_Rewritten
         public class IL2CPPChainloaderPatch {
             public static void Postfix(IL2CPPChainloaderPatch __instance, PluginInfo pluginInfo, Assembly pluginAssembly)
             {
-                HarmonyMain.Instance.Log.LogInfo("Loading plugin " + pluginInfo.TypeName);
+                DillyzRoleApiMain.Instance.Log.LogInfo("Loading plugin " + pluginInfo.TypeName);
                 Reg(pluginAssembly); 
             }
 
@@ -61,7 +61,7 @@ namespace DillyzRoleApi_Rewritten
 
                 List<string> assetNames = pluginAssembly.GetManifestResourceNames().ToArray().ToList();
                 foreach (string asset in assetNames)
-                    HarmonyMain.Instance.Log.LogInfo("Asset Found: " + asset);
+                    DillyzRoleApiMain.Instance.Log.LogInfo("Asset Found: " + asset);
 
                 foreach (Type type in pluginAssembly.GetTypes())
                 {

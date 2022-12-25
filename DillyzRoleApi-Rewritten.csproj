@@ -49,7 +49,7 @@
     <Compile Include="DillyzUtil.cs" />
     <Compile Include="ExileControllerPatch.cs" />
     <Compile Include="GameOverPatch.cs" />
-    <Compile Include="HarmonyMain.cs" />
+    <Compile Include="DillyzRoleApiMain.cs" />
     <Compile Include="HudManagerPatch.cs" />
     <Compile Include="Il2CppItem.cs" />
     <Compile Include="IntroCutscenePatch.cs" />

@@ -75,7 +75,7 @@ namespace DillyzRoleApi_Rewritten
                 if (_allValues.Contains(value))
                     this._curIndex = _allValues.IndexOf(value);
                 else
-                    HarmonyMain.Instance.Log.LogError($"New string value \"{value}\" cannot be found! (Did you check the capitalization?)");
+                    DillyzRoleApiMain.Instance.Log.LogError($"New string value \"{value}\" cannot be found! (Did you check the capitalization?)");
 
                 if (_onChanged != null)
                     _onChanged(_allValues[_curIndex]);
@@ -94,7 +94,7 @@ namespace DillyzRoleApi_Rewritten
             else
             {
                 this._defaultValue = allValues[0];
-                HarmonyMain.Instance.Log.LogError($"The default string value \"{defaultValue}\" could not be found! (Did you check the capitalization?)");
+                DillyzRoleApiMain.Instance.Log.LogError($"The default string value \"{defaultValue}\" could not be found! (Did you check the capitalization?)");
             }    
             this._allValues = allValues;
 

@@ -30,7 +30,7 @@ namespace DillyzRoleApi_Rewritten
             foreach (CustomRole role in allRoles)
                 if (role.name == name)
                 {
-                    HarmonyMain.Instance.Log.LogError($"Role by name \"{role.name}\" already exists!");
+                    DillyzRoleApiMain.Instance.Log.LogError($"Role by name \"{role.name}\" already exists!");
                     return role;
                 }
             CustomRole rolee = new CustomRole(name, subtext, nameColor, nameColorPublic, roleColor, canSeeTeam, side, ventPrivilege, canKill, showEjectText);

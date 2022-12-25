@@ -72,7 +72,7 @@ namespace DillyzRoleApi_Rewritten
 
                 RolesSettingsMenuPatch_FNFModderReference.customtabs[role.name] = newTab;
 
-                HarmonyMain.Instance.Log.LogInfo("h");
+                DillyzRoleApiMain.Instance.Log.LogInfo("h");
                 foreach (CustomSetting setting in role.advancedSettings)
                 {
                     GameObject newSettingParent = new GameObject();
@@ -82,7 +82,7 @@ namespace DillyzRoleApi_Rewritten
                     newSettingParent.transform.position = ogSettingPos + (new Vector3(0, ySpace, 0) * ymultlol);
 
                     /*System.Action<GameObject> value = delegate (GameObject obj) { 
-                        HarmonyMain.Instance.Log.LogInfo(obj.name + " child");
+                        DillyzRoleApiMain.Instance.Log.LogInfo(obj.name + " child");
                     };
                     ogNumbOpt.ForEachChild(value);*/
 
@@ -133,7 +133,7 @@ namespace DillyzRoleApi_Rewritten
                                 {
                                     foreach (AudioSource audioSource in SoundManager.Instance.allSources.Values)
                                     {
-                                        HarmonyMain.Instance.Log.LogInfo(audioSource.name + " is playing " + audioSource.clip.name);
+                                        DillyzRoleApiMain.Instance.Log.LogInfo(audioSource.name + " is playing " + audioSource.clip.name);
                                     }
 
                                     //SoundManager.Instance.PlaySound(, false, 0.8f, null);
@@ -337,7 +337,7 @@ namespace DillyzRoleApi_Rewritten
 
             /*ogSetting.transform.Find("Count Plus_TMP").gameObject.GetComponent<PassiveButton>().OnClick.AddListener((UnityEngine.Events.UnityAction)funnny);
             void funnny() {
-                HarmonyMain.Instance.Log.LogInfo(ogSetting.transform.Find("Count Plus_TMP").gameObject.GetComponent<TextMeshPro>().color);
+                DillyzRoleApiMain.Instance.Log.LogInfo(ogSetting.transform.Find("Count Plus_TMP").gameObject.GetComponent<TextMeshPro>().color);
             }*/
 
 
@@ -423,17 +423,17 @@ namespace DillyzRoleApi_Rewritten
                 for (int i = 0; i < textsToMakeActive.Length; i++)
                 {
                     TextMeshPro curTMP = textsToMakeActive[i];
-                    //HarmonyMain.Instance.Log.LogInfo("prank");
+                    //DillyzRoleApiMain.Instance.Log.LogInfo("prank");
                     PassiveButton tmpButton = curTMP.gameObject.GetComponent<PassiveButton>();
 
-                    //HarmonyMain.Instance.Log.LogInfo("prank23");
+                    //DillyzRoleApiMain.Instance.Log.LogInfo("prank23");
                     tmpButton.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
                     tmpButton.OnClick.AddListener((UnityEngine.Events.UnityAction)callback);
 
                     tmpButton.OnMouseOver.AddListener((UnityEngine.Events.UnityAction)bgover);
 
                     void callback() {
-                        //HarmonyMain.Instance.Log.LogInfo(role.name + "'s " + curTMP.name + " was clicked");
+                        //DillyzRoleApiMain.Instance.Log.LogInfo(role.name + "'s " + curTMP.name + " was clicked");
 
                         if (!AmongUsClient.Instance.AmHost)
                             return;

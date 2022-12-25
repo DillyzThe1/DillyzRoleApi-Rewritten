@@ -62,7 +62,7 @@ namespace DillyzRoleApi_Rewritten
         {
             if (player == null || player.Data == null)
             {
-                HarmonyMain.Instance.Log.LogInfo("hey noob ur mod broke");
+                DillyzRoleApiMain.Instance.Log.LogInfo("hey noob ur mod broke");
                 return CustomRoleSide.Crewmate;
             }
             if (CustomRole.getRoleName(player.PlayerId) != "" && CustomRole.getRoleName(player.PlayerId) != null)
@@ -210,10 +210,10 @@ namespace DillyzRoleApi_Rewritten
         }
         public static void commitAssassination(PlayerControl assassinator, PlayerControl target)
         {
-            //HarmonyMain.Instance.Log.LogInfo(assassinator.KillAnimations.Length + " kill anims");
+            //DillyzRoleApiMain.Instance.Log.LogInfo(assassinator.KillAnimations.Length + " kill anims");
             ///foreach (KillAnimation killanim in assassinator.KillAnimations)
-            //    HarmonyMain.Instance.Log.LogInfo("Kill animation " + killanim.name + " found!");
-            HarmonyMain.Instance.Log.LogInfo(assassinator.name + " " + target.name);
+            //    DillyzRoleApiMain.Instance.Log.LogInfo("Kill animation " + killanim.name + " found!");
+            DillyzRoleApiMain.Instance.Log.LogInfo(assassinator.name + " " + target.name);
 
             bool isKiller = assassinator.PlayerId == PlayerControl.LocalPlayer.PlayerId;
             bool isVictim = target.PlayerId == PlayerControl.LocalPlayer.PlayerId;
@@ -337,20 +337,20 @@ namespace DillyzRoleApi_Rewritten
                 return Sprite.Create(tex2d, new Rect(0, 0, tex2d.width, tex2d.height), Vector2.one * 0.5f, 100f);
             }
             else
-                HarmonyMain.Instance.Log.LogError("Sprite image \"" + spritePath + "\" could not be found!");
+                DillyzRoleApiMain.Instance.Log.LogError("Sprite image \"" + spritePath + "\" could not be found!");
 
             return null;
         }
 
         public static void AddRpcCall(string rpcName, Action<MessageReader> callback) {
-            HarmonyMain.Instance.Log.LogInfo("Added RPC callback for " + rpcName + ".");
+            DillyzRoleApiMain.Instance.Log.LogInfo("Added RPC callback for " + rpcName + ".");
             CustomRpcHandler.customRpcCallbacks.Add(new CustomRpcCallback(rpcName, callback));
         }
 
         public static void InvokeRPCCall(string rpcName, Action<MessageWriter> writingCallback) {
             if (writingCallback == null)
             {
-                HarmonyMain.Instance.Log.LogError(rpcName + " had a null writingCallback! (Did you forget delegate(MessageWriter writer) {}, you idiot?)" +
+                DillyzRoleApiMain.Instance.Log.LogError(rpcName + " had a null writingCallback! (Did you forget delegate(MessageWriter writer) {}, you idiot?)" +
                     "\n     (Also, in the callback you need to write data with writer.Write(yourvariable);)");
                 return;
             }
@@ -365,7 +365,7 @@ namespace DillyzRoleApi_Rewritten
                     return; 
                 }
 
-            HarmonyMain.Instance.Log.LogError("Alright, you're trolling. You're. TROLLING. The RPC you're calling is null. " + rpcName + " doesn't EXIST! Are you ok?!");
+            DillyzRoleApiMain.Instance.Log.LogError("Alright, you're trolling. You're. TROLLING. The RPC you're calling is null. " + rpcName + " doesn't EXIST! Are you ok?!");
         }
 
         public static Color color32ToColor(Color32 color32)
