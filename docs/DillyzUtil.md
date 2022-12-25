@@ -25,7 +25,7 @@ Arguments:
 - `bool` nameColorPublic >> Determines if everyone in the game can see the role color or not.
 - `Color32` roleColor >> The color of the role used everywhere. Make a new one with `new Color32(255, 255, 255, 255)`. (Order: RGBA)
 - `bool` canSeeTeam >> Determines if your entire team can see your color or not.
-- `CustomRoleSide` side >> An enum determining what team you're on. `CustomRoleSide` contains `Impostor`, `Crewmate`, `Independent`, & `LoneWolf`.
+- `CustomRoleSide` side >> An enum determining what team you're on. `CustomRoleSide` contains `Impostor` , `Crewmate` , `Independent` , & `LoneWolf`.
 - `VentPrivilege` ventPrivilege >> determines how powerful the venting capabilities of the role are. Please only use `Impostor` or `None` for now.
 - `bool` canKill >> Determines if the role can use the default kill or not.
 - `bool` showEjectText >> Determines if the ejection text should be "was not The Impostor" or "was The Jester".
@@ -39,7 +39,7 @@ Arguments:
 - `PlayerControl` player >> The player you want the role name of.
 
 <br>
-Can return `Crewmate`, `Impostor`, `Scientist`, `Engineer`, `GuardianAngel`, `ShapeShifter`, or your own custom role's name.
+Can return `Crewmate` , `Impostor` , `Scientist` , `Engineer` , `GuardianAngel` , `ShapeShifter` , or your own custom role's name.
 
 ## roleSide
 Returns <a href="https://github.com/DillyzThe1/DillyzRoleApi-Rewritten/blob/main/CustomRole.cs#L176">`CustomRoleSide`</a>.<br>
@@ -47,7 +47,7 @@ Arguments:
 - `PlayerControl` player >> The player you want the role side of.
 
 <br>
-Will return `Impostor`, `Crewmate`, `Independent`, or `LoneWolf`.
+Will return `Impostor` , `Crewmate` , `Independent` , or `LoneWolf`.
 
 ## roleColor
 Returns `Color32`.<br>
