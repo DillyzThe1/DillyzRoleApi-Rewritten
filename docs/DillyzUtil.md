@@ -11,7 +11,7 @@ Arguments:
 - `bool` isTargetButton >> Determines if your button targets players or gets clicked standalone.
 - `string[]` allowedRoles >> A string array of every role allowed to use it. Setting to nothing pretty much means Freeplay only.
 - `string[]` roleCantTarget >> Any roles that the button is NOT allowed to target. (Ex: Impostor can't execute `Impostor`s or `ShapeShifter`s.
-- `Action<<a href="https://github.com/DillyzThe1/DillyzRoleApi-Rewritten/blob/main/CustomButton.cs#L112">KillButtonCustomData</a>, bool>` onClicked >> A custom return for being clicked. Pass the following code: `delegate(<a href="https://github.com/DillyzThe1/DillyzRoleApi-Rewritten/blob/main/CustomButton.cs#L112">KillButtonCustomData</a> button, bool success) {if (!success) return;}`.
+- `Action<`<a href="https://github.com/DillyzThe1/DillyzRoleApi-Rewritten/blob/main/CustomButton.cs#L112">`KillButtonCustomData`</a>`, bool>` onClicked >> A custom return for being clicked. Pass the following code: `delegate(`<a href="https://github.com/DillyzThe1/DillyzRoleApi-Rewritten/blob/main/CustomButton.cs#L112">`KillButtonCustomData`</a>` button, bool success) {if (!success) return;}`.
 
 Creates a new <a href="https://github.com/DillyzThe1/DillyzRoleApi-Rewritten/blob/main/CustomButton.cs">`CustomButton`</a> and returns it for modification.
 
