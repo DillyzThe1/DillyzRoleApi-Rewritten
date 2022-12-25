@@ -57,4 +57,44 @@ If you are having a problem so far, please <a href="https://github.com/DillyzThe
 
 ## S2 - Jester
 Now for educational experience, let's make the Jester role in your new mod setup!<br>
-
+First, we'll create our own role. We want it to be a Jester with a purple role color that's independent from Crewmates and Impostors.<br>
+Let's start by adding a simple function following the `createRole` function.<br>
+Documentation on such: https://github.com/DillyzThe1/DillyzRoleApi-Rewritten/blob/main/docs/DillyzUtil.md#createrole <br>
+![GitHub Logo](/docs/assets/jestercode.png)<br>
+<br>
+Alright, well now we've got the Jester loading in-game with amount and chance options.<br>
+![GitHub Logo](/docs/assets/jester-in-game.png)<br>
+<br>
+But hey, why won't he win on vote-out?<br>
+Well, we've got to add that first!<br>
+<br>
+We'll begin by creating a new class file called PlayerControlPatch.<br>
+Hit Ctrl + Shift + A, then type `PlayerControlPatch.cs` and hit `Add`.<br>
+<br>
+Great, we've got a new empty file now. Let's import `HarmonyLib` and add a patch class within.<br>
+In this case, there's a function in the `PlayerControl` class called `Exile`. We'll patch that.<br>
+![GitHub Logo](/docs/assets/pcp-embedded-patch.png)<br>
+<br>
+Great.<br>
+Now, we need to make a public static void called Prefix. this is an override function that occurs beofre what we're patching.<br>
+If you would like to do it after the function you're patching is called, do Postfix.<br>
+<br>
+Now let's add the following code to the patched function, recognizing the class we patched's instance.<br>
+```cs
+public static void Prefix(PlayerControl __instance)
+{
+	// do stuff here :)
+}
+```
+Wonderful! Now let's add some functionality!<br>
+First, I'm going to use the `getRoleName` function in `DillyzUtil` to compare the `__instance` player to a Jester.<br>
+I will do so by typing the following inside of my function:<br>
+```cs
+if (DillyzUtil.getRoleName(__instance) == "Jester") {
+	// functionality here
+}
+```
+Yes! This is what we've been waiting for!<br>
+Now let's get the `CustomRole` instance and call the `WinGame` function on it, passing `__instance` as the cause!<br>
+![GitHub Logo](/docs/assets/pcp-exile-patch.png)<br>
+<br>
