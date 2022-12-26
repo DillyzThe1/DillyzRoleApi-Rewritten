@@ -6,7 +6,7 @@
 Clone your Among Us install folder.<br>
 In the clone of the install folder, do either method A or B:<br>
 <br>
-Head over to the <a href="https://github.com/DillyzThe1/DillyzRoleApi-Rewritten/releases/latest/">latest release</a> and download `DillyzRoleApi_2.x.x_BepInExBundle.zip`.<br>
+Head over to the <a href="https://github.com/DillyzThe1/DillyzRoleApi-Rewritten/releases/latest/">latest release</a> and download [`DillyzRoleApi_2.x.x_BepInExBundle.zip`](../../releases/download/2.0.0/DillyzRoleApi_2.0.0_BepInExBundle.zip).<br>
 Extract the files and put it in your Among Us install's clone.<br>
 Boot up the game using the exe in the Among Us clone.
 
