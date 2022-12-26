@@ -121,7 +121,7 @@ namespace DillyzRoleApi_Rewritten
             }
             else
             {
-                ejectionText += $"The Impostor.";
+                ejectionText += $"{(side == CustomRoleSide.Impostor ? "" : "not ")}The Impostor.";
                 //ejectionText_bad += $"The Impostor.";
             }
 

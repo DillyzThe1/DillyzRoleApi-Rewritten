@@ -11,10 +11,9 @@ using AmongUs.GameOptions;
 using BepInEx.IL2CPP.Utils;
 using GooglePlayGames.BasicApi.SavedGame;
 using Hazel;
-using Il2CppSystem.Collections.Generic;
+using System.Collections.Generic;
 using MS.Internal.Xml.XPath;
 using UnityEngine;
-using static Il2CppSystem.Globalization.CultureInfo;
 
 namespace DillyzRoleApi_Rewritten
 {
@@ -374,7 +373,8 @@ namespace DillyzRoleApi_Rewritten
         }
 
         // TODO: Document this function later!
-        public static string SafeSubString(string str, int start, int length) {
+        public static string SafeSubString(string str, int start, int length)
+        {
             if (length >= str.Length)
                 return str;
             if (length < 0)
@@ -383,6 +383,13 @@ namespace DillyzRoleApi_Rewritten
                 return "";
 
             return str.Substring(start, length);
+
+        }
+        public static List<PlayerControl> GetAllOfRole(string rolename)
+        {
+            List<PlayerControl> pcs = PlayerControl.AllPlayerControls.ToArray().ToList();
+            pcs.RemoveAll(x => getRoleName(x) != rolename);
+            return pcs;
         }
     }
 }

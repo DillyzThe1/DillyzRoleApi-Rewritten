@@ -53,5 +53,15 @@ namespace DillyzRoleApi_Rewritten
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
             }
         }
+
+        [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.OnGameStart))]
+        public class PlayerControlPlayer_OnGameStart
+        {
+            public static void Postfix(PlayerControl __instance) {
+                ExileControllerPatch.initial_shifters = DillyzUtil.GetAllOfRole("ShapeShifter").Count;
+                ExileControllerPatch.initial_engineers = DillyzUtil.GetAllOfRole("Engineer").Count;
+                ExileControllerPatch.initial_scientists = DillyzUtil.GetAllOfRole("Scientist").Count;
+            }
+        }
     }
 }

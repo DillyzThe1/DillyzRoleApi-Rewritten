@@ -13,7 +13,8 @@ namespace DillyzRoleApi_Rewritten
     [HarmonyPatch(typeof(LobbyBehaviour), nameof(LobbyBehaviour.FixedUpdate))]
     class LobbyBehaviourPatch
     {
-        public static void Postfix(LobbyBehaviour __instance) {
+        public static void Postfix(LobbyBehaviour __instance)
+        {
             if (GameOptionsManager.Instance.CurrentGameOptions != null)
             {
                 TextMeshPro gs = DestroyableSingleton<HudManager>.Instance.GameSettings;
@@ -23,12 +24,13 @@ namespace DillyzRoleApi_Rewritten
 
                 Transform gstextalttrans = gs.gameObject.transform.parent.Find("gstextalt");
                 TextMeshPro gstextalt = null;
-                if (gstextalttrans == null) {
+                if (gstextalttrans == null)
+                {
                     gstextalt = GameObject.Instantiate(gs);
                     gstextalt.transform.parent = gs.transform.parent;
                     gstextalt.name = "gstextalt";
                     gstextalt.alignment = TextAlignmentOptions.Right;
-                } 
+                }
                 else
                     gstextalt = gstextalttrans.gameObject.GetComponent<TextMeshPro>();
 
@@ -47,7 +49,8 @@ namespace DillyzRoleApi_Rewritten
                         gstextalt.text += $"{name}: {count} with {chance}% Chance\n";
                     }
                 }
-                foreach (CustomRole role in CustomRole.allRoles) {
+                foreach (CustomRole role in CustomRole.allRoles)
+                {
                     gstextalt.text += $"{role.name}: {role.setting_countPerGame} with {role.setting_chancePerGame}% Chance\n";
                 }
             }
