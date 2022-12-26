@@ -494,6 +494,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>xcopy ".\DillyzRoleApi-Rewritten.dll" "%25AmongUsModDir%25\BepInEx\plugins\" /y
+echo f | xcopy ".\DillyzRoleApi-Rewritten.dll" "$(MSBuildProjectDirectory)\notes n stuff\DillyzRoleApi-Rewritten-Latest-Commit.dll" /y
 start "Among Us" "%25AmongUsModDir%25/Among Us.exe"</PostBuildEvent>
   </PropertyGroup>
 </Project>
