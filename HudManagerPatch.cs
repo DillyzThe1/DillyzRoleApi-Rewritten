@@ -88,8 +88,7 @@ namespace DillyzRoleApi_Rewritten
                     HudManagerPatch.displayColor(__instance, player, CustomPalette.White);
             }
 
-            if ((AmongUsClient.Instance == null || AmongUsClient.Instance.GameState != InnerNetClient.GameStates.Started)
-                && AmongUsClient.Instance.NetworkMode != NetworkModes.FreePlay)
+            if (AmongUsClient.Instance == null || AmongUsClient.Instance.GameState != InnerNetClient.GameStates.Started)
                 return;
 
             // task list

@@ -1,10 +1,13 @@
 ﻿using AmongUs.GameOptions;
+using Cpp2IL.Core.Analysis.Actions.x86;
 using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace DillyzRoleApi_Rewritten
@@ -16,35 +19,128 @@ namespace DillyzRoleApi_Rewritten
             if (__instance.Hierarchy.Count != 1)
                 return;
 
-            float xc = 0f, yc = 0f, mh = 0f;
+            List<TaskAddButton> buttons = new List<TaskAddButton>();
+
+            foreach (RoleBehaviour rb in DestroyableSingleton<RoleManager>.Instance.AllRoles)
+                the(__instance, rb, buttons);
+
+
+            Transform trans = __instance.ActiveItems[__instance.ActiveItems.Count - 1];
+            float xc = trans.localPosition.x + __instance.fileWidth, yc = trans.localPosition.y, mh = 0f;
             foreach (CustomRole role in CustomRole.allRoles) {
                 TaskAddButton taskbutton = UnityEngine.Object.Instantiate<TaskAddButton>(__instance.RoleButton);
                 taskbutton.SafePositionWorld = __instance.SafePositionWorld;
                 taskbutton.Text.text = $"Be_{role.name}.exe";
                 __instance.AddFileAsChild(__instance.Root, taskbutton, ref xc, ref yc, ref mh);
-                taskbutton.Role = DestroyableSingleton<RoleManager>.Instance.AllRoles[0];
+                //taskbutton.Role = null;//DestroyableSingleton<RoleManager>.Instance.AllRoles[0];
                 taskbutton.FileImage.color = role.roleColor;
-                if (taskbutton.Button != null) {
+                buttons.Add(taskbutton);
+                if (taskbutton.Button != null)
+                {
                     ControllerManager.Instance.AddSelectableUiElement(taskbutton.Button, false);
 
-                    taskbutton.Button.OnClick.RemoveAllListeners();
+                    taskbutton.Button.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
                     taskbutton.Button.OnClick.AddListener((UnityAction)callback);
-                    void callback() {
-                        PlayerControl.LocalPlayer.Revive();
+                    void callback()
+                    {
+                        DillyzRoleApiMain.Instance.Log.LogInfo("dementia-3");
+                        //PlayerControl.LocalPlayer.Revive();
+
                         if (role.side == CustomRoleSide.Impostor || role.switchToImpostor)
                         {
-                            PlayerControl.LocalPlayer.Data.RoleType = AmongUs.GameOptions.RoleTypes.Impostor;
-                            PlayerControl.LocalPlayer.Data.Role = new ImpostorRole();
-
-                            CustomRole.setRoleName(PlayerControl.LocalPlayer.PlayerId, role.name);
-                            return;
+                            DillyzRoleApiMain.Instance.Log.LogInfo("dementia-2");
+                            PlayerControl.LocalPlayer.RpcSetRole(RoleTypes.Impostor);
                         }
-                        PlayerControl.LocalPlayer.Data.RoleType = AmongUs.GameOptions.RoleTypes.Crewmate;
-                        PlayerControl.LocalPlayer.Data.Role = new CrewmateRole();
+                        else
+                        {
+                            DillyzRoleApiMain.Instance.Log.LogInfo("dementia-1");
+                            PlayerControl.LocalPlayer.RpcSetRole(RoleTypes.Crewmate);
+                        }
+                        ShipStatus.Instance.Begin();
+                        PlayerControl.LocalPlayer.transform.position = __instance.SafePositionWorld;
 
+                        DillyzRoleApiMain.Instance.Log.LogInfo("dementia");
                         CustomRole.setRoleName(PlayerControl.LocalPlayer.PlayerId, role.name);
+                        taskbutton.Overlay.gameObject.SetActive(true);
+
+                        DillyzRoleApiMain.Instance.Log.LogInfo("dementia1");
+                        foreach (TaskAddButton button in buttons)
+                            button.Overlay.gameObject.SetActive(false);
+                        DillyzRoleApiMain.Instance.Log.LogInfo("dementia2");
+                        foreach (Transform trans in __instance.ActiveItems)
+                        {
+                            if (trans.gameObject == null)
+                                continue;
+                            TaskAddButton taskadd = trans.gameObject.GetComponent<TaskAddButton>();
+                            if (taskadd == null || taskadd.Overlay == null)
+                                continue;
+
+                            DillyzRoleApiMain.Instance.Log.LogInfo("dementia23");
+                            taskadd.Overlay.enabled = false;
+                            taskadd.Overlay.gameObject.SetActive(false);
+                        }
+                        taskbutton.Overlay.gameObject.SetActive(true);
                     }
+
+                    taskbutton.Button.OnMouseOut.AddListener((UnityAction)callback2);
+                    void callback2() => taskbutton.FileImage.color = role.roleColor;
+                    taskbutton.Overlay.enabled = true;
+                    taskbutton.Overlay.gameObject.SetActive(false);
+
+                    HudManager.Instance.SetHudActive(true);
                 }
+            } 
+        }
+
+        public static void the(TaskAdderGame __instance, RoleBehaviour arbys, List<TaskAddButton> buttons) {
+            foreach (Transform trans in __instance.ActiveItems)
+            {
+                if (trans.gameObject == null)
+                    continue;
+                TaskAddButton taskadd = trans.gameObject.GetComponent<TaskAddButton>();
+                if (taskadd == null)
+                    continue;
+
+                if (taskadd.Role != arbys)
+                    continue;
+
+                taskadd.Button.OnClick.AddListener((UnityAction)callback);
+                void callback() {
+                    taskadd.Overlay.gameObject.SetActive(true);
+                    taskadd.Overlay.enabled = true;
+                    CustomRole.setRoleName(PlayerControl.LocalPlayer.PlayerId, "");
+
+                    foreach (TaskAddButton waffleironjpeg in buttons)
+                        waffleironjpeg.Overlay.gameObject.SetActive(false);
+                }
+
+                Color32 newColor = CustomPalette.CrewmateBlue;
+                switch (arbys.Role)
+                {
+                    case RoleTypes.Impostor:
+                        newColor = CustomPalette.ImpostorRed;
+                        break;
+                    case RoleTypes.ImpostorGhost:
+                        newColor = CustomPalette.ImpostorRed;
+                        break;
+                    case RoleTypes.Shapeshifter:
+                        newColor = CustomPalette.ShapeShifterCrimson;
+                        break;
+                    case RoleTypes.Engineer:
+                        newColor = CustomPalette.EngineerOrange;
+                        break;
+                    case RoleTypes.Scientist:
+                        newColor = CustomPalette.ScientistTeal;
+                        break;
+                    case RoleTypes.GuardianAngel:
+                        newColor = CustomPalette.GuardianAngleLightBlue;
+                        break;
+                }
+
+                taskadd.Button.OnMouseOut.AddListener((UnityAction)callback2);
+                void callback2() => taskadd.FileImage.color = newColor;
+                taskadd.FileImage.color = newColor;
+                return;
             }
         }
     }

@@ -29,9 +29,6 @@ namespace DillyzRoleApi_Rewritten
             }
             public static bool roleCanVent(PlayerControl player)
             {
-                if (DillyzUtil.InFreeplay())
-                    return true;
-
                 string rolename = DillyzUtil.getRoleName(player);
 
                 if (player.Data.IsDead)
@@ -119,9 +116,6 @@ namespace DillyzRoleApi_Rewritten
 
                 if (__instance.gameObject.GetComponent<KillButtonCustomData>() != null)
                     return false;
-
-                if (DillyzUtil.InFreeplay())
-                    return true;
 
                 string rolename = DillyzUtil.getRoleName(PlayerControl.LocalPlayer);
                 CustomRole role = CustomRole.getByName(rolename);

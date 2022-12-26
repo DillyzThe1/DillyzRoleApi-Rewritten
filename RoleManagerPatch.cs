@@ -99,7 +99,7 @@ namespace DillyzRoleApi_Rewritten
                     pc.RemoveAll(x => !x.Data.IsDead || DillyzUtil.roleSide(x) != CustomRoleSide.Crewmate);
                     int num = pc.Count;
                     IRoleOptionsCollection roleOptions = GameOptionsManager.Instance.CurrentGameOptions.RoleOptions;
-                    if (AmongUsClient.Instance.NetworkMode == NetworkModes.FreePlay)
+                    if (DillyzUtil.InFreeplay())
                         roleTheyWant = guardRole;
                     else if (num <= roleOptions.GetNumPerGame(guardRole))
                     {
