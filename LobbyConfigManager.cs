@@ -48,10 +48,10 @@ namespace DillyzRoleApi_Rewritten
             AmongUsClient.Instance.FinishRpcImmediately(writer);
         }
 
-        public static void UpdateNormalValues()
+        public static void UpdateAdvancedRoleValues()
         {
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.SetSettings, Hazel.SendOption.None, -1);
-            writer.Write((byte)CustomRole.allRoles.Count);
+            writer.Write((byte)(CustomRole.allRoles.Count-1));
             foreach (CustomRole role in CustomRole.allRoles)
             {
                 foreach (CustomSetting setting in role.advancedSettings)

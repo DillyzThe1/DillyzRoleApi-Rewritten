@@ -41,7 +41,7 @@ namespace DillyzRoleApi_Rewritten
 
                 DillyzRoleApiMain.Instance.Log.LogInfo("bruh " + __instance.__4__this.name);
 
-                LobbyConfigManager.UpdateNormalValues();
+                LobbyConfigManager.UpdateAdvancedRoleValues();
                 LobbyConfigManager.UpdateRoleValues();
 
                 List<string> allRoles = CustomRole.allRoleNames;
