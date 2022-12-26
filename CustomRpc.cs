@@ -86,15 +86,15 @@ namespace DillyzRoleApi_Rewritten
                             string roleToGet_Wthing = settingToSet.Substring(epictrtoll, settingToSet.Length - epictrtoll);
                             string roleToACTAULLYGet = roleToGet_Wthing.Substring(0, roleToGet_Wthing.LastIndexOf("-"));
 
-                            string thevaluelol = reader.ReadString();
+                            int thevaluelol = reader.ReadInt32();
                             foreach (LobbyRoleSetting newsetting in LobbyConfigManager.lobbyRoleSettings)
                             {
                                 if (newsetting.roleName == roleToACTAULLYGet)
                                 {
                                     if (roleToGet_Wthing.EndsWith("-Count"))
-                                        newsetting.roleCount = Int32.Parse(thevaluelol);
+                                        newsetting.roleCount = thevaluelol;
                                     else if (roleToGet_Wthing.EndsWith("-Chance"))
-                                        newsetting.roleChance = Int32.Parse(thevaluelol);
+                                        newsetting.roleChance = thevaluelol;
                                 }
                             }
                             continue;

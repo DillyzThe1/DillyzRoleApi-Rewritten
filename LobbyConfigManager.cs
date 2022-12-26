@@ -41,9 +41,9 @@ namespace DillyzRoleApi_Rewritten
             foreach (CustomRole role in CustomRole.allRoles)
             {
                 writer.Write($"LOBBY_ROLE_SETTING-{role.name}-Count");
-                writer.Write(role.setting_countPerGame.ToString());
+                writer.Write(role.setting_countPerGame);
                 writer.Write($"LOBBY_ROLE_SETTING-{role.name}-Chance");
-                writer.Write(role.setting_chancePerGame.ToString());
+                writer.Write(role.setting_chancePerGame);
             }
             AmongUsClient.Instance.FinishRpcImmediately(writer);
         }
