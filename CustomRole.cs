@@ -59,6 +59,8 @@ namespace DillyzRoleApi_Rewritten
             }
         }
 
+        public int curActive = 0; // USED FOR GRAMMAR CHECKS, PLEASE IGNORE THIS!
+
         public string name = "Role Text";                       // Your role's name.
         public string subtext;                                  // The text that appears under.
         public bool nameColorChanges;                           // Determines if your name color is your role color or just red/white.

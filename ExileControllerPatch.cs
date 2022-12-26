@@ -22,6 +22,9 @@ namespace DillyzRoleApi_Rewritten
                 return;
 
             __instance.completeString = role.ejectionText.Replace("[0]", exiled.PlayerName);
+
+            if (role.curActive > 1)
+                __instance.completeString = __instance.completeString.Replace("The", role.a_or_an).Replace("the", role.a_or_an);
         }
     }
 }

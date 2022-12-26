@@ -34,6 +34,7 @@ namespace DillyzRoleApi_Rewritten
                 {
                     if (role.decoy)
                         continue;
+                    role.curActive = 0;
                     DillyzRoleApiMain.Instance.Log.LogInfo($"Let's check out {role.name}.");
                     List<PlayerControl> availablePlayers = PlayerControl.AllPlayerControls.ToArray().ToList();
                     availablePlayers.RemoveAll(x => !DillyzUtil.templateRole(x));
@@ -50,6 +51,8 @@ namespace DillyzRoleApi_Rewritten
 
                         if (role.setting_chancePerGame != 100 && UnityEngine.Random.Range(0, 100) >= role.setting_chancePerGame)
                             return;
+
+                        role.curActive++;
 
                         int roleIndex = roleRNG.Next(0, availablePlayers.Count);
                         PlayerControl selectedPlayer = availablePlayers[roleIndex];
