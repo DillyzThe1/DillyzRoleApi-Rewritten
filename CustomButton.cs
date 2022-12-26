@@ -170,6 +170,13 @@ namespace DillyzRoleApi_Rewritten
 
             if (this.killButton.currentTarget != null && this.killButton.currentTarget != player)
                 this.killButton.currentTarget.ToggleHighlight(false, PlayerControl.LocalPlayer.Data.Role.TeamType);
+
+            if (PlayerControl.LocalPlayer.inVent) {
+                this.killButton.currentTarget = null;
+                this.killButton.SetDisabled();
+                return;
+            }
+
             this.killButton.currentTarget = player;
             if (killButton.currentTarget != null)
             {
