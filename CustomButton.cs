@@ -14,6 +14,7 @@ namespace DillyzRoleApi_Rewritten
     // https://stackoverflow.com/questions/7056041/can-you-assign-a-function-to-a-variable-in-c
     public class CustomButton
     {
+        public KillButtonCustomData GameInstance; // ADD A NULL CHECK IF YOU USE THIS OK?!
         public string name = "OtherKill";
         public string imageName = "DillyzRoleApi_Rewritten.Assets.kill.png";
         private float _cooldown = 30;
@@ -115,6 +116,7 @@ namespace DillyzRoleApi_Rewritten
         public DateTime lastUse;
         public CustomButton buttonData;
         public KillButton killButton;
+        public bool blockingButton = false;
 
         public bool isSetup = false;
 
@@ -125,6 +127,8 @@ namespace DillyzRoleApi_Rewritten
             this.maxCooldown = this.buttonData.cooldown;
             this.lastUse = DateTime.UtcNow;
             this.isSetup = true;
+
+            this.buttonData.GameInstance = this;
         }
 
         public void Update()
@@ -138,6 +142,12 @@ namespace DillyzRoleApi_Rewritten
             TimeSpan timeLeft = DateTime.UtcNow - lastUse;
             int timeRemaining = (int)Math.Ceiling((double)new decimal(maxCooldown - timeLeft.TotalMilliseconds / 1000f));
             this.killButton.SetCoolDown(timeRemaining < 0 ? 0 : timeRemaining, maxCooldown);
+
+            if (blockingButton) {
+                if (this.buttonData.targetButton)
+                    SetTarget(null);
+                this.killButton.SetDisabled();
+            }
 
             if (this.buttonData.targetButton)
             {

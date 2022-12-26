@@ -18,6 +18,9 @@ namespace DillyzRoleApi_Rewritten
 
         public static void SetAllToWin(String roleToWin, PlayerControl causedBy, bool rpc)
         {
+            foreach (CustomButton button in CustomButton.AllCustomButtons)
+                button.GameInstance = null;
+
             CustomRole top10Role = CustomRole.getByName(roleToWin);
 
             if (top10Role.side == CustomRoleSide.Crewmate || top10Role.side == CustomRoleSide.Impostor)
