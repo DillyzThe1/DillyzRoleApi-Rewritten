@@ -147,6 +147,7 @@ namespace DillyzRoleApi_Rewritten
                 if (this.buttonData.targetButton)
                     SetTarget(null);
                 this.killButton.SetDisabled();
+                return;
             }
 
             if (this.buttonData.targetButton)
