@@ -12,9 +12,19 @@ using UnityEngine.Events;
 
 namespace DillyzRoleApi_Rewritten
 {
+    [HarmonyPatch(typeof(TaskAddButton), nameof(TaskAddButton.Update))]
+    class TaskAddButtonPatch_Update
+    {
+        public static void Postfix(TaskAddButton __instance)
+        { 
+            if (__instance.Role != null && TaskAddMinigamePatch.customTime)
+                __instance.Overlay.gameObject.GetComponent<SpriteRenderer>().enabled = false;
+        }
+    }
     [HarmonyPatch(typeof(TaskAdderGame), nameof(TaskAdderGame.ShowFolder))]
     class TaskAddMinigamePatch
     {
+        public static bool customTime = false;
         public static void Postfix(TaskAdderGame __instance, TaskFolder taskFolder) {
             if (__instance.Hierarchy.Count != 1)
                 return;
@@ -35,6 +45,8 @@ namespace DillyzRoleApi_Rewritten
                 //taskbutton.Role = null;//DestroyableSingleton<RoleManager>.Instance.AllRoles[0];
                 taskbutton.FileImage.color = role.roleColor;
                 buttons.Add(taskbutton);
+
+                SpriteRenderer sprrend = taskbutton.Overlay.gameObject.GetComponent<SpriteRenderer>();
                 if (taskbutton.Button != null)
                 {
                     ControllerManager.Instance.AddSelectableUiElement(taskbutton.Button, false);
@@ -43,30 +55,17 @@ namespace DillyzRoleApi_Rewritten
                     taskbutton.Button.OnClick.AddListener((UnityAction)callback);
                     void callback()
                     {
-                        DillyzRoleApiMain.Instance.Log.LogInfo("dementia-3");
-                        //PlayerControl.LocalPlayer.Revive();
-
                         if (role.side == CustomRoleSide.Impostor || role.switchToImpostor)
-                        {
-                            DillyzRoleApiMain.Instance.Log.LogInfo("dementia-2");
                             PlayerControl.LocalPlayer.RpcSetRole(RoleTypes.Impostor);
-                        }
                         else
-                        {
-                            DillyzRoleApiMain.Instance.Log.LogInfo("dementia-1");
                             PlayerControl.LocalPlayer.RpcSetRole(RoleTypes.Crewmate);
-                        }
                         ShipStatus.Instance.Begin();
                         PlayerControl.LocalPlayer.transform.position = __instance.SafePositionWorld;
 
-                        DillyzRoleApiMain.Instance.Log.LogInfo("dementia");
                         CustomRole.setRoleName(PlayerControl.LocalPlayer.PlayerId, role.name);
-                        taskbutton.Overlay.gameObject.SetActive(true);
 
-                        DillyzRoleApiMain.Instance.Log.LogInfo("dementia1");
                         foreach (TaskAddButton button in buttons)
-                            button.Overlay.gameObject.SetActive(false);
-                        DillyzRoleApiMain.Instance.Log.LogInfo("dementia2");
+                            sprrend.enabled = false;
                         foreach (Transform trans in __instance.ActiveItems)
                         {
                             if (trans.gameObject == null)
@@ -74,17 +73,15 @@ namespace DillyzRoleApi_Rewritten
                             TaskAddButton taskadd = trans.gameObject.GetComponent<TaskAddButton>();
                             if (taskadd == null || taskadd.Overlay == null)
                                 continue;
-
-                            DillyzRoleApiMain.Instance.Log.LogInfo("dementia23");
-                            taskadd.Overlay.enabled = false;
-                            taskadd.Overlay.gameObject.SetActive(false);
+                            
+                            taskadd.Overlay.gameObject.GetComponent<SpriteRenderer>().enabled = false;
                         }
-                        taskbutton.Overlay.gameObject.SetActive(true);
+                        sprrend.enabled = true;
+                        customTime = true;
                     }
 
                     taskbutton.RolloverHandler.OutColor = role.roleColor;
-                    taskbutton.Overlay.enabled = true;
-                    taskbutton.Overlay.gameObject.SetActive(false);
+                    sprrend.enabled = false;
 
                     HudManager.Instance.SetHudActive(true);
                 }
@@ -105,12 +102,12 @@ namespace DillyzRoleApi_Rewritten
 
                 taskadd.Button.OnClick.AddListener((UnityAction)callback);
                 void callback() {
-                    taskadd.Overlay.gameObject.SetActive(true);
-                    taskadd.Overlay.enabled = true;
+                    taskadd.Overlay.gameObject.GetComponent<SpriteRenderer>().enabled = true;
                     CustomRole.setRoleName(PlayerControl.LocalPlayer.PlayerId, "");
+                    customTime = false;
 
                     foreach (TaskAddButton waffleironjpeg in buttons)
-                        waffleironjpeg.Overlay.gameObject.SetActive(false);
+                        waffleironjpeg.Overlay.gameObject.GetComponent<SpriteRenderer>().enabled = false;
                 }
 
                 Color32 newColor = CustomPalette.CrewmateBlue;
