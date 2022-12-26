@@ -15,8 +15,11 @@ Currently, the only rolepackage is just the ClassicRolePackage, which is include
 You may find the source code of the ClassicRolePackage isolated <a href="https://github.com/DillyzThe1/ClassicRolePackage">here</a>.
 
 # Modding with the API
-*WARNING: THE DOCUMENTATION IS UNFINISHED AND ONLY HAS A TEMPORARY TUTORIAL TO MAKE A ROLE WITH CUSTOM BUTTONS. BASIC DOCUMENTATION SHOULD BE FINISHED BY JANUARY 1st, 2023.*<br>
-Making a clone of ClassicRolePackage
+*WARNING: THE DOCUMENTATION IS UNFINISHED AND ONLY CONTAINS UNFINISHED ROLE EXAMPLES AND UTILITY DOCUMENTATION.*<br>
+*PLEASE USE THE DISCORD LINK ON THE WIKI PAGE FOR MORE HELP!*<br>
+<br>
+[[DillyzRoleApi Wiki]](https://github.com/DillyzThe1/DillyzRoleApi-Rewritten/wiki)
+
 
 # Disclaimer
 This mod is not affiliated with Among Us or Innersloth LLC, and the content contained therein is not endorsed or otherwise sponsored by Innersloth LLC.<br>
