@@ -88,7 +88,7 @@ namespace DillyzRoleApi_Rewritten
                     HudManagerPatch.displayColor(__instance, player, CustomPalette.White);
             }
 
-            if (AmongUsClient.Instance == null || AmongUsClient.Instance.GameState != InnerNetClient.GameStates.Started)
+            if (AmongUsClient.Instance == null || (!DillyzUtil.InGame() && !DillyzUtil.InFreeplay()))
                 return;
 
             // task list
@@ -112,6 +112,9 @@ namespace DillyzRoleApi_Rewritten
 
             // DOING THIS FOR THE RETURN THING BC I LIKE RETURNS
             displayActionButton(__instance, localRole, udiededed);
+
+            if (AllKillButtons == null)
+                MakeFunnyThing(__instance.KillButton, __instance.AbilityButton);
         }
 
         public static void MakeFunnyThing(KillButton killButton, AbilityButton abilityButton) {
@@ -202,8 +205,6 @@ namespace DillyzRoleApi_Rewritten
                 foreach (KillButtonCustomData button in AllKillButtons)
                     button.killButton.gameObject.SetActive(button.CanUse());
             }
-            else if (AllKillButtons == null)
-                MakeFunnyThing(__instance.KillButton, __instance.AbilityButton);
         }
 
         public static void displayColor(HudManager __instance, PlayerControl player, Color32 roleColor) {
