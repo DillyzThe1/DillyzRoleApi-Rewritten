@@ -150,7 +150,7 @@ namespace DillyzRoleApi_Rewritten
 
                     if (!newKill.isActiveAndEnabled || (newKill.currentTarget == null && customKillControl.buttonData.targetButton) || newKill.isCoolingDown ||
                          PlayerControl.LocalPlayer.Data.IsDead != customKillControl.buttonData.buttonForGhosts || (customKillControl.buttonData.caresAboutMoving 
-                                                                                                                && !PlayerControl.LocalPlayer.CanMove))
+                            && !PlayerControl.LocalPlayer.CanMove) || !newKill.canInteract)
                     {
                         customKillControl.buttonData.OnClicked(customKillControl, false);
                         return;
