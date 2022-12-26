@@ -372,5 +372,17 @@ namespace DillyzRoleApi_Rewritten
         {
             return new Color(color32.r / 255f, color32.g / 255f, color32.b / 255f, 1f);
         }
+
+        // TODO: Document this function later!
+        public static string SafeSubString(string str, int start, int length) {
+            if (length >= str.Length)
+                return str;
+            if (length < 0)
+                return "";
+            if (length == 0)
+                return "";
+
+            return str.Substring(start, length);
+        }
     }
 }

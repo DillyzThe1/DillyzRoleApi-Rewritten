@@ -97,19 +97,17 @@ namespace DillyzRoleApi_Rewritten
             if (!udiededed || DillyzUtil.getRoleName(PlayerControl.LocalPlayer) == "GuardianAngel")
             {
                 string intendedString = DillyzUtil.roleText(PlayerControl.LocalPlayer);
-                if (__instance.TaskPanel.taskText.text.Length > 0 && !__instance.TaskPanel.taskText.text.Contains(intendedString))
+                TextMeshPro taskText = __instance.TaskPanel.taskText;
+                if (taskText.text.Length > 0 && !taskText.text.Contains(intendedString))
                 {
                     if (PlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.Scientist)
-                        __instance.TaskPanel.taskText.text =
-                            __instance.TaskPanel.taskText.text.Substring(0, __instance.TaskPanel.taskText.text.IndexOf("Scientist Hint") - 1);
+                        taskText.text = DillyzUtil.SafeSubString(taskText.text, 0, taskText.text.IndexOf("Scientist Hint") - 1);
                     else if (PlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.Engineer)
-                        __instance.TaskPanel.taskText.text =
-                            __instance.TaskPanel.taskText.text.Substring(0, __instance.TaskPanel.taskText.text.IndexOf("Engineer Hint") - 1);
+                        taskText.text = DillyzUtil.SafeSubString(taskText.text, 0, taskText.text.IndexOf("Engineer Hint") - 1);
                     else if (PlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.GuardianAngel)
-                        __instance.TaskPanel.taskText.text =
-                            __instance.TaskPanel.taskText.text.Substring(0, __instance.TaskPanel.taskText.text.IndexOf("Guardian Angel") - 1);
+                        taskText.text = DillyzUtil.SafeSubString(taskText.text, 0, taskText.text.IndexOf("Guardian Angel") - 1);
 
-                    __instance.TaskPanel.taskText.text += intendedString;
+                    taskText.text += intendedString;
                 }
             }
 
