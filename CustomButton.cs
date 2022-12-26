@@ -144,14 +144,13 @@ namespace DillyzRoleApi_Rewritten
                 SetTarget(DillyzUtil.getClosestPlayer(PlayerControl.LocalPlayer, this.buttonData.rolesCantTarget,
                         GameOptionsData.KillDistances[GameOptionsManager.Instance.currentNormalGameOptions.KillDistance], !this.buttonData.buttonTargetsGhosts,
                         this.buttonData.canTargetSelf));
+                return;
             }
+
+            if ((timeRemaining < 0 || this.buttonData.cooldown == 0) && !PlayerControl.LocalPlayer.inVent)
+                this.killButton.SetEnabled();
             else
-            {
-                if (timeRemaining < 0 || this.buttonData.cooldown == 0)
-                    this.killButton.SetEnabled();
-                else
-                    this.killButton.SetDisabled();
-            }
+                this.killButton.SetDisabled();
         }
 
         public bool CanUse()
