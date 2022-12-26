@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using static DillyzRoleApi_Rewritten.Il2CppItemAttribute;
 
 namespace DillyzRoleApi_Rewritten
 {
@@ -44,10 +45,24 @@ namespace DillyzRoleApi_Rewritten
                 LobbyConfigManager.UpdateAdvancedRoleValues();
                 LobbyConfigManager.UpdateRoleValues();
 
+                // send mods
+                List<PluginBuildInfo> allPluginInfos = DillyzRoleApiMain.pluginData;
+
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.ModCheck, Hazel.SendOption.None, -1);
+                writer.Write(allPluginInfos.Count - 1);
+                foreach (PluginBuildInfo plugin in allPluginInfos)
+                {
+                    writer.Write(plugin.Name);
+                    writer.Write(plugin.Version);
+                    writer.Write(plugin.Id);
+                }
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+
+                // send roles
                 List<string> allRoles = CustomRole.allRoleNames;
 
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.RoleCheck, Hazel.SendOption.None, -1);
-                writer.Write(CustomRole.allRoleNames.Count);
+                writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.RoleCheck, Hazel.SendOption.None, -1);
+                writer.Write(allRoles.Count);
                 foreach (string str in allRoles)
                     writer.Write(str);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);

@@ -38,6 +38,8 @@ namespace DillyzRoleApi_Rewritten
         public static string BEPINEX_CONFIG_FOLDER => BepInEx.Paths.BepInExConfigPath.Replace("BepInEx.cfg","");
 
         public static DillyzRoleApiMain Instance;
+        
+        public static List<PluginBuildInfo> pluginData = new List<PluginBuildInfo>();
 
         // https://docs.bepinex.dev/v5.4.21/articles/dev_guide/plugin_tutorial/4_configuration.html
         public ConfigEntry<bool> enableDebugHitman;
@@ -61,6 +63,7 @@ namespace DillyzRoleApi_Rewritten
             }));
 
             LobbyConfigManager.Load();
+            DillyzRoleApiMain.pluginData.Add(new PluginBuildInfo(MOD_NAME, MOD_VERSION, MOD_ID));
 
             if (enableDebugHitman.Value) {
                 Log.LogInfo("Adding a Hitman!");

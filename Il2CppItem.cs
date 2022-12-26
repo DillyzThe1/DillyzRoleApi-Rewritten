@@ -8,6 +8,7 @@ using BepInEx;
 using BepInEx.IL2CPP;
 using HarmonyLib;
 using UnhollowerRuntimeLib;
+using UnityEngine.Networking.Types;
 
 namespace DillyzRoleApi_Rewritten
 {
@@ -37,7 +38,7 @@ namespace DillyzRoleApi_Rewritten
             try
             {
                 RegisterTypeOptions options = new RegisterTypeOptions() { Interfaces = interfaces };
-                DillyzRoleApiMain.Instance.Log.LogInfo($"Registering Class {type.FullDescription()}");
+                //DillyzRoleApiMain.Instance.Log.LogInfo($"Registering Class {type.FullDescription()}");
                 ClassInjector.RegisterTypeInIl2Cpp(type, options);
             }
             catch (Exception e) {
@@ -49,7 +50,7 @@ namespace DillyzRoleApi_Rewritten
         public class IL2CPPChainloaderPatch {
             public static void Postfix(IL2CPPChainloaderPatch __instance, PluginInfo pluginInfo, Assembly pluginAssembly)
             {
-                DillyzRoleApiMain.Instance.Log.LogInfo("Loading plugin " + pluginInfo.TypeName);
+                DillyzRoleApiMain.pluginData.Add(new PluginBuildInfo(pluginInfo.Metadata.Name, pluginInfo.Metadata.Version.ToString(), pluginInfo.Metadata.GUID));
                 Reg(pluginAssembly); 
             }
 
@@ -59,9 +60,13 @@ namespace DillyzRoleApi_Rewritten
                     return;
                 _registeredAssemblies.Add(pluginAssembly);
 
+                //DillyzRoleApiMain.Instance.Log.LogInfo("Loading " + pluginAssembly.GetName().Name + " v" + pluginAssembly.GetName().Version);
+
+                DillyzRoleApiMain.Instance.Log.LogInfo("-- FINDING ASSETS IN " + pluginAssembly.GetName().Name + " --");
                 List<string> assetNames = pluginAssembly.GetManifestResourceNames().ToArray().ToList();
                 foreach (string asset in assetNames)
                     DillyzRoleApiMain.Instance.Log.LogInfo("Asset Found: " + asset);
+                DillyzRoleApiMain.Instance.Log.LogInfo("-- FOUND ASSETS IN " + pluginAssembly.GetName().Name + " --");
 
                 foreach (Type type in pluginAssembly.GetTypes())
                 {
@@ -69,6 +74,18 @@ namespace DillyzRoleApi_Rewritten
                     if (attribute != null)
                         TypeReg(type, attribute.Interfaces);
                 }
+            }
+        }
+
+        public class PluginBuildInfo {
+            public string Name;
+            public string Version;
+            public string Id;
+
+            public PluginBuildInfo(string Name, string Version, string Id) { 
+                this.Name = Name;
+                this.Version = Version;
+                this.Id = Id;
             }
         }
     }

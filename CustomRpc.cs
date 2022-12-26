@@ -8,6 +8,7 @@ using HarmonyLib;
 using Hazel;
 using Il2CppSystem.Text.Json;
 using Sentry;
+using static DillyzRoleApi_Rewritten.Il2CppItemAttribute;
 
 namespace DillyzRoleApi_Rewritten
 {
@@ -19,6 +20,7 @@ namespace DillyzRoleApi_Rewritten
         Assassinate = 103,      // Custom-made assassination.
         SetSettings = 104,      // Setting the settings sets the setting settings.
         RoleCheck = 105,        // A role check for me to do. If you're missing any roles or have too many, you're kicked out.
+        ModCheck = 106,         // A mod check for me to do. Technically, this is called before role check. 🤓
         CustomRPCCall = 110     // Available spaces for custom RPC. Register your own with DillyzUtil.regRpcCallback("RpcName", delegate(MessageReader reader) {});
     }
 
@@ -224,6 +226,95 @@ namespace DillyzRoleApi_Rewritten
                         AmongUsClient.Instance.HandleDisconnect(AmongUsClient.Instance.LastDisconnectReason, AmongUsClient.Instance.LastCustomDisconnect);
                         return;
                     }
+
+                    break;
+                case (byte)CustomRpc.ModCheck:
+                    if (AmongUsClient.Instance.AmHost)
+                        return;
+
+                    List<PluginBuildInfo> hostPlugins = new List<PluginBuildInfo>();
+
+                    int pluginsToFind = reader.ReadInt32();
+                    for (int i = 0; i < pluginsToFind; i++)
+                        hostPlugins.Add(new PluginBuildInfo(reader.ReadString(), reader.ReadString(), reader.ReadString()));
+
+                    List<PluginBuildInfo> missingPlugins = new List<PluginBuildInfo>();
+                    List<PluginBuildInfo> extraPlugins = new List<PluginBuildInfo>();
+
+                    foreach (PluginBuildInfo plugin in hostPlugins)
+                    {
+                        bool found = false;
+                        foreach (PluginBuildInfo plugin2 in DillyzRoleApiMain.pluginData)
+                            if (plugin2.Name == plugin.Name && plugin2.Version == plugin.Version && plugin2.Id == plugin.Id)
+                                found = true;
+
+                        if (!found && !plugin.Name.Contains("Unity") && !plugin.Name.Contains("Explorer"))
+                            missingPlugins.Add(plugin);
+                    }
+
+                    foreach (PluginBuildInfo plugin in DillyzRoleApiMain.pluginData)
+                    {
+                        bool found = false;
+                        foreach (PluginBuildInfo plugin2 in hostPlugins)
+                            if (plugin2.Name == plugin.Name && plugin2.Version == plugin.Version && plugin2.Id == plugin.Id)
+                                found = true;
+
+                        if (!found && !plugin.Name.Contains("Unity") && !plugin.Name.Contains("Explorer"))
+                            extraPlugins.Add(plugin);
+                    }
+
+                    bool missedMods = missingPlugins.Count != 0, moreMods = extraPlugins.Count != 0;
+
+                    if (!missedMods && !moreMods)
+                        return;
+                    AmongUsClient.Instance.LastDisconnectReason = DisconnectReasons.Custom;
+
+
+                    if (missedMods)
+                    {
+                        foreach (PluginBuildInfo plugin in missingPlugins)
+                            switch (missingPlugins.Count)
+                            {
+                                case 1:
+                                    AmongUsClient.Instance.LastCustomDisconnect = "<b><#FF0000>Missing</color> mod:</b>\n";
+                                    AmongUsClient.Instance.LastCustomDisconnect += $"{missingPlugins[0].Name} (v{missingPlugins[0].Version}).";
+                                    break;
+                                case 2:
+                                    AmongUsClient.Instance.LastCustomDisconnect = "<b><#FF0000>Missing</color> mods:</b>\n";
+                                    AmongUsClient.Instance.LastCustomDisconnect += $"{missingPlugins[0].Name} (v{missingPlugins[0].Version}) & {missingPlugins[1].Name} (v{missingPlugins[1].Version}).";
+                                    break;
+                                default:
+                                    AmongUsClient.Instance.LastCustomDisconnect = "<b><#FF0000>Missing</color> mods:</b>\n";
+                                    for (int i = 0; i < missingPlugins.Count; i++)
+                                        AmongUsClient.Instance.LastCustomDisconnect += (i == missingPlugins.Count - 1) ? $"& {missingPlugins[i].Name} (v{missingPlugins[i].Version})." : $"{missingPlugins[i].Name} (v{missingPlugins[i].Version}), ";
+                                    break;
+                            }
+
+                        AmongUsClient.Instance.HandleDisconnect(AmongUsClient.Instance.LastDisconnectReason, AmongUsClient.Instance.LastCustomDisconnect);
+                        return;
+                    }
+
+
+                    foreach (PluginBuildInfo plugin in extraPlugins)
+                        switch (extraPlugins.Count)
+                        {
+                            case 1:
+                                AmongUsClient.Instance.LastCustomDisconnect = "<b><#6400FF>Extra</color> mod:</b>\n";
+                                AmongUsClient.Instance.LastCustomDisconnect += $"{extraPlugins[0].Name} (v{extraPlugins[0].Version}).";
+                                break;
+                            case 2:
+                                AmongUsClient.Instance.LastCustomDisconnect = "<b><#6400FF>Extra</color> mods:</b>\n";
+                                AmongUsClient.Instance.LastCustomDisconnect += $"{extraPlugins[0].Name} (v{extraPlugins[0].Version}) & {extraPlugins[1].Name} (v{extraPlugins[1].Version}).";
+                                break;
+                            default:
+                                AmongUsClient.Instance.LastCustomDisconnect = "<b><#6400FF>Extra</color> mods:</b>\n";
+                                for (int i = 0; i < extraPlugins.Count; i++)
+                                    AmongUsClient.Instance.LastCustomDisconnect += (i == extraPlugins.Count - 1) ? $"& {extraPlugins[i].Name} (v{extraPlugins[i].Version})." : $"{extraPlugins[i].Name} (v{extraPlugins[i].Version}), ";
+                                break;
+                        }
+
+                    AmongUsClient.Instance.HandleDisconnect(AmongUsClient.Instance.LastDisconnectReason, AmongUsClient.Instance.LastCustomDisconnect);
+
 
                     break;
                 case (byte)CustomRpc.CustomRPCCall:
