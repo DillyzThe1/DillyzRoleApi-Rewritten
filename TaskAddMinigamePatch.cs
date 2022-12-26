@@ -82,8 +82,7 @@ namespace DillyzRoleApi_Rewritten
                         taskbutton.Overlay.gameObject.SetActive(true);
                     }
 
-                    taskbutton.Button.OnMouseOut.AddListener((UnityAction)callback2);
-                    void callback2() => taskbutton.FileImage.color = role.roleColor;
+                    taskbutton.RolloverHandler.OutColor = role.roleColor;
                     taskbutton.Overlay.enabled = true;
                     taskbutton.Overlay.gameObject.SetActive(false);
 
@@ -137,8 +136,7 @@ namespace DillyzRoleApi_Rewritten
                         break;
                 }
 
-                taskadd.Button.OnMouseOut.AddListener((UnityAction)callback2);
-                void callback2() => taskadd.FileImage.color = newColor;
+                taskadd.RolloverHandler.OutColor = newColor;
                 taskadd.FileImage.color = newColor;
                 return;
             }
