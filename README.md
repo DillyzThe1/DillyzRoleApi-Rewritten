@@ -14,12 +14,6 @@ Boot up the game using the exe in the Among Us clone.
 Currently, the only rolepackage is just the ClassicRolePackage, which is included with the BepInExBundle.<br>
 You may find the source code of the ClassicRolePackage isolated <a href="https://github.com/DillyzThe1/ClassicRolePackage">here</a>.
 
-# Modding with the API
-*WARNING: THE DOCUMENTATION IS UNFINISHED AND ONLY CONTAINS UNFINISHED ROLE EXAMPLES AND UTILITY DOCUMENTATION.*<br>
-*PLEASE USE THE DISCORD LINK ON THE WIKI PAGE FOR MORE HELP!*<br>
-<br>
-[[DillyzRoleApi Wiki]](https://github.com/DillyzThe1/DillyzRoleApi-Rewritten/wiki)
-
 ## All Versions
 | Among Us<br>Version | DillyzRoleApi<br>Version | BepInEx + DillyzRoleApi<br>+ ClassicRolePack<br>Bundle |  BepInEx<br>Build  | Standalone DLL |
 |------------------|-----------------------|--------------------------------------------------|-----------------|----------------|
@@ -31,6 +25,12 @@ You may find the source code of the ClassicRolePackage isolated <a href="https:/
 | 2021.4.12 & 2021.4.14 | v1.2.0 | [[Download]](https://github.com/DillyzThe1/DillyzRoleApi/releases/download/1.2.0/DillyzRoleAPI+BepInEx+Reactor.1.2.0.zip) | Unknown | [[Download]](https://github.com/DillyzThe1/DillyzRoleApi/releases/download/1.2.0/DillyzRolesAPI-2021.4.12s.dll) |
 | 2021.4.12 & 2021.4.14 | v1.1.0 | [[Download]](https://github.com/DillyzThe1/DillyzRoleApi/releases/download/1.1.0/DillyzRoleAPI+BepInEx+Reactor.zip) | Unknown | [[Download]](https://github.com/DillyzThe1/DillyzRoleApi/releases/download/1.1.0/DillyzRolesAPI-2021.4.12s.dll) |
 | 2021.4.2 | v1.0.0 | Unavailable | Unknown | Unavailable |
+
+# Modding with the API
+*WARNING: THE DOCUMENTATION IS UNFINISHED AND ONLY CONTAINS UNFINISHED ROLE EXAMPLES AND UTILITY DOCUMENTATION.*<br>
+*PLEASE USE THE DISCORD LINK ON THE WIKI PAGE FOR MORE HELP!*<br>
+<br>
+[[DillyzRoleApi Wiki]](https://github.com/DillyzThe1/DillyzRoleApi-Rewritten/wiki)
 
 # Disclaimer
 This mod is not affiliated with Among Us or Innersloth LLC, and the content contained therein is not endorsed or otherwise sponsored by Innersloth LLC.<br>
