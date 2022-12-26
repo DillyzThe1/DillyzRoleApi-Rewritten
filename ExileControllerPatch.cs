@@ -21,10 +21,10 @@ namespace DillyzRoleApi_Rewritten
             if (role == null || !GameOptionsManager.Instance.currentNormalGameOptions.ConfirmImpostor)
                 return;
 
-            __instance.completeString = role.ejectionText.Replace("[0]", exiled.PlayerName);
-
             if (role.curActive > 1)
-                __instance.completeString = __instance.completeString.Replace("The", role.a_or_an).Replace("the", role.a_or_an);
+                __instance.completeString = role.ejectionText.Replace("The", role.a_or_an).Replace("the", role.a_or_an).Replace("[0]", exiled.PlayerName);
+            else
+                __instance.completeString = role.ejectionText.Replace("[0]", exiled.PlayerName);
         }
     }
 }
