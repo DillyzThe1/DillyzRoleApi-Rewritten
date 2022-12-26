@@ -248,7 +248,7 @@ namespace DillyzRoleApi_Rewritten
                             if (plugin2.Name == plugin.Name && plugin2.Version == plugin.Version && plugin2.Id == plugin.Id)
                                 found = true;
 
-                        if (!found && !plugin.Name.Contains("Unity") && !plugin.Name.Contains("Explorer"))
+                        if (!found && plugin.Name != "UnityExplorer")
                             missingPlugins.Add(plugin);
                     }
 
@@ -259,7 +259,7 @@ namespace DillyzRoleApi_Rewritten
                             if (plugin2.Name == plugin.Name && plugin2.Version == plugin.Version && plugin2.Id == plugin.Id)
                                 found = true;
 
-                        if (!found && !plugin.Name.Contains("Unity") && !plugin.Name.Contains("Explorer"))
+                        if (!found && plugin.Name != "UnityExplorer")
                             extraPlugins.Add(plugin);
                     }
 
