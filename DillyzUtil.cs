@@ -341,6 +341,43 @@ namespace DillyzRoleApi_Rewritten
             return null;
         }
 
+        public static AudioClip getSound(Assembly assembly, string soundPath, string soundId) {
+            if (!soundPath.EndsWith(".wav"))
+            {
+                DillyzRoleApiMain.Instance.Log.LogError("Only .wav files are supported for sound!");
+                return null;
+            }
+
+            Stream myStream = assembly.GetManifestResourceStream(soundPath);
+            if (myStream != null)
+            {
+                myStream.Position = 0;
+                byte[] audioBytes = new byte[myStream.Length];
+                for (int i = 0; i < myStream.Length;)
+                    i += myStream.Read(audioBytes, i, Convert.ToInt32(myStream.Length) - i);
+
+                float[] soundFloats = new float[audioBytes.Length / 4];
+                for (int i = 0; i < soundFloats.Length; i++) {
+                    if (BitConverter.IsLittleEndian)
+                        Array.Reverse(audioBytes, i*4, 4);
+                    soundFloats[i] = BitConverter.ToSingle(audioBytes, i * 4) / 0x80000000;
+                }
+
+                int channels = audioBytes[22];
+                int freq = 0;
+                for (int i = 0; i < 4; i++)
+                    freq |= ((int)audioBytes[24 + i]) << (i * 8);
+
+                AudioClip clip = AudioClip.Create(soundId, soundFloats.Length, Math.Min(Math.Max(channels, 1), 2), freq < 1000 ? 48000 : freq, false, false);
+                clip.SetData(soundFloats, 0);
+                return clip;
+            }
+            else
+                DillyzRoleApiMain.Instance.Log.LogError("Sound file at \"" + soundPath + "\" could not be found!");
+
+            return null;
+        }
+
         public static void AddRpcCall(string rpcName, Action<MessageReader> callback) {
             DillyzRoleApiMain.Instance.Log.LogInfo("Added RPC callback for " + rpcName + ".");
             CustomRpcHandler.customRpcCallbacks.Add(new CustomRpcCallback(rpcName, callback));
