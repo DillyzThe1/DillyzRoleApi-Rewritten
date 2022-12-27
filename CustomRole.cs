@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Hazel;
-using Il2CppSystem.Xml;
 using UnityEngine;
 
 // the idea here is that you'll instiate this class for your own purposes

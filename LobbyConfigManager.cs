@@ -1,14 +1,5 @@
-﻿
-using Hazel;
-using Il2CppSystem.Text.Json;
-using Sentry.Protocol.Envelopes;
-using System;
+﻿using Hazel;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
 
 namespace DillyzRoleApi_Rewritten
 {

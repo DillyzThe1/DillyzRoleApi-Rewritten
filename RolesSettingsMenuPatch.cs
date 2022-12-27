@@ -1,19 +1,9 @@
 ﻿using HarmonyLib;
 using Hazel;
-using Il2CppSystem;
-using Il2CppSystem.Diagnostics;
-using Sentry;
-using Steamworks;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
-using static DillyzRoleApi_Rewritten.RoleManagerPatch;
-using static Il2CppSystem.Net.TimerThread;
-using static UnityEngine.GraphicsBuffer;
 
 namespace DillyzRoleApi_Rewritten
 {
@@ -49,7 +39,7 @@ namespace DillyzRoleApi_Rewritten
 
             foreach (CustomRole role in CustomRole.allRoles)
             {
-                if (role.decoy)
+                if (role.decoy || !role.hasSettings)
                     continue;
                 ymultlol = 0f;
                 RolesSettingsMenuPatch.cachedsprites[role.name] = role.settingsSprite;

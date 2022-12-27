@@ -1,17 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using HarmonyLib;
 using TMPro;
 using UnityEngine;
 using AmongUs.GameOptions;
-using InnerNet;
-using static Rewired.ButtonLoopSet;
-using System.IO;
-using System.Reflection;
-using Sentry.Internal.Extensions;
 
 namespace DillyzRoleApi_Rewritten
 {

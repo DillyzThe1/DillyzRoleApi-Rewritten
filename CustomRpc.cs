@@ -1,13 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Cpp2IL.Core.Analysis.ResultModels;
 using HarmonyLib;
 using Hazel;
-using Il2CppSystem.Text.Json;
-using Sentry;
 using static DillyzRoleApi_Rewritten.Il2CppItemAttribute;
 
 namespace DillyzRoleApi_Rewritten

@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.IL2CPP;
 using HarmonyLib;
-using Il2CppSystem;
-using Il2CppSystem.Net;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using static DillyzRoleApi_Rewritten.Il2CppItemAttribute;
