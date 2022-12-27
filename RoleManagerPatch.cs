@@ -55,11 +55,16 @@ namespace DillyzRoleApi_Rewritten
                             continue;
                         }
 
+                        if (role.setting_chancePerGame == 0) {
+                            DillyzRoleApiMain.Instance.Log.LogInfo($"{role.name} will NEVER spawn.");
+                            return;
+                        }
+
                         if (role.setting_chancePerGame != 100)
                         {
                             int rolecahcnde = UnityEngine.Random.Range(0, 100);
-                            DillyzRoleApiMain.Instance.Log.LogInfo($"{role.name} had a {rolecahcnde}% chance this time. It requires {role.setting_chancePerGame}% or more.");
-                            if (role.setting_chancePerGame > rolecahcnde)
+                            DillyzRoleApiMain.Instance.Log.LogInfo($"{role.name} had a {rolecahcnde}% chance this time. It requires {role.setting_chancePerGame}% or LESS.");
+                            if (role.setting_chancePerGame < rolecahcnde)
                                 continue;
                         }
                         else
