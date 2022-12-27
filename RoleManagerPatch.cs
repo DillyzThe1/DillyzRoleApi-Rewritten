@@ -50,7 +50,10 @@ namespace DillyzRoleApi_Rewritten
                     for (int i = 0; i < role.setting_countPerGame; i++)
                     {
                         if (availablePlayers.Count == 0)
+                        {
+                            DillyzRoleApiMain.Instance.Log.LogInfo($"Nobody was left to assign ${role.name} to.");
                             continue;
+                        }
 
                         if (role.setting_chancePerGame != 100)
                         {
