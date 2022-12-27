@@ -4,15 +4,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using AmongUs.GameOptions;
 using BepInEx.IL2CPP.Utils;
-using GooglePlayGames.BasicApi.SavedGame;
 using Hazel;
-using System.Collections.Generic;
-using MS.Internal.Xml.XPath;
 using UnityEngine;
 
 namespace DillyzRoleApi_Rewritten
@@ -304,6 +298,15 @@ namespace DillyzRoleApi_Rewritten
             CustomRole.setRoleName(target.PlayerId, "");
 
             yield break;
+        }
+
+        public static void RpcSetRole(PlayerControl player, string role) {
+            CustomRole.setRoleName(player.PlayerId, role);
+
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.SetRole, Hazel.SendOption.None, -1);
+            writer.Write(player.PlayerId);
+            writer.Write(role);
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
         }
 
         public static double getDist(Vector2 p1, Vector2 p2)
