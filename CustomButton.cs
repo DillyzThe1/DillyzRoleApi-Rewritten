@@ -158,7 +158,7 @@ namespace DillyzRoleApi_Rewritten
                 return;
             }
 
-            if ((timeRemaining < 0 || this.buttonData.cooldown == 0) && !PlayerControl.LocalPlayer.inVent)
+            if ((timeRemaining <= 0 || this.buttonData.cooldown == 0) && !PlayerControl.LocalPlayer.inVent)
                 this.killButton.SetEnabled();
             else
                 this.killButton.SetDisabled();
