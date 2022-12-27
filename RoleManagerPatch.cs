@@ -55,7 +55,7 @@ namespace DillyzRoleApi_Rewritten
                         if (role.setting_chancePerGame != 100)
                         {
                             int rolecahcnde = UnityEngine.Random.Range(0, 100);
-                            DillyzRoleApiMain.Instance.Log.LogInfo($"{role.name} had a {rolecahcnde}% chance this time.");
+                            DillyzRoleApiMain.Instance.Log.LogInfo($"{role.name} had a {rolecahcnde}% chance this time. It requires {role.setting_chancePerGame}% or more.");
                             if (role.setting_chancePerGame > rolecahcnde)
                                 continue;
                         }
