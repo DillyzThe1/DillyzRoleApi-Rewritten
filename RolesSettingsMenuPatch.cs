@@ -340,7 +340,7 @@ namespace DillyzRoleApi_Rewritten
             foreach (CustomRole role in CustomRole.allRoles)
             {
                 if (!role.hasSettings)
-                    return;
+                    continue;
 
                 GameObject settingParent = new GameObject();
                 settingParent.transform.parent = ogSetting.transform.parent;
