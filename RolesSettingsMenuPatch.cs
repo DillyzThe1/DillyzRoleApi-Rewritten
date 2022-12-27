@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using Hazel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -337,6 +338,16 @@ namespace DillyzRoleApi_Rewritten
                 return distBet2 + lastSetting.transform.position.y + (distBet2*rolesThatUsedY);
             }
 
+            RolesSettingsMenuPatch_Update.xOg = ogSetting.gameObject.transform.position.x;
+            RolesSettingsMenuPatch_Update.yOg = ogSetting.gameObject.transform.position.y;
+            RolesSettingsMenuPatch_Update.zOg = ogSetting.gameObject.transform.position.z;
+            RolesSettingsMenuPatch_Update.ySpace = otherSetting.gameObject.transform.position.y - ogSetting.gameObject.transform.position.y;
+
+            RolesSettingsMenuPatch_Update.objsToWorryAbout.Clear();
+
+            foreach (RoleOptionSetting setting in __instance.AllRoleSettings)
+                RolesSettingsMenuPatch_Update.objsToWorryAbout.Add(setting.gameObject);
+
             foreach (CustomRole role in CustomRole.allRoles)
             {
                 if (!role.hasSettings)
@@ -347,6 +358,7 @@ namespace DillyzRoleApi_Rewritten
                 settingParent.name = role.name;
                 settingParent.layer = ogSetting.gameObject.layer;
 
+                RolesSettingsMenuPatch_Update.objsToWorryAbout.Add(settingParent);
 
                 GameObject og_bg = ogSetting.gameObject.transform.Find("Background").gameObject;
                 GameObject bg = GameObject.Instantiate(og_bg);
@@ -487,6 +499,37 @@ namespace DillyzRoleApi_Rewritten
 
                 rolesThatUsedY++;
                 settingParent.transform.localScale = Vector3.one;
+            }
+        }
+
+
+
+        [HarmonyPatch(typeof(RolesSettingsMenu), nameof(RolesSettingsMenu.Update))]
+        public class RolesSettingsMenuPatch_Update
+        {
+            public static float xOg = 0f;
+            public static float yOg = 0f;
+            public static float zOg = 0f;
+            public static float ySpace = 0f;
+            public static float yOff = 0f;
+
+            public static List<GameObject> objsToWorryAbout = new List<GameObject>();
+            public static void Postfix(RolesSettingsMenu __instance) {
+                //DillyzRoleApiMain.Instance.Log.LogInfo("gary come home " + __instance.transform.position.y);
+                yOff -= Input.mouseScrollDelta.y/5f;
+
+                if (yOff <= 0)
+                    yOff = 0;
+                if (objsToWorryAbout.Count < 9)
+                    yOff = 0;
+                //else if (yOff >= Math.Max(objsToWorryAbout.Count - 8,0) * ySpace)
+                //    yOff = Math.Max(objsToWorryAbout.Count - 8, 0) * ySpace;
+
+                for (int i = 0; i < objsToWorryAbout.Count; i++)
+                {
+                    Transform t = objsToWorryAbout[i].transform;
+                    t.position = new Vector3(t.position.x, yOg + ySpace * i + yOff, t.position.z);
+                }
             }
         }
     }
