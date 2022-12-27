@@ -341,29 +341,89 @@ namespace DillyzRoleApi_Rewritten
             return null;
         }
 
-        public static AudioClip getSound(Assembly assembly, string soundPath, string soundId, int freq) {
+        [Obsolete("ok")]
+        public static AudioClip getSound(Assembly assembly, string soundPath, string soundId, int freq)
+        {
+            return getSound(assembly, soundPath, soundId, freq);
+        }
+        public static AudioClip getSound(Assembly assembly, string soundPath, string soundId) {
             if (!soundPath.EndsWith(".wav"))
             {
                 DillyzRoleApiMain.Instance.Log.LogError("Only .wav files are supported for sound!");
                 return null;
             }
+            DillyzRoleApiMain.Instance.Log.LogInfo("wav");
 
             Stream myStream = assembly.GetManifestResourceStream(soundPath);
             if (myStream != null)
             {
+                DillyzRoleApiMain.Instance.Log.LogInfo("wav1");
                 myStream.Position = 0;
                 byte[] audioBytes = new byte[myStream.Length];
                 for (int i = 0; i < myStream.Length;)
                     i += myStream.Read(audioBytes, i, Convert.ToInt32(myStream.Length) - i);
 
-                float[] soundFloats = new float[audioBytes.Length / 4];
-                for (int i = 0; i < soundFloats.Length; i++) {
-                    if (BitConverter.IsLittleEndian)
-                        Array.Reverse(audioBytes, i*4, 4);
-                    soundFloats[i] = BitConverter.ToSingle(audioBytes, i * 4) / 0x80000000;
+                DillyzRoleApiMain.Instance.Log.LogInfo("wav2");
+                // https://sites.google.com/site/musicgapi/technical-documents/wav-file-format
+                UInt16 format = BitConverter.ToUInt16(audioBytes, 20);
+                if (format == 1 || format == 65534)
+                {
+                    DillyzRoleApiMain.Instance.Log.LogError("Sound file at \"" + soundPath + "\" is of wrong format! (foramt " + format + ")");
+                    return null;
+                }
+                DillyzRoleApiMain.Instance.Log.LogInfo("wav3");
+                UInt16 depth = BitConverter.ToUInt16(audioBytes, 52);
+
+                int c1 = BitConverter.ToInt32(audioBytes, 16);
+                int h = 16 + 4 + c1 + 4;
+                int samples = (int)BitConverter.ToInt32(audioBytes, 60);
+                DillyzRoleApiMain.Instance.Log.LogInfo(samples);
+
+                for (int a = 0; a < 100; a++)
+                {
+                    DillyzRoleApiMain.Instance.Log.LogInfo(a + " -> " + ((int)BitConverter.ToInt32(audioBytes, a)) + " || " + ((int)BitConverter.ToInt16(audioBytes, a)) +
+                    " || " + ((int)BitConverter.ToUInt32(audioBytes, a)) + " || " + ((int)BitConverter.ToUInt16(audioBytes, a)));
                 }
 
-                AudioClip clip = AudioClip.Create(soundId, soundFloats.Length, 1, freq, false, false);
+                DillyzRoleApiMain.Instance.Log.LogInfo("wav4" + depth);
+                float[] soundFloats;
+
+                int s = 0, h2 = 0, f = 0, cs = 0, p = 0;
+                switch (depth) {
+                    case 16:
+                        DillyzRoleApiMain.Instance.Log.LogInfo("wav5");
+                        s = BitConverter.ToInt32(audioBytes, h);
+                        h2 = h + sizeof(int); 
+                        f = sizeof(Int16); 
+                        cs = s / f;
+                        p = 0;
+                        soundFloats = new float[cs];
+                        while (p < cs)
+                        {
+                            soundFloats[p] = (float)BitConverter.ToInt16(audioBytes, p * f + h2) / Int16.MaxValue;
+                            p++;
+                        }
+                        break;
+                    case 32:
+                        DillyzRoleApiMain.Instance.Log.LogInfo("wav5");
+                        s = BitConverter.ToInt32(audioBytes, h);
+                        h2 = h + sizeof(int); 
+                        f = sizeof(float); 
+                        cs = s / f; 
+                        p = 0;
+                        soundFloats = new float[cs];
+                        while (p < cs) {
+                            soundFloats[p] = (float)BitConverter.ToInt32(audioBytes, p * f + h2) / Int32.MaxValue;
+                            p++;
+                        }
+                        break;
+                    default:
+                        DillyzRoleApiMain.Instance.Log.LogError("Sound file \"" + soundPath + "\" is of unsupported depth! (" + depth + "bit)");
+                        return null;
+
+                }
+                DillyzRoleApiMain.Instance.Log.LogInfo("wav6");
+                AudioClip clip = AudioClip.Create(soundId, soundFloats.Length, (int)BitConverter.ToInt16(audioBytes, 58), samples, false);
                 clip.SetData(soundFloats, 0);
                 return clip;
             }
