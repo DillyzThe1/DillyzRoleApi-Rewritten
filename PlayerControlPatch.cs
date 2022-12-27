@@ -49,7 +49,7 @@ namespace DillyzRoleApi_Rewritten
                 List<PluginBuildInfo> allPluginInfos = DillyzRoleApiMain.pluginData;
 
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.ModCheck, Hazel.SendOption.None, -1);
-                writer.Write(allPluginInfos.Count - 1);
+                writer.Write(allPluginInfos.Count);
                 foreach (PluginBuildInfo plugin in allPluginInfos)
                 {
                     writer.Write(plugin.Name);
