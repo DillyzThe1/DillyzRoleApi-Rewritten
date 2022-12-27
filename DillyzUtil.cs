@@ -341,7 +341,7 @@ namespace DillyzRoleApi_Rewritten
             return null;
         }
 
-        public static AudioClip getSound(Assembly assembly, string soundPath, string soundId) {
+        public static AudioClip getSound(Assembly assembly, string soundPath, string soundId, int freq) {
             if (!soundPath.EndsWith(".wav"))
             {
                 DillyzRoleApiMain.Instance.Log.LogError("Only .wav files are supported for sound!");
@@ -363,12 +363,7 @@ namespace DillyzRoleApi_Rewritten
                     soundFloats[i] = BitConverter.ToSingle(audioBytes, i * 4) / 0x80000000;
                 }
 
-                int channels = audioBytes[22];
-                int freq = 0;
-                for (int i = 0; i < 4; i++)
-                    freq |= ((int)audioBytes[24 + i]) << (i * 8);
-
-                AudioClip clip = AudioClip.Create(soundId, soundFloats.Length, Math.Min(Math.Max(channels, 1), 2), freq < 1000 ? 48000 : freq, false, false);
+                AudioClip clip = AudioClip.Create(soundId, soundFloats.Length, 1, freq, false, false);
                 clip.SetData(soundFloats, 0);
                 return clip;
             }
