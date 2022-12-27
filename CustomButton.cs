@@ -106,6 +106,16 @@ namespace DillyzRoleApi_Rewritten
         {
             this._canUse = canUse;
         }
+
+        // USE TIMER FUNCS AND VARS!!!!!
+        public Action<KillButtonCustomData> useTimerCallback;
+        public float useTime = 0f;
+
+        public void SetUseTimeButton(float useTime, Action<KillButtonCustomData> useTimerCallback) {
+            this.useTime = Math.Abs(useTime);
+            this.useTimerCallback = useTimerCallback;
+        }
+        // end user time stuff
     }
 
     // used to attach data to kill button clones
@@ -119,6 +129,8 @@ namespace DillyzRoleApi_Rewritten
         public bool blockingButton = false;
 
         public bool isSetup = false;
+
+        public bool useTimerMode = false;
 
         public void Setup(CustomButton buttonData, KillButton killButton)
         {
@@ -138,6 +150,27 @@ namespace DillyzRoleApi_Rewritten
 
             this.killButton.buttonLabelText.text = this.buttonData.buttonText;
             this.killButton.buttonLabelText.SetOutlineColor(this.buttonData.textOutlineColor);
+
+            if (useTimerMode) {
+                TimeSpan useTimeLeft = DateTime.UtcNow - lastUse;
+                int useTimeRemaining = (int)Math.Ceiling((double)new decimal(this.buttonData.useTime - useTimeLeft.TotalMilliseconds / 1000f));
+                this.killButton.SetCoolDown(useTimeRemaining, this.buttonData.useTime);
+                this.killButton.cooldownTimerText.color = Palette.AcceptedGreen;
+
+                if (useTimeRemaining > 0)
+                {
+                    if (this.buttonData.targetButton)
+                        SetTarget(null);
+                    this.killButton.SetDisabled();
+                    return;
+                }
+
+                if (buttonData.useTimerCallback != null)
+                    buttonData.useTimerCallback(this);
+                useTimerMode = false;
+                lastUse = DateTime.UtcNow;
+                killButton.cooldownTimerText.color = Palette.White;
+            }
 
             TimeSpan timeLeft = DateTime.UtcNow - lastUse;
             int timeRemaining = (int)Math.Ceiling((double)new decimal(maxCooldown - timeLeft.TotalMilliseconds / 1000f));

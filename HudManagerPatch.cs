@@ -161,6 +161,8 @@ namespace DillyzRoleApi_Rewritten
 
                     if (customKillControl.buttonData.targetButton)
                         customKillControl.SetTarget(null);
+
+                    customKillControl.useTimerMode = customKillControl.buttonData.useTime > 0f;
                 }
 
                 AllKillButtons.Add(customKillControl);
