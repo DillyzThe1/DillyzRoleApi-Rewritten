@@ -28,13 +28,16 @@ namespace DillyzRoleApi_Rewritten
                 // rng
                 Random roleRNG = new Random();
 
-                DillyzRoleApiMain.Instance.Log.LogInfo($"Right now, we've got {CustomRole.allRoles.Count} roles to assign.");
+                List<CustomRole> roles = CustomRole.allRoles;
+                DillyzRoleApiMain.Instance.Log.LogInfo($"Right now, we've got {roles.Count} roles to assign.");
                 // assign roles
-                foreach (CustomRole role in CustomRole.allRoles)
+                for (int r = 0; r < roles.Count; r++)
                 {
+                    CustomRole role = roles[r];
+                    DillyzRoleApiMain.Instance.Log.LogInfo($"{role.name} has nobody in it. (Is it a decoy? {role.decoy}.)");
+                    role.curActive = 0;
                     if (role.decoy)
                         continue;
-                    role.curActive = 0;
                     DillyzRoleApiMain.Instance.Log.LogInfo($"Let's check out {role.name}.");
                     List<PlayerControl> availablePlayers = PlayerControl.AllPlayerControls.ToArray().ToList();
                     availablePlayers.RemoveAll(x => !DillyzUtil.templateRole(x));
@@ -49,8 +52,15 @@ namespace DillyzRoleApi_Rewritten
                         if (availablePlayers.Count == 0)
                             continue;
 
-                        if (role.setting_chancePerGame != 100 && UnityEngine.Random.Range(0, 100) >= role.setting_chancePerGame)
-                            return;
+                        if (role.setting_chancePerGame != 100)
+                        {
+                            int rolecahcnde = UnityEngine.Random.Range(0, 100);
+                            DillyzRoleApiMain.Instance.Log.LogInfo($"{role.name} had a {rolecahcnde}% chance this time.");
+                            if (role.setting_chancePerGame > rolecahcnde)
+                                continue;
+                        }
+                        else
+                            DillyzRoleApiMain.Instance.Log.LogInfo($"{role.name} will always spawn.");
 
                         role.curActive++;
 
