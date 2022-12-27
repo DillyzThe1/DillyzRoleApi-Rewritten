@@ -46,6 +46,8 @@ namespace DillyzRoleApi_Rewritten
                 }
                 foreach (CustomRole role in CustomRole.allRoles)
                 {
+                    if (!role.hasSettings)
+                        return;
                     gstextalt.text += $"{role.name}: {role.setting_countPerGame} with {role.setting_chancePerGame}% Chance\n";
                 }
             }
