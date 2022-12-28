@@ -55,8 +55,11 @@ namespace DillyzRoleApi_Rewritten
             SceneManager.add_sceneLoaded((System.Action<Scene, LoadSceneMode>)((scene, loadscenemode) =>
             {
                 Log.LogInfo("this is so sad can we " + scene.name);
-                if (scene.name == "MainMenu") // :happyspongebob:
+                if (scene.name == "MainMenu")
+                {
                     ModManager.Instance.ShowModStamp();
+
+                }
             }));
 
             LobbyConfigManager.Load();

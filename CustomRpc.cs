@@ -239,10 +239,10 @@ namespace DillyzRoleApi_Rewritten
                     {
                         bool found = false;
                         foreach (PluginBuildInfo plugin2 in DillyzRoleApiMain.pluginData)
-                            if (plugin2.Name == plugin.Name && plugin2.Version == plugin.Version && plugin2.Id == plugin.Id)
+                            if (plugin2.Name.ToLower() == plugin.Name.ToLower() && plugin2.Version.ToLower() == plugin.Version.ToLower())// && plugin2.Id == plugin.Id)
                                 found = true;
 
-                        if (!found && plugin.Name != "UnityExplorer")
+                        if (!found && plugin.Name.ToLower() != "unityexplorer")
                             missingPlugins.Add(plugin);
                     }
 
@@ -250,10 +250,10 @@ namespace DillyzRoleApi_Rewritten
                     {
                         bool found = false;
                         foreach (PluginBuildInfo plugin2 in hostPlugins)
-                            if (plugin2.Name == plugin.Name && plugin2.Version == plugin.Version && plugin2.Id == plugin.Id)
+                            if (plugin2.Name.ToLower() == plugin.Name.ToLower() && plugin2.Version.ToLower() == plugin.Version.ToLower())// && plugin2.Id == plugin.Id)
                                 found = true;
 
-                        if (!found && plugin.Name != "UnityExplorer")
+                        if (!found && plugin.Name.ToLower() != "unityexplorer")
                             extraPlugins.Add(plugin);
                     }
 
