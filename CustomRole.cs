@@ -54,11 +54,11 @@ namespace DillyzRoleApi_Rewritten
                 if (HudManagerPatch.AllKillButtons != null) {
                     foreach (KillButtonCustomData button in HudManagerPatch.AllKillButtons)
                     {
+                        button.lastUse = DateTime.UtcNow;
                         if (button.useTimerMode && button.buttonData.allowedRoles.Contains(role))
                         {
                             button.useTimerMode = false;
                             button.killButton.cooldownTimerText.color = Palette.White;
-                            button.lastUse = DateTime.UtcNow;
                             if (button.buttonData.useTimerCallback != null)
                                 button.buttonData.useTimerCallback(button, true);
                         }
