@@ -121,6 +121,9 @@ namespace DillyzRoleApi_Rewritten
                     skipNextAssignment = false;
                 }
 
+                if (__instance.PlayerId == PlayerControl.LocalPlayer.PlayerId)
+                    DestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(false);
+
 
                 if (__instance.AmOwner)
                 {
