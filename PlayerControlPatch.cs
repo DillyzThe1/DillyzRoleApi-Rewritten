@@ -95,9 +95,10 @@ namespace DillyzRoleApi_Rewritten
                 __instance.cosmetics.PettingHand.StopPetting();
 
                 bool choseRole = false;
-                if (AmongUsClient.Instance.AmHost)
+                if (AmongUsClient.Instance.AmHost || DillyzUtil.InFreeplay())
                 {
                     CustomRole playerrole = CustomRole.getByName(DillyzUtil.getRoleName(__instance));
+                    DillyzRoleApiMain.Instance.Log.LogInfo("role null? " + (playerrole == null) + " | role to ghost? " + (playerrole != null ? playerrole.roletoGhostInto : "none"));
                     if (playerrole != null && playerrole.roletoGhostInto != "")
                     {
                         DillyzUtil.RpcSetRole(__instance, playerrole.roletoGhostInto);
@@ -106,7 +107,8 @@ namespace DillyzRoleApi_Rewritten
                     else
                         DillyzUtil.RpcSetRole(__instance, "");
                 }
-                GameManager.Instance.OnPlayerDeath(__instance, AmongUsClient.Instance.AmHost && !choseRole);
+                DillyzRoleApiMain.Instance.Log.LogInfo("chose role? " + choseRole);
+                GameManager.Instance.OnPlayerDeath(__instance, false);// (AmongUsClient.Instance.AmHost || DillyzUtil.InFreeplay()) && !choseRole);
 
 
                 if (__instance.AmOwner)
