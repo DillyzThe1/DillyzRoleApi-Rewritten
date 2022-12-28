@@ -27,16 +27,13 @@ namespace DillyzRoleApi_Rewritten
                 Random roleRNG = new Random();
 
                 List<CustomRole> roles = CustomRole.allRoles;
-                DillyzRoleApiMain.Instance.Log.LogInfo($"Right now, we've got {roles.Count} roles to assign.");
                 // assign roles
                 for (int r = 0; r < roles.Count; r++)
                 {
                     CustomRole role = roles[r];
-                    DillyzRoleApiMain.Instance.Log.LogInfo($"{role.name} has nobody in it. (Skip? {role.decoy || !role.roleSeleciton}.) (Ghost? {role.ghostRole})");
                     role.curActive = 0;
                     if (role.decoy || !role.roleSeleciton || role.ghostRole)
                         continue;
-                    DillyzRoleApiMain.Instance.Log.LogInfo($"Let's check out {role.name}.");
                     List<PlayerControl> availablePlayers = PlayerControl.AllPlayerControls.ToArray().ToList();
                     availablePlayers.RemoveAll(x => !DillyzUtil.templateRole(x));
 
@@ -48,25 +45,17 @@ namespace DillyzRoleApi_Rewritten
                     for (int i = 0; i < role.setting_countPerGame; i++)
                     {
                         if (availablePlayers.Count == 0)
-                        {
-                            DillyzRoleApiMain.Instance.Log.LogInfo($"Nobody was left to assign ${role.name} to.");
                             continue;
-                        }
 
-                        if (role.setting_chancePerGame == 0) {
-                            DillyzRoleApiMain.Instance.Log.LogInfo($"{role.name} will NEVER spawn.");
+                        if (role.setting_chancePerGame == 0)
                             return;
-                        }
 
                         if (role.setting_chancePerGame != 100)
                         {
                             int rolecahcnde = UnityEngine.Random.Range(0, 100);
-                            DillyzRoleApiMain.Instance.Log.LogInfo($"{role.name} had a {rolecahcnde}% chance this time. It requires {role.setting_chancePerGame}% or LESS.");
                             if (role.setting_chancePerGame < rolecahcnde)
                                 continue;
                         }
-                        else
-                            DillyzRoleApiMain.Instance.Log.LogInfo($"{role.name} will always spawn.");
 
                         role.curActive++;
 
@@ -80,8 +69,6 @@ namespace DillyzRoleApi_Rewritten
                             selectedPlayer.Data.RoleType = AmongUs.GameOptions.RoleTypes.Impostor;
                             selectedPlayer.Data.Role = new ImpostorRole();
                         }
-
-                        DillyzRoleApiMain.Instance.Log.LogInfo($"Hey! {selectedPlayer.name} is now the {role.name} of the game!");
 
                         // send role packet
                         writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.SetRole, Hazel.SendOption.None, -1);
