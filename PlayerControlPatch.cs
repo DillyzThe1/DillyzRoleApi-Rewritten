@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using Hazel;
 using System.Collections.Generic;
+using UnityEngine;
 using static DillyzRoleApi_Rewritten.Il2CppItemAttribute;
 
 namespace DillyzRoleApi_Rewritten
@@ -71,6 +72,49 @@ namespace DillyzRoleApi_Rewritten
                 ExileControllerPatch.initial_shifters = DillyzUtil.GetAllOfRole("ShapeShifter").Count;
                 ExileControllerPatch.initial_engineers = DillyzUtil.GetAllOfRole("Engineer").Count;
                 ExileControllerPatch.initial_scientists = DillyzUtil.GetAllOfRole("Scientist").Count;
+            }
+        }
+
+        [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Die))]
+        public class PlayerControlPlayer_Die
+        {
+            public static bool Postfix(PlayerControl __instance, DeathReason reason, bool assignGhostRole)
+            {
+                if (!DestroyableSingleton<TutorialManager>.InstanceExists && __instance.AmOwner)
+                {
+                    StatsManager.Instance.LastGameStarted = Il2CppSystem.DateTime.MinValue;
+                    StatsManager instance = StatsManager.Instance;
+                    float banPoints = instance.BanPoints;
+                    instance.BanPoints = banPoints - 1f;
+                }
+                TempData.LastDeathReason = reason;
+                __instance.cosmetics.AnimatePetMourning();
+                __instance.Data.IsDead = true;
+                __instance.gameObject.layer = LayerMask.NameToLayer("Ghost");
+                __instance.cosmetics.SetNameMask(false);
+                __instance.cosmetics.PettingHand.StopPetting();
+
+                bool choseRole = false;
+                if (AmongUsClient.Instance.AmHost)
+                {
+                    CustomRole playerrole = CustomRole.getByName(DillyzUtil.getRoleName(__instance));
+                    if (playerrole != null && playerrole.roletoGhostInto != "")
+                    {
+                        DillyzUtil.RpcSetRole(__instance, playerrole.roletoGhostInto);
+                        choseRole = true;
+                    }
+                    else
+                        DillyzUtil.RpcSetRole(__instance, "");
+                }
+                GameManager.Instance.OnPlayerDeath(__instance, AmongUsClient.Instance.AmHost && !choseRole);
+
+
+                if (__instance.AmOwner)
+                {
+                    DestroyableSingleton<HudManager>.Instance.Chat.SetVisible(true);
+                    __instance.AdjustLighting();
+                }
+                return false;
             }
         }
     }

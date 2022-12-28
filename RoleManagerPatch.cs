@@ -32,9 +32,9 @@ namespace DillyzRoleApi_Rewritten
                 for (int r = 0; r < roles.Count; r++)
                 {
                     CustomRole role = roles[r];
-                    DillyzRoleApiMain.Instance.Log.LogInfo($"{role.name} has nobody in it. (Skip? {role.decoy || !role.roleSeleciton}.)");
+                    DillyzRoleApiMain.Instance.Log.LogInfo($"{role.name} has nobody in it. (Skip? {role.decoy || !role.roleSeleciton}.) (Ghost? {role.ghostRole})");
                     role.curActive = 0;
-                    if (role.decoy || !role.roleSeleciton)
+                    if (role.decoy || !role.roleSeleciton || role.ghostRole)
                         continue;
                     DillyzRoleApiMain.Instance.Log.LogInfo($"Let's check out {role.name}.");
                     List<PlayerControl> availablePlayers = PlayerControl.AllPlayerControls.ToArray().ToList();

@@ -77,7 +77,13 @@ namespace DillyzRoleApi_Rewritten
         [Obsolete("Variable \"decoy\" is obselete! Please use \"roleSelected\" and \"hasSettings\"!")]
          public bool decoy = false;                              // If this role isn't actaully meant for gameplay. Use this if you have no real roles to make.
         public bool roleSeleciton = true;
-        public bool hasSettings = true; 
+        public bool hasSettings = true;
+
+        public string roletoGhostInto = "";
+        [Obsolete("Incomplete.", false)]
+        public bool ghostRole = false;
+        [Obsolete("Incomplete.", false)]
+        public List<string> rolesToGhost;
 
 
         // settings stuff

@@ -295,7 +295,7 @@ namespace DillyzRoleApi_Rewritten
             if (involved)
                 curCamera.Locked = false;
 
-            CustomRole.setRoleName(target.PlayerId, "");
+            //CustomRole.setRoleName(target.PlayerId, "");
 
             yield break;
         }
