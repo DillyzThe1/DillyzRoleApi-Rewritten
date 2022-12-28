@@ -78,7 +78,7 @@ namespace DillyzRoleApi_Rewritten
         [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Die))]
         public class PlayerControlPlayer_Die
         {
-            public static bool Postfix(PlayerControl __instance, DeathReason reason, bool assignGhostRole)
+            public static bool Prefix(PlayerControl __instance, DeathReason reason, bool assignGhostRole)
             {
                 if (!DestroyableSingleton<TutorialManager>.InstanceExists && __instance.AmOwner)
                 {
