@@ -140,8 +140,8 @@ namespace DillyzRoleApi_Rewritten
                 void listener() {
                     DillyzRoleApiMain.Instance.Log.LogInfo("epic clickenining");
 
-                    if (!newKill.isActiveAndEnabled || (newKill.currentTarget == null && customKillControl.buttonData.targetButton) || newKill.isCoolingDown ||
-                         PlayerControl.LocalPlayer.Data.IsDead != customKillControl.buttonData.buttonForGhosts || (customKillControl.buttonData.caresAboutMoving 
+                    if (!newKill.isActiveAndEnabled || (newKill.currentTarget == null && customKillControl.buttonData.targetButton) 
+                                                    || newKill.isCoolingDown || (customKillControl.buttonData.caresAboutMoving 
                             && !PlayerControl.LocalPlayer.CanMove) || !newKill.canInteract)
                     {
                         customKillControl.buttonData.OnClicked(customKillControl, false);
