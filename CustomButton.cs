@@ -23,7 +23,6 @@ namespace DillyzRoleApi_Rewritten
             } 
         }
         public bool targetButton = false;
-        public bool buttonForGhosts = false;
         public bool buttonTargetsGhosts = false;
         public bool caresAboutMoving = true;
         public List<string> allowedRoles;
@@ -67,7 +66,6 @@ namespace DillyzRoleApi_Rewritten
             this.imageName = imageName;
             this._cooldown = cooldown;
             this.targetButton = isTargetButton;
-            this.buttonForGhosts = false;
             this.buttonTargetsGhosts = false;
             this.caresAboutMoving = true;
             this.allowedRoles = allowedRoles.ToList();
@@ -199,7 +197,7 @@ namespace DillyzRoleApi_Rewritten
                 return false;
 
             PlayerControl lp = PlayerControl.LocalPlayer;
-            return MeetingHud.Instance == null && (buttonData.RoleAllowed(DillyzUtil.getRoleName(lp))) && lp.Data.IsDead == this.buttonData.buttonForGhosts;
+            return MeetingHud.Instance == null && (buttonData.RoleAllowed(DillyzUtil.getRoleName(lp)));
         }
 
         public void SetTarget(PlayerControl player)
