@@ -62,19 +62,10 @@ namespace DillyzRoleApi_Rewritten
                         int roleIndex = roleRNG.Next(0, availablePlayers.Count);
                         PlayerControl selectedPlayer = availablePlayers[roleIndex];
                         availablePlayers.Remove(selectedPlayer);
-                        CustomRole.setRoleName(selectedPlayer.PlayerId, role.name);
+                        DillyzUtil.RpcSetRole(selectedPlayer, role.name);
 
                         if (role.switchToImpostor && !selectedPlayer.Data.Role.IsImpostor)
-                        {
-                            selectedPlayer.Data.RoleType = AmongUs.GameOptions.RoleTypes.Impostor;
-                            selectedPlayer.Data.Role = new ImpostorRole();
-                        }
-
-                        // send role packet
-                        writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.SetRole, Hazel.SendOption.None, -1);
-                        writer.Write(selectedPlayer.PlayerId);
-                        writer.Write(role.name);
-                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                            selectedPlayer.RpcSetRole(RoleTypes.Impostor);
                     }
                 }
             }
