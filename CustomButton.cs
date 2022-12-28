@@ -104,10 +104,10 @@ namespace DillyzRoleApi_Rewritten
         }
 
         // USE TIMER FUNCS AND VARS!!!!!
-        public Action<KillButtonCustomData> useTimerCallback;
+        public Action<KillButtonCustomData, bool> useTimerCallback; // button - interupted
         public float useTime = 0f;
 
-        public void SetUseTimeButton(float useTime, Action<KillButtonCustomData> useTimerCallback) {
+        public void SetUseTimeButton(float useTime, Action<KillButtonCustomData, bool> useTimerCallback) {
             this.useTime = Math.Abs(useTime);
             this.useTimerCallback = useTimerCallback;
         }
@@ -162,7 +162,7 @@ namespace DillyzRoleApi_Rewritten
                 }
 
                 if (buttonData.useTimerCallback != null)
-                    buttonData.useTimerCallback(this);
+                    buttonData.useTimerCallback(this, false);
                 useTimerMode = false;
                 lastUse = DateTime.UtcNow;
                 killButton.cooldownTimerText.color = Palette.White;

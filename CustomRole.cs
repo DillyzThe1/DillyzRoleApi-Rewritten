@@ -45,7 +45,28 @@ namespace DillyzRoleApi_Rewritten
         // player id to role name
         public static Dictionary<byte, string> roleNameMap = new Dictionary<byte, string>();
         public static string getRoleName(byte playerId) => roleNameMap.ContainsKey(playerId) ? roleNameMap[playerId] : "";
-        public static void setRoleName(byte playerId, string roleName) => roleNameMap[playerId] = roleName;
+        public static void setRoleName(byte playerId, string roleName) {
+
+            if (roleNameMap.ContainsKey(playerId)) {
+                PlayerControl player = DillyzUtil.findPlayerControl(playerId);
+                string role = DillyzUtil.getRoleName(player);
+
+                if (HudManagerPatch.AllKillButtons != null) {
+                    foreach (KillButtonCustomData button in HudManagerPatch.AllKillButtons)
+                    {
+                        if (button.useTimerMode && button.buttonData.allowedRoles.Contains(role))
+                        {
+                            button.useTimerMode = false;
+                            button.lastUse = DateTime.UtcNow;
+                            if (button.buttonData.useTimerCallback != null)
+                                button.buttonData.useTimerCallback(button, true);
+                        }
+                    }
+                }
+            }
+
+            roleNameMap[playerId] = roleName; 
+        }
 
         public List<PlayerControl> AllPlayersWithRole {
             get
