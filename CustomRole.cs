@@ -79,11 +79,8 @@ namespace DillyzRoleApi_Rewritten
         public bool roleSeleciton = true;
         public bool hasSettings = true;
 
-        public string roletoGhostInto = "";
-        [Obsolete("Incomplete.", false)]
-        public bool ghostRole = false;
-        [Obsolete("Incomplete.", false)]
-        public List<string> rolesToGhost;
+        public string roletoGhostInto = ""; // turns into this role on death
+        public bool ghostRole = false; // marks the role as a ghost
 
 
         // settings stuff

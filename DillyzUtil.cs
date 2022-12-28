@@ -301,6 +301,7 @@ namespace DillyzRoleApi_Rewritten
         }
 
         public static void RpcSetRole(PlayerControl player, string role) {
+            DillyzRoleApiMain.Instance.Log.LogInfo($"setting {player.name} as {role}");
             CustomRole.setRoleName(player.PlayerId, role);
 
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.SetRole, Hazel.SendOption.None, -1);

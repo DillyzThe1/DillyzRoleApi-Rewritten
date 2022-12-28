@@ -101,14 +101,16 @@ namespace DillyzRoleApi_Rewritten
                     DillyzRoleApiMain.Instance.Log.LogInfo("role null? " + (playerrole == null) + " | role to ghost? " + (playerrole != null ? playerrole.roletoGhostInto : "none"));
                     if (playerrole != null && playerrole.roletoGhostInto != "")
                     {
-                        DillyzUtil.RpcSetRole(__instance, playerrole.roletoGhostInto);
+                        CustomRole newrole = CustomRole.getByName(playerrole.roletoGhostInto);
+                        if (newrole == null || !newrole.ghostRole)
+                            DillyzUtil.RpcSetRole(__instance, playerrole.roletoGhostInto);
                         choseRole = true;
                     }
                     else
                         DillyzUtil.RpcSetRole(__instance, "");
                 }
                 DillyzRoleApiMain.Instance.Log.LogInfo("chose role? " + choseRole);
-                GameManager.Instance.OnPlayerDeath(__instance, false);// (AmongUsClient.Instance.AmHost || DillyzUtil.InFreeplay()) && !choseRole);
+                GameManager.Instance.OnPlayerDeath(__instance, (AmongUsClient.Instance.AmHost || DillyzUtil.InFreeplay()) && !choseRole);
 
 
                 if (__instance.AmOwner)
