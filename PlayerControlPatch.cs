@@ -78,6 +78,7 @@ namespace DillyzRoleApi_Rewritten
         [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Die))]
         public class PlayerControlPlayer_Die
         {
+            public static bool skipNextAssignment = false;
             public static bool Prefix(PlayerControl __instance, DeathReason reason, bool assignGhostRole)
             {
                 if (!DestroyableSingleton<TutorialManager>.InstanceExists && __instance.AmOwner)
@@ -94,23 +95,31 @@ namespace DillyzRoleApi_Rewritten
                 __instance.cosmetics.SetNameMask(false);
                 __instance.cosmetics.PettingHand.StopPetting();
 
-                if (AmongUsClient.Instance.AmHost || DillyzUtil.InFreeplay())
+                if (!skipNextAssignment)
                 {
-                    bool choseRole = false;
-                    CustomRole playerrole = CustomRole.getByName(DillyzUtil.getRoleName(__instance));
-                    if (playerrole != null && playerrole.roletoGhostInto != "")
+                    if (AmongUsClient.Instance.AmHost || DillyzUtil.InFreeplay())
                     {
-                        CustomRole newrole = CustomRole.getByName(playerrole.roletoGhostInto);
-                        if (newrole == null || !newrole.ghostRole)
-                            DillyzUtil.RpcSetRole(__instance, playerrole.roletoGhostInto);
-                        choseRole = true;
+                        bool choseRole = false;
+                        CustomRole playerrole = CustomRole.getByName(DillyzUtil.getRoleName(__instance));
+                        if (playerrole != null && playerrole.roletoGhostInto != "")
+                        {
+                            CustomRole newrole = CustomRole.getByName(playerrole.roletoGhostInto);
+                            if (newrole == null || !newrole.ghostRole)
+                                DillyzUtil.RpcSetRole(__instance, playerrole.roletoGhostInto);
+                            choseRole = true;
+                        }
+                        else
+                            DillyzUtil.RpcSetRole(__instance, "");
+                        GameManager.Instance.OnPlayerDeath(__instance, !choseRole);
                     }
                     else
-                        DillyzUtil.RpcSetRole(__instance, "");
-                    GameManager.Instance.OnPlayerDeath(__instance, !choseRole);
+                        GameManager.Instance.OnPlayerDeath(__instance, false);
                 }
                 else
+                {
                     GameManager.Instance.OnPlayerDeath(__instance, false);
+                    skipNextAssignment = false;
+                }
 
 
                 if (__instance.AmOwner)

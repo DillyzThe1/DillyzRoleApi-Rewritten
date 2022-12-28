@@ -3,6 +3,7 @@ using HarmonyLib;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using static DillyzRoleApi_Rewritten.PlayerControlPatch;
 
 namespace DillyzRoleApi_Rewritten
 {
@@ -72,6 +73,12 @@ namespace DillyzRoleApi_Rewritten
                         }
                         sprrend.enabled = true;
                         customTime = true;
+
+                        if (role.ghostRole)
+                        {
+                            PlayerControlPlayer_Die.skipNextAssignment = true;
+                            PlayerControl.LocalPlayer.Die(DeathReason.Kill, false);
+                        }
                     }
 
                     taskbutton.RolloverHandler.OutColor = role.roleColor;
