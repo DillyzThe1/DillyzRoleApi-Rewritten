@@ -171,14 +171,20 @@ namespace DillyzRoleApi_Rewritten
                    $"ventPrivilege: {this.ventPrivilege}, canKill: {this.canKill}]";
         }
          
-        public void AddAdvancedSetting_Float(string name, int defaultValue, int minimum, int maximum, int increment, Action<float> onChanged) {
-            _advancedSettings.Add(new CustomFloatSetting(name, defaultValue, minimum, maximum, increment, onChanged));
+        public CustomFloatSetting AddAdvancedSetting_Float(string name, int defaultValue, int minimum, int maximum, int increment, Action<float> onChanged) {
+            CustomFloatSetting setting = new CustomFloatSetting(name, defaultValue, minimum, maximum, increment, onChanged);
+            _advancedSettings.Add(setting);
+            return setting;
         }
-        public void AddAdvancedSetting_String(string name, string defaultValue, string[] allValues, Action<string> onChanged) {
-            _advancedSettings.Add(new CustomStringSetting(name, defaultValue, allValues.ToList(), onChanged));
+        public CustomStringSetting AddAdvancedSetting_String(string name, string defaultValue, string[] allValues, Action<string> onChanged) {
+            CustomStringSetting setting = new CustomStringSetting(name, defaultValue, allValues.ToList(), onChanged);
+            _advancedSettings.Add(setting);
+            return setting;
         }
-        public void AddAdvancedSetting_Boolean(string name, bool defaultValue, Action<bool> onChanged) {
-            _advancedSettings.Add(new CustomBooleanSetting(name, defaultValue, onChanged));
+        public CustomBooleanSetting AddAdvancedSetting_Boolean(string name, bool defaultValue, Action<bool> onChanged) {
+            CustomBooleanSetting setting = new CustomBooleanSetting(name, defaultValue, onChanged);
+            _advancedSettings.Add(setting);
+            return setting;
         }
 
         public void WinGame(PlayerControl cause) {
