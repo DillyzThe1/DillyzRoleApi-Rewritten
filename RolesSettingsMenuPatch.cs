@@ -150,9 +150,9 @@ namespace DillyzRoleApi_Rewritten
 
                             }
                             break;
-                        case CustomSettingType.Integer:
+                        case CustomSettingType.Float:
                             {
-                                CustomNumberSetting intSetting = setting as CustomNumberSetting;
+                                CustomNumberSetting floatSetting = setting as CustomNumberSetting;
 
                                 GameObject ogvaluetmp = ogNumbOpt.transform.Find("Value_TMP").gameObject;
                                 TextMeshPro valueTMP = GameObject.Instantiate(ogvaluetmp).GetComponent<TextMeshPro>();
@@ -160,7 +160,7 @@ namespace DillyzRoleApi_Rewritten
                                 valueTMP.transform.localPosition = new Vector3(0f, -0.015f, 0f);
                                 valueTMP.transform.position = new Vector3(ogvaluetmp.transform.position.x + (xoff/2f), valueTMP.transform.position.y, -168f);
                                 valueTMP.gameObject.layer = ogvaluetmp.gameObject.layer;
-                                valueTMP.text = intSetting.settingValue.ToString();
+                                valueTMP.text = floatSetting.settingValue.ToString();
 
                                 GameObject ogplustmp = ogNumbOpt.transform.Find("Plus_TMP").gameObject;
                                 TextMeshPro plusTMP = GameObject.Instantiate(ogplustmp).GetComponent<TextMeshPro>();
@@ -174,13 +174,13 @@ namespace DillyzRoleApi_Rewritten
                                 plusTMPButton.OnClick.AddListener((UnityEngine.Events.UnityAction)callback_1);
                                 void callback_1()
                                 {
-                                    intSetting.settingValue += intSetting.increment;
-                                    valueTMP.text = intSetting.settingValue.ToString();
+                                    floatSetting.settingValue += floatSetting.increment;
+                                    valueTMP.text = floatSetting.settingValue.ToString() + floatSetting.suffix;
 
                                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.SetSettings, Hazel.SendOption.None, -1);
                                     writer.Write((byte)1);
                                     writer.Write($"LOBBY_ARS-{role.name}-{setting.title}");
-                                    writer.Write(intSetting.settingValue);
+                                    writer.Write(floatSetting.settingValue);
                                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                                 }
 
@@ -197,13 +197,13 @@ namespace DillyzRoleApi_Rewritten
                                 minusTMPButton.OnClick.AddListener((UnityEngine.Events.UnityAction)callback_2);
                                 void callback_2()
                                 {
-                                    intSetting.settingValue -= intSetting.increment;
-                                    valueTMP.text = intSetting.settingValue.ToString();
+                                    floatSetting.settingValue -= floatSetting.increment;
+                                    valueTMP.text = floatSetting.settingValue.ToString();
 
                                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.SetSettings, Hazel.SendOption.None, -1);
                                     writer.Write((byte)1);
                                     writer.Write($"LOBBY_ARS-{role.name}-{setting.title}");
-                                    writer.Write(intSetting.settingValue);
+                                    writer.Write(floatSetting.settingValue);
                                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                                 }
                             }

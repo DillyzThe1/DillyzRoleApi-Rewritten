@@ -6,18 +6,17 @@ namespace DillyzRoleApi_Rewritten
     public class CustomSetting {
         public CustomSettingType settingType = CustomSettingType.None;
         public string title = "Invalid";
-        public string curRole = "Jester";
     }
 
     public class CustomNumberSetting : CustomSetting
     {
-        private int _value;
-        private int _defaultValue;
-        private int _minimumValue;
-        private int _maximumValue;
-        private int _increment;
-        public int increment => _increment;
-        public int settingValue {
+        private float _value;
+        private float _defaultValue;
+        private float _minimumValue;
+        private float _maximumValue;
+        private float _increment;
+        public float increment => _increment;
+        public float settingValue {
             get {
                 return _value;
             }
@@ -28,13 +27,13 @@ namespace DillyzRoleApi_Rewritten
                     _onChanged(_value);
             }
         }
+        public string suffix = "";
 
-        private Action<int> _onChanged;
+        private Action<float> _onChanged;
 
-        public CustomNumberSetting(string name, string rolename, int defaultValue, int min, int max, int increment, Action<int> onChanged) {
+        public CustomNumberSetting(string name, float defaultValue, float min, float max, float increment, Action<float> onChanged) {
             this.title = name;
-            this.curRole = rolename;
-            this.settingType = CustomSettingType.Integer;
+            this.settingType = CustomSettingType.Float;
 
             this._defaultValue = defaultValue;
             this._minimumValue = min;
@@ -78,10 +77,9 @@ namespace DillyzRoleApi_Rewritten
             }
         }
 
-        public CustomStringSetting(string name, string rolename, string defaultValue, List<string> allValues, Action<string> onChanged)
+        public CustomStringSetting(string name, string defaultValue, List<string> allValues, Action<string> onChanged)
         {
             this.title = name;
-            this.curRole = rolename;
             this.settingType = CustomSettingType.String;
 
             this._curIndex = 0;
@@ -123,9 +121,8 @@ namespace DillyzRoleApi_Rewritten
 
         private Action<bool> _onChanged;
 
-        public CustomBooleanSetting(string name, string rolename, bool defaultValue, Action<bool> onChanged) {
+        public CustomBooleanSetting(string name, bool defaultValue, Action<bool> onChanged) {
             this.title = name;
-            this.curRole = rolename;
             this._defaultValue = defaultValue;
             this.settingValue = defaultValue;
             this.settingType = CustomSettingType.Boolean;
@@ -141,7 +138,7 @@ namespace DillyzRoleApi_Rewritten
 
     public enum CustomSettingType { 
         None,
-        Integer,
+        Float,
         String,
         Boolean
     }

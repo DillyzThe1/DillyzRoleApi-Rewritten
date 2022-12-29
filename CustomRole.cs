@@ -171,14 +171,14 @@ namespace DillyzRoleApi_Rewritten
                    $"ventPrivilege: {this.ventPrivilege}, canKill: {this.canKill}]";
         }
 
-        public void AddAdvancedSetting_Int(string name, int defaultValue, int minimum, int maximum, int increment, Action<int> onChanged) {
-            _advancedSettings.Add(new CustomNumberSetting(name, this.name, defaultValue, minimum, maximum, increment, onChanged));
+        public void AddAdvancedSetting_Int(string name, int defaultValue, int minimum, int maximum, int increment, Action<float> onChanged) {
+            _advancedSettings.Add(new CustomNumberSetting(name, defaultValue, minimum, maximum, increment, onChanged));
         }
         public void AddAdvancedSetting_String(string name, string defaultValue, string[] allValues, Action<string> onChanged) {
-            _advancedSettings.Add(new CustomStringSetting(name, this.name, defaultValue, allValues.ToList(), onChanged));
+            _advancedSettings.Add(new CustomStringSetting(name, defaultValue, allValues.ToList(), onChanged));
         }
         public void AddAdvancedSetting_Boolean(string name, bool defaultValue, Action<bool> onChanged) {
-            _advancedSettings.Add(new CustomBooleanSetting(name, this.name, defaultValue, onChanged));
+            _advancedSettings.Add(new CustomBooleanSetting(name, defaultValue, onChanged));
         }
 
         public void WinGame(PlayerControl cause) {

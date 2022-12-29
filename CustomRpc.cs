@@ -123,7 +123,7 @@ namespace DillyzRoleApi_Rewritten
                                             boolsetting.settingValue = reader.ReadBoolean();
                                             //DillyzRoleApiMain.Instance.Log.LogInfo(typeToActaullyGet + " = " + boolsetting.settingValue);
                                             break;
-                                        case CustomSettingType.Integer:
+                                        case CustomSettingType.Float:
                                             CustomNumberSetting intsetting = rolesetting as CustomNumberSetting;
                                             intsetting.settingValue = reader.ReadInt32();
                                             //DillyzRoleApiMain.Instance.Log.LogInfo(typeToActaullyGet + " = " + intsetting.settingValue);
