@@ -33,6 +33,9 @@ namespace DillyzRoleApi_Rewritten
             Transform trans = __instance.ActiveItems[__instance.ActiveItems.Count - 1];
             float xc = trans.localPosition.x + __instance.fileWidth, yc = trans.localPosition.y, mh = 0f;
             foreach (CustomRole role in CustomRole.allRoles) {
+                if (role.hiddenFromFreeplay)
+                    continue;
+
                 TaskAddButton taskbutton = UnityEngine.Object.Instantiate<TaskAddButton>(__instance.RoleButton);
                 taskbutton.SafePositionWorld = __instance.SafePositionWorld;
                 taskbutton.Text.text = $"Be_{role.name}.exe";

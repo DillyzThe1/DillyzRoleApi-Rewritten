@@ -9,8 +9,10 @@ namespace DillyzRoleApi_Rewritten
     class PlayerControlPatch
     {
         [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.MurderPlayer))]
-        public class PlayerControlPatch_MurderPlayer {
-            public static bool Prefix(PlayerControl __instance, PlayerControl target) {
+        public class PlayerControlPatch_MurderPlayer
+        {
+            public static bool Prefix(PlayerControl __instance, PlayerControl target)
+            {
                 DillyzRoleApiMain.Instance.Log.LogWarning($"{__instance.name} tried to kill {target.name} using the normal PlayerControl.MurderPlayer() function!" +
                                                                                                 $" (Did you forget to do DillyzUtil.RpcCommitAssassination()?)");
                 DillyzUtil.commitAssassination(__instance, target);
@@ -68,7 +70,9 @@ namespace DillyzRoleApi_Rewritten
         [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.OnGameStart))]
         public class PlayerControlPlayer_OnGameStart
         {
-            public static void Postfix(PlayerControl __instance) {
+            public static void Postfix(PlayerControl __instance)
+            {
+                PlayerControlPlayer_Die.gaurdianAngelAttempts = 0;
                 ExileControllerPatch.initial_shifters = DillyzUtil.GetAllOfRole("ShapeShifter").Count;
                 ExileControllerPatch.initial_engineers = DillyzUtil.GetAllOfRole("Engineer").Count;
                 ExileControllerPatch.initial_scientists = DillyzUtil.GetAllOfRole("Scientist").Count;
@@ -79,6 +83,7 @@ namespace DillyzRoleApi_Rewritten
         public class PlayerControlPlayer_Die
         {
             public static bool skipNextAssignment = false;
+            public static int gaurdianAngelAttempts = 0;
             public static bool Prefix(PlayerControl __instance, DeathReason reason, bool assignGhostRole)
             {
                 if (!DestroyableSingleton<TutorialManager>.InstanceExists && __instance.AmOwner)
@@ -107,21 +112,34 @@ namespace DillyzRoleApi_Rewritten
                                 DillyzUtil.RpcSetRole(__instance, playerrole.roletoGhostInto);
                         }
                         else
-                            DillyzUtil.RpcSetRole(__instance, "");
+                        {
+                            int angelmax = GameOptionsManager.Instance.CurrentGameOptions.RoleOptions.GetNumPerGame(AmongUs.GameOptions.RoleTypes.GuardianAngel);
+                            int angelchance = GameOptionsManager.Instance.CurrentGameOptions.RoleOptions.GetChancePerGame(AmongUs.GameOptions.RoleTypes.GuardianAngel);
+
+                            string targetrole = "";
+                            if (DillyzUtil.roleSide(__instance) == CustomRoleSide.Crewmate && (gaurdianAngelAttempts < angelmax || DillyzUtil.InFreeplay()))
+                            {
+                                int rolecahcnde = UnityEngine.Random.Range(0, 100);
+                                if (angelchance != 0 && (angelchance == 100 || angelchance >= rolecahcnde) || DillyzUtil.InFreeplay())
+                                    targetrole = "GuardianAngel";
+                                gaurdianAngelAttempts++;
+                            }
+                            DillyzUtil.RpcSetRole(__instance, targetrole);
+                        }
                     }
-                }
-                else
-                    skipNextAssignment = false;
-                GameManager.Instance.OnPlayerDeath(__instance, false);
+                    else
+                        skipNextAssignment = false;
+                    GameManager.Instance.OnPlayerDeath(__instance, false);
 
-                if (__instance.PlayerId == PlayerControl.LocalPlayer.PlayerId)
-                    DestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(false);
+                    if (__instance.PlayerId == PlayerControl.LocalPlayer.PlayerId)
+                        DestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(false);
 
 
-                if (__instance.AmOwner)
-                {
-                    DestroyableSingleton<HudManager>.Instance.Chat.SetVisible(true);
-                    __instance.AdjustLighting();
+                    if (__instance.AmOwner)
+                    {
+                        DestroyableSingleton<HudManager>.Instance.Chat.SetVisible(true);
+                        __instance.AdjustLighting();
+                    }
                 }
                 return false;
             }

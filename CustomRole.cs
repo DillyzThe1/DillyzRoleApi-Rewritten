@@ -47,7 +47,6 @@ namespace DillyzRoleApi_Rewritten
         public static Dictionary<byte, string> roleNameMap = new Dictionary<byte, string>();
         public static string getRoleName(byte playerId) => roleNameMap.ContainsKey(playerId) ? roleNameMap[playerId] : "";
         public static void setRoleName(byte playerId, string roleName) {
-
             PlayerControl player = DillyzUtil.findPlayerControl(playerId);
             string role = DillyzUtil.getRoleName(player);
 
@@ -67,7 +66,40 @@ namespace DillyzRoleApi_Rewritten
                 }
             }
 
-            roleNameMap[playerId] = roleName; 
+            /*if (PlayerTask.DestroyTasksOfType<ImportantTextTask>(PlayerControl.LocalPlayer) && !PlayerTask.PlayerHasTaskOfType<NormalPlayerTask>(PlayerControl.LocalPlayer))
+                ShipStatus.Instance.Begin();*/
+            switch (roleName) {
+                case "Impostor":
+                    PlayerControl.LocalPlayer.RpcSetRole(RoleTypes.Impostor);
+                    break;
+                case "ShapeShifter":
+                    PlayerControl.LocalPlayer.RpcSetRole(RoleTypes.Shapeshifter);
+                    break;
+                case "Scientist":
+                    PlayerControl.LocalPlayer.RpcSetRole(RoleTypes.Scientist);
+                    break;
+                case "Engineer":
+                    PlayerControl.LocalPlayer.RpcSetRole(RoleTypes.Engineer);
+                    break;
+                case "GuardianAngel":
+                    PlayerControl.LocalPlayer.RpcSetRole(RoleTypes.GuardianAngel);
+                    break;
+                case "Crewmate":
+                    PlayerControl.LocalPlayer.RpcSetRole(RoleTypes.Crewmate);
+                    break;
+                case "":
+                    break;
+                default:
+                    CustomRole roleee = CustomRole.getByName(role);
+                    PlayerControl.LocalPlayer.RpcSetRole((roleee != null && roleee.switchToImpostor) ? RoleTypes.Impostor : RoleTypes.Crewmate);
+                    roleNameMap[playerId] = roleName;
+
+                    DillyzRoleApiMain.Instance.Log.LogInfo("role " + roleNameMap[playerId]);
+                    return;
+            }
+            roleNameMap[playerId] = "";
+
+            DillyzRoleApiMain.Instance.Log.LogInfo("roleE " + roleName + " " + roleNameMap[playerId]);
         }
 
         public List<PlayerControl> AllPlayersWithRole {
@@ -101,6 +133,7 @@ namespace DillyzRoleApi_Rewritten
          public bool decoy = false;                              // If this role isn't actaully meant for gameplay. Use this if you have no real roles to make.
         public bool roleSeleciton = true;
         public bool hasSettings = true;
+        public bool hiddenFromFreeplay = false;
 
         public string roletoGhostInto = ""; // turns into this role on death
         public bool ghostRole = false; // marks the role as a ghost
@@ -139,6 +172,8 @@ namespace DillyzRoleApi_Rewritten
             this.canKill = canKill;
             this.ejectionText = "[0] was ";
             //this.ejectionText_bad = "[0] was not ";
+
+            this.switchToImpostor = (this.side == CustomRoleSide.Impostor);
 
             // vs woudn't let me use turnary operators this time >:/
             if (showEjectText)
