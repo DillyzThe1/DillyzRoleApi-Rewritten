@@ -166,9 +166,15 @@ namespace DillyzRoleApi_Rewritten
                 killButton.cooldownTimerText.color = Palette.White;
             }
 
-            TimeSpan timeLeft = DateTime.UtcNow - lastUse;
-            int timeRemaining = (int)Math.Ceiling((double)new decimal(maxCooldown - timeLeft.TotalMilliseconds / 1000f));
-            this.killButton.SetCoolDown(timeRemaining < 0 ? 0 : timeRemaining, maxCooldown);
+            int timeRemaining = 0;
+            if (this.buttonData.cooldown != 0f)
+            {
+                TimeSpan timeLeft = DateTime.UtcNow - lastUse;
+                timeRemaining = (int)Math.Ceiling((double)new decimal(maxCooldown - timeLeft.TotalMilliseconds / 1000f));
+                this.killButton.SetCoolDown(timeRemaining < 0f ? 0f : timeRemaining, maxCooldown);
+            }
+            else
+                this.killButton.SetCoolDown(0f, 1f);
 
             if (blockingButton) {
                 if (this.buttonData.targetButton)
@@ -185,7 +191,7 @@ namespace DillyzRoleApi_Rewritten
                 return;
             }
 
-            if ((timeRemaining <= 0 || this.buttonData.cooldown == 0) && !PlayerControl.LocalPlayer.inVent)
+            if (timeRemaining <= 0 && !PlayerControl.LocalPlayer.inVent)
                 this.killButton.SetEnabled();
             else
                 this.killButton.SetDisabled();
