@@ -99,27 +99,20 @@ namespace DillyzRoleApi_Rewritten
                 {
                     if (AmongUsClient.Instance.AmHost || DillyzUtil.InFreeplay())
                     {
-                        bool choseRole = false;
                         CustomRole playerrole = CustomRole.getByName(DillyzUtil.getRoleName(__instance));
                         if (playerrole != null && playerrole.roletoGhostInto != "")
                         {
                             CustomRole newrole = CustomRole.getByName(playerrole.roletoGhostInto);
                             if (newrole == null || !newrole.ghostRole)
                                 DillyzUtil.RpcSetRole(__instance, playerrole.roletoGhostInto);
-                            choseRole = true;
                         }
                         else
                             DillyzUtil.RpcSetRole(__instance, "");
-                        GameManager.Instance.OnPlayerDeath(__instance, !choseRole);
                     }
-                    else
-                        GameManager.Instance.OnPlayerDeath(__instance, false);
                 }
                 else
-                {
-                    GameManager.Instance.OnPlayerDeath(__instance, false);
                     skipNextAssignment = false;
-                }
+                GameManager.Instance.OnPlayerDeath(__instance, false);
 
                 if (__instance.PlayerId == PlayerControl.LocalPlayer.PlayerId)
                     DestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(false);
