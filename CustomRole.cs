@@ -48,23 +48,21 @@ namespace DillyzRoleApi_Rewritten
         public static string getRoleName(byte playerId) => roleNameMap.ContainsKey(playerId) ? roleNameMap[playerId] : "";
         public static void setRoleName(byte playerId, string roleName) {
 
-            if (roleNameMap.ContainsKey(playerId)) {
-                PlayerControl player = DillyzUtil.findPlayerControl(playerId);
-                string role = DillyzUtil.getRoleName(player);
+            PlayerControl player = DillyzUtil.findPlayerControl(playerId);
+            string role = DillyzUtil.getRoleName(player);
 
-                if (HudManagerPatch.AllKillButtons != null && playerId == PlayerControl.LocalPlayer.PlayerId)
+            if (HudManagerPatch.AllKillButtons != null && playerId == PlayerControl.LocalPlayer.PlayerId)
+            {
+                player.SetKillTimer(GameOptionsManager.Instance.CurrentGameOptions.GetFloat(FloatOptionNames.KillCooldown));
+                foreach (KillButtonCustomData button in HudManagerPatch.AllKillButtons)
                 {
-                    player.SetKillTimer(GameOptionsManager.Instance.CurrentGameOptions.GetFloat(FloatOptionNames.KillCooldown));
-                    foreach (KillButtonCustomData button in HudManagerPatch.AllKillButtons)
+                    button.lastUse = DateTime.UtcNow;
+                    if (button.useTimerMode && button.buttonData.allowedRoles.Contains(role))
                     {
-                        button.lastUse = DateTime.UtcNow;
-                        if (button.useTimerMode && button.buttonData.allowedRoles.Contains(role))
-                        {
-                            button.useTimerMode = false;
-                            button.killButton.cooldownTimerText.color = Palette.White;
-                            if (button.buttonData.useTimerCallback != null)
-                                button.buttonData.useTimerCallback(button, true);
-                        }
+                        button.useTimerMode = false;
+                        button.killButton.cooldownTimerText.color = Palette.White;
+                        if (button.buttonData.useTimerCallback != null)
+                            button.buttonData.useTimerCallback(button, true);
                     }
                 }
             }

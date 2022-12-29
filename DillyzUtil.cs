@@ -510,8 +510,9 @@ namespace DillyzRoleApi_Rewritten
         public static void RPCRevivePlayer(PlayerControl player, string roleto)
         {
             CustomRole role = CustomRole.getByName(roleto);
+            RoleTypes t = (role != null && (role.switchToImpostor || role.side == CustomRoleSide.Impostor)) ? RoleTypes.Crewmate : RoleTypes.Impostor;
+            //player.RpcSetRole(t);
             RpcSetRole(player, roleto);
-            player.RpcSetRole((role != null && (role.switchToImpostor || role.side == CustomRoleSide.Impostor)) ? RoleTypes.Crewmate : RoleTypes.Impostor);
             player.Revive();
 
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.RevivePlayer, SendOption.None, -1);
