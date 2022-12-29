@@ -207,7 +207,7 @@ namespace DillyzRoleApi_Rewritten
                    $"ventPrivilege: {this.ventPrivilege}, canKill: {this.canKill}]";
         }
          
-        public CustomFloatSetting AddAdvancedSetting_Float(string name, int defaultValue, int minimum, int maximum, int increment, Action<float> onChanged) {
+        public CustomFloatSetting AddAdvancedSetting_Float(string name, float defaultValue, float minimum, float maximum, float increment, Action<float> onChanged) {
             CustomFloatSetting setting = new CustomFloatSetting(name, defaultValue, minimum, maximum, increment, onChanged);
             _advancedSettings.Add(setting);
             return setting;
