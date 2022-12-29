@@ -510,7 +510,7 @@ namespace DillyzRoleApi_Rewritten
         public static void RPCRevivePlayer(PlayerControl player, string roleto)
         {
             CustomRole role = CustomRole.getByName(roleto);
-            RoleTypes t = (role != null && (role.switchToImpostor || role.side == CustomRoleSide.Impostor)) ? RoleTypes.Crewmate : RoleTypes.Impostor;
+            RoleTypes t = (role != null && role.switchToImpostor) ? RoleTypes.Impostor : RoleTypes.Crewmate;
             //player.RpcSetRole(t);
             RpcSetRole(player, roleto);
             player.Revive();

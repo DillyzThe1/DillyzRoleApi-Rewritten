@@ -57,7 +57,7 @@ namespace DillyzRoleApi_Rewritten
             {
                 string rolename = DillyzUtil.getRoleName(__instance);
                 CustomRole role = CustomRole.getByName(rolename);
-                if (rolename == "Impostor" || rolename == "ShapeShifter" || (role != null && (role.side == CustomRoleSide.Impostor || role.switchToImpostor) && role.canKill))
+                if (rolename == "Impostor" || rolename == "ShapeShifter" || (role != null && role.switchToImpostor && role.canKill))
                     return true;
                 // don't kill em
                 return false;

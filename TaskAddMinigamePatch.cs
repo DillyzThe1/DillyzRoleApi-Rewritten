@@ -53,7 +53,7 @@ namespace DillyzRoleApi_Rewritten
                     taskbutton.Button.OnClick.AddListener((UnityAction)callback);
                     void callback()
                     {
-                        if (role.side == CustomRoleSide.Impostor || role.switchToImpostor)
+                        if (role.switchToImpostor)
                             PlayerControl.LocalPlayer.RpcSetRole(RoleTypes.Impostor);
                         else
                             PlayerControl.LocalPlayer.RpcSetRole(RoleTypes.Crewmate);

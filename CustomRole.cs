@@ -70,28 +70,28 @@ namespace DillyzRoleApi_Rewritten
                 ShipStatus.Instance.Begin();*/
             switch (roleName) {
                 case "Impostor":
-                    PlayerControl.LocalPlayer.RpcSetRole(RoleTypes.Impostor);
+                    player.RpcSetRole(RoleTypes.Impostor);
                     break;
                 case "ShapeShifter":
-                    PlayerControl.LocalPlayer.RpcSetRole(RoleTypes.Shapeshifter);
+                    player.RpcSetRole(RoleTypes.Shapeshifter);
                     break;
                 case "Scientist":
-                    PlayerControl.LocalPlayer.RpcSetRole(RoleTypes.Scientist);
+                    player.RpcSetRole(RoleTypes.Scientist);
                     break;
                 case "Engineer":
-                    PlayerControl.LocalPlayer.RpcSetRole(RoleTypes.Engineer);
+                    player.RpcSetRole(RoleTypes.Engineer);
                     break;
                 case "GuardianAngel":
-                    PlayerControl.LocalPlayer.RpcSetRole(RoleTypes.GuardianAngel);
+                    player.RpcSetRole(RoleTypes.GuardianAngel);
                     break;
                 case "Crewmate":
-                    PlayerControl.LocalPlayer.RpcSetRole(RoleTypes.Crewmate);
+                    player.RpcSetRole(RoleTypes.Crewmate);
                     break;
                 case "":
                     break;
                 default:
                     CustomRole roleee = CustomRole.getByName(role);
-                    PlayerControl.LocalPlayer.RpcSetRole((roleee != null && roleee.switchToImpostor) ? RoleTypes.Impostor : RoleTypes.Crewmate);
+                    player.RpcSetRole((roleee != null && roleee.switchToImpostor) ? RoleTypes.Impostor : RoleTypes.Crewmate);
                     roleNameMap[playerId] = roleName;
 
                     DillyzRoleApiMain.Instance.Log.LogInfo("role " + roleNameMap[playerId]);
