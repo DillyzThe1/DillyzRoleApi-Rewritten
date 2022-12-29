@@ -13,12 +13,31 @@ namespace DillyzRoleApi_Rewritten
 {
     public class DillyzUtil
     {
+        public static List<CustomSetting> customLobbySettings = new List<CustomSetting>();
+
         public static CustomButton addButton(Assembly epicAssemblyFail, string name, string imageName, float cooldown, bool isTargetButton, string[] allowedRoles,
                                                                                     string[] rolesCantTarget, Action<KillButtonCustomData, bool> onClicked) =>
                                     CustomButton.addButton(epicAssemblyFail, name, imageName, cooldown, isTargetButton, allowedRoles, rolesCantTarget, onClicked);
         public static CustomRole createRole(String name, String subtext, bool nameColor, bool nameColorPublic, Color32 roleColor, bool canSeeTeam, CustomRoleSide side,
                     VentPrivilege ventPrivilege, bool canKill, bool showEjectText) =>
                                  CustomRole.createRole(name, subtext, nameColor, nameColorPublic, roleColor, canSeeTeam, side, ventPrivilege, canKill, showEjectText);
+        public static CustomBooleanSetting addSetting_Toggle(string name, bool defaultValue, Action<bool> onChanged) {
+            CustomBooleanSetting setting = new CustomBooleanSetting(name, defaultValue, onChanged);
+            customLobbySettings.Add(setting);
+            return setting; 
+        }
+        public static CustomNumberSetting addSetting_Number(string name, float defaultValue, float min, float max, float increment, Action<float> onChanged)
+        {
+            CustomNumberSetting setting = new CustomNumberSetting(name, defaultValue, min, max, increment, onChanged);
+            customLobbySettings.Add(setting);
+            return setting;
+        }
+        public static CustomStringSetting addSetting_String(string name, string defaultValue, List<string> allValues, Action<string> onChanged)
+        {
+            CustomStringSetting setting = new CustomStringSetting(name, defaultValue, allValues, onChanged);
+            customLobbySettings.Add(setting);
+            return setting;
+        }
 
         public static String getRoleName(PlayerControl player)
         {
