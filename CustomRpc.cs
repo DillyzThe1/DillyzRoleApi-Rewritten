@@ -15,6 +15,7 @@ namespace DillyzRoleApi_Rewritten
         SetSettings = 104,      // Setting the settings sets the setting settings.
         RoleCheck = 105,        // A role check for me to do. If you're missing any roles or have too many, you're kicked out.
         ModCheck = 106,         // A mod check for me to do. Technically, this is called before role check. 🤓
+        RevivePlayer = 107,     // Revives a player. What do you expect?
         CustomRPCCall = 110     // Available spaces for custom RPC. Register your own with DillyzUtil.regRpcCallback("RpcName", delegate(MessageReader reader) {});
     }
 
@@ -310,6 +311,9 @@ namespace DillyzRoleApi_Rewritten
                     AmongUsClient.Instance.HandleDisconnect(AmongUsClient.Instance.LastDisconnectReason, AmongUsClient.Instance.LastCustomDisconnect);
 
 
+                    break;
+                case (byte)CustomRpc.RevivePlayer:
+                    DillyzUtil.findPlayerControl(reader.ReadByte()).Revive();
                     break;
                 case (byte)CustomRpc.CustomRPCCall:
                     string rpcToGet = reader.ReadString();

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using AmongUs.GameOptions;
 using Hazel;
 using UnityEngine;
 
@@ -51,7 +52,9 @@ namespace DillyzRoleApi_Rewritten
                 PlayerControl player = DillyzUtil.findPlayerControl(playerId);
                 string role = DillyzUtil.getRoleName(player);
 
-                if (HudManagerPatch.AllKillButtons != null) {
+                if (HudManagerPatch.AllKillButtons != null && playerId == PlayerControl.LocalPlayer.PlayerId)
+                {
+                    player.SetKillTimer(GameOptionsManager.Instance.CurrentGameOptions.GetFloat(FloatOptionNames.KillCooldown));
                     foreach (KillButtonCustomData button in HudManagerPatch.AllKillButtons)
                     {
                         button.lastUse = DateTime.UtcNow;

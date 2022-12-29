@@ -24,7 +24,7 @@ namespace DillyzRoleApi_Rewritten
         public static CustomBooleanSetting addSetting_Toggle(string name, bool defaultValue, Action<bool> onChanged) {
             CustomBooleanSetting setting = new CustomBooleanSetting(name, defaultValue, onChanged);
             customLobbySettings.Add(setting);
-            return setting; 
+            return setting;
         }
         public static CustomFloatSetting addSetting_Number(string name, float defaultValue, float min, float max, float increment, Action<float> onChanged)
         {
@@ -94,7 +94,7 @@ namespace DillyzRoleApi_Rewritten
             switch (player.Data.RoleType) {
                 case RoleTypes.Impostor:
                     return CustomPalette.ImpostorRed;
-                case  RoleTypes.ImpostorGhost:
+                case RoleTypes.ImpostorGhost:
                     return CustomPalette.ImpostorRed;
                 case RoleTypes.Shapeshifter:
                     return CustomPalette.ShapeShifterCrimson;
@@ -416,8 +416,8 @@ namespace DillyzRoleApi_Rewritten
                     case 16:
                         DillyzRoleApiMain.Instance.Log.LogInfo("wav5");
                         s = BitConverter.ToInt32(audioBytes, h);
-                        h2 = h + sizeof(int); 
-                        f = sizeof(Int16); 
+                        h2 = h + sizeof(int);
+                        f = sizeof(Int16);
                         cs = s / f;
                         p = 0;
                         soundFloats = new float[cs];
@@ -430,9 +430,9 @@ namespace DillyzRoleApi_Rewritten
                     case 32:
                         DillyzRoleApiMain.Instance.Log.LogInfo("wav5");
                         s = BitConverter.ToInt32(audioBytes, h);
-                        h2 = h + sizeof(int); 
-                        f = sizeof(float); 
-                        cs = s / f; 
+                        h2 = h + sizeof(int);
+                        f = sizeof(float);
+                        cs = s / f;
                         p = 0;
                         soundFloats = new float[cs];
                         while (p < cs) {
@@ -476,7 +476,7 @@ namespace DillyzRoleApi_Rewritten
                     if (writingCallback != null)
                         writingCallback(writer);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    return; 
+                    return;
                 }
 
             DillyzRoleApiMain.Instance.Log.LogError("Alright, you're trolling. You're. TROLLING. The RPC you're calling is null. " + rpcName + " doesn't EXIST! Are you ok?!");
@@ -505,6 +505,19 @@ namespace DillyzRoleApi_Rewritten
             List<PlayerControl> pcs = PlayerControl.AllPlayerControls.ToArray().ToList();
             pcs.RemoveAll(x => getRoleName(x) != rolename);
             return pcs;
+        }
+
+        public static void RPCRevivePlayer(PlayerControl player, string roleto)
+        {
+            CustomRole role = CustomRole.getByName(roleto);
+            RpcSetRole(player, roleto);
+            player.RpcSetRole((role != null && (role.switchToImpostor || role.side == CustomRoleSide.Impostor)) ? RoleTypes.Crewmate : RoleTypes.Impostor);
+            player.Revive();
+
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.RevivePlayer, SendOption.None, -1);
+            writer.Write(player.PlayerId);
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+
         }
     }
 }
