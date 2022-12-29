@@ -35,14 +35,25 @@ namespace DillyzRoleApi_Rewritten
     [HarmonyPatch(typeof(IntroCutscene._ShowTeam_d__32), nameof(IntroCutscene._ShowTeam_d__32.MoveNext))]
     class IntroCutscenePatch_Team
     {
-        public static void Postfix(IntroCutscene._ShowRole_d__35 __instance)
+        public static void Postfix(IntroCutscene._ShowTeam_d__32 __instance)
         {
             CustomRole role = CustomRole.getByName(DillyzUtil.getRoleName(PlayerControl.LocalPlayer));
             if (role == null)
                 return;
 
-            if (role.side == CustomRoleSide.Impostor || role.side == CustomRoleSide.Crewmate)
+            if (role.side == CustomRoleSide.Crewmate)
                 return;
+
+            // doing this bc dumb dumb
+            if (role.side == CustomRoleSide.Impostor)
+            {
+                string imphex = DillyzUtil.colorToHex(CustomPalette.ImpostorRed);
+                __instance.__4__this.TeamTitle.text = $"<{imphex}>Impostor</color>";
+                __instance.__4__this.ImpostorText.text = "";
+                __instance.__4__this.BackgroundBar.material.color = CustomPalette.ImpostorRed;
+                return;
+            }
+
 
             Color32 intendedColor = (role.side == CustomRoleSide.Independent) ? role.roleColor : CustomPalette.LoneWolfGray;
             string colorHex = DillyzUtil.colorToHex(intendedColor);
