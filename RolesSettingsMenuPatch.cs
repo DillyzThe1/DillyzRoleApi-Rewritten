@@ -160,7 +160,7 @@ namespace DillyzRoleApi_Rewritten
                                 valueTMP.transform.localPosition = new Vector3(0f, -0.015f, 0f);
                                 valueTMP.transform.position = new Vector3(ogvaluetmp.transform.position.x + (xoff/2f), valueTMP.transform.position.y, -168f);
                                 valueTMP.gameObject.layer = ogvaluetmp.gameObject.layer;
-                                valueTMP.text = floatSetting.settingValue.ToString();
+                                valueTMP.text = floatSetting.settingValue.ToString() + floatSetting.suffix;
 
                                 GameObject ogplustmp = ogNumbOpt.transform.Find("Plus_TMP").gameObject;
                                 TextMeshPro plusTMP = GameObject.Instantiate(ogplustmp).GetComponent<TextMeshPro>();
@@ -198,7 +198,7 @@ namespace DillyzRoleApi_Rewritten
                                 void callback_2()
                                 {
                                     floatSetting.settingValue -= floatSetting.increment;
-                                    valueTMP.text = floatSetting.settingValue.ToString();
+                                    valueTMP.text = floatSetting.settingValue.ToString() + floatSetting.suffix;
 
                                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.SetSettings, Hazel.SendOption.None, -1);
                                     writer.Write((byte)1);
