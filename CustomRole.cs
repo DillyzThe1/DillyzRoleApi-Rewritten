@@ -153,18 +153,19 @@ namespace DillyzRoleApi_Rewritten
                 case "":
                     break;
                 default:
-                    CustomRole roleee = CustomRole.getByName(role);
+                    CustomRole roleee = CustomRole.getByName(roleName);
+                    //DillyzRoleApiMain.Instance.Log.LogInfo((roleee == null) + " " + player.name);
                     bool funnyt = (roleee != null && roleee.switchToImpostor);
-                    DillyzRoleApiMain.Instance.Log.LogInfo(funnyt + " that " + player.name + " is an imp");
+                    //DillyzRoleApiMain.Instance.Log.LogInfo(funnyt + " that " + player.name + " is an imp");
                     player.SetRole(funnyt ? RoleTypes.Impostor : RoleTypes.Crewmate);
                     roleNameMap[playerId] = roleName;
 
-                    DillyzRoleApiMain.Instance.Log.LogInfo("role " + roleNameMap[playerId]);
+                    //DillyzRoleApiMain.Instance.Log.LogInfo("role " + roleNameMap[playerId]);
                     return;
             }
             roleNameMap[playerId] = "";
 
-            DillyzRoleApiMain.Instance.Log.LogInfo("roleE " + roleName + " " + roleNameMap[playerId]);
+            //DillyzRoleApiMain.Instance.Log.LogInfo("roleE " + roleName + " " + roleNameMap[playerId]);
         }
 
         public List<PlayerControl> AllPlayersWithRole {

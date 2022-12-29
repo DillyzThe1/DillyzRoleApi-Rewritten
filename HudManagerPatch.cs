@@ -4,6 +4,7 @@ using HarmonyLib;
 using TMPro;
 using UnityEngine;
 using AmongUs.GameOptions;
+using System.Linq;
 
 namespace DillyzRoleApi_Rewritten
 {
@@ -183,7 +184,7 @@ namespace DillyzRoleApi_Rewritten
                     TimeSpan timeLeft = DateTime.UtcNow - lastKillThingForCustoms;
                     int timeRemaining = (int)Math.Ceiling((double)new decimal(fullCooldown - timeLeft.TotalMilliseconds / 1000f));
                     __instance.KillButton.SetCoolDown(timeRemaining < 0 ? 0 : timeRemaining, fullCooldown);
-                    __instance.KillButton.SetTarget(DillyzUtil.getClosestPlayer(PlayerControl.LocalPlayer));
+                    __instance.KillButton.SetTarget(DillyzUtil.getClosestPlayer(PlayerControl.LocalPlayer, null, GameOptionsData.KillDistances[GameOptionsManager.Instance.currentNormalGameOptions.KillDistance], true, false, DillyzUtil.roleSide(PlayerControl.LocalPlayer) != CustomRoleSide.Impostor));
                 }
             }
             else {

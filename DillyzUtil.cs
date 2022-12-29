@@ -187,13 +187,19 @@ namespace DillyzRoleApi_Rewritten
             return getClosestPlayer(centerPlayer, null, mindist, true, false);
         }
 
-        public static PlayerControl getClosestPlayer(PlayerControl centerPlayer, System.Collections.Generic.List<String> roleFilters, double mindist, bool shouldBeAlive, bool canTargetSelf) {
+        public static PlayerControl getClosestPlayer(PlayerControl centerPlayer, System.Collections.Generic.List<String> roleFilters, double mindist, bool shouldBeAlive, bool canTargetSelf)
+        {
+            return getClosestPlayer(centerPlayer, roleFilters, mindist, shouldBeAlive, canTargetSelf, true);
+        }
+        public static PlayerControl getClosestPlayer(PlayerControl centerPlayer, System.Collections.Generic.List<String> roleFilters, double mindist, bool shouldBeAlive, bool canTargetSelf, bool targetsImpostorTeam) {
             System.Collections.Generic.List<PlayerControl> welcomeOldPlayers = PlayerControl.AllPlayerControls.ToArray().ToList();
             PlayerControl close = canTargetSelf ? PlayerControl.LocalPlayer : null;
             double playerDist = mindist;
 
             if (roleFilters != null)
                 welcomeOldPlayers.RemoveAll(x => roleFilters.Contains(getRoleName(x)));
+            if (!targetsImpostorTeam)
+                welcomeOldPlayers.RemoveAll(x => (roleSide(x) == CustomRoleSide.Impostor));
             welcomeOldPlayers.RemoveAll(x => x.Data.IsDead == shouldBeAlive);
             welcomeOldPlayers.RemoveAll(x => x.inVent);
 
