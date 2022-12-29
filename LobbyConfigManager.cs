@@ -53,7 +53,7 @@ namespace DillyzRoleApi_Rewritten
                             writer.Write((setting as CustomBooleanSetting).settingValue);
                             break;
                         case CustomSettingType.Float:
-                            writer.Write((setting as CustomNumberSetting).settingValue);
+                            writer.Write((setting as CustomFloatSetting).settingValue);
                             break;
                         case CustomSettingType.String:
                             writer.Write((setting as CustomStringSetting).settingValue);

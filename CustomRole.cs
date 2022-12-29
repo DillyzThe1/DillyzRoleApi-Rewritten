@@ -170,9 +170,9 @@ namespace DillyzRoleApi_Rewritten
                    $"roleColor: [{this.roleColor.r}, {this.roleColor.g}, {this.roleColor.b}, teamCanSeeYou: {this.teamCanSeeYou}, side: {this.side}, " +
                    $"ventPrivilege: {this.ventPrivilege}, canKill: {this.canKill}]";
         }
-
-        public void AddAdvancedSetting_Int(string name, int defaultValue, int minimum, int maximum, int increment, Action<float> onChanged) {
-            _advancedSettings.Add(new CustomNumberSetting(name, defaultValue, minimum, maximum, increment, onChanged));
+         
+        public void AddAdvancedSetting_Float(string name, int defaultValue, int minimum, int maximum, int increment, Action<float> onChanged) {
+            _advancedSettings.Add(new CustomFloatSetting(name, defaultValue, minimum, maximum, increment, onChanged));
         }
         public void AddAdvancedSetting_String(string name, string defaultValue, string[] allValues, Action<string> onChanged) {
             _advancedSettings.Add(new CustomStringSetting(name, defaultValue, allValues.ToList(), onChanged));

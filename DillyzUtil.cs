@@ -26,9 +26,9 @@ namespace DillyzRoleApi_Rewritten
             customLobbySettings.Add(setting);
             return setting; 
         }
-        public static CustomNumberSetting addSetting_Number(string name, float defaultValue, float min, float max, float increment, Action<float> onChanged)
+        public static CustomFloatSetting addSetting_Number(string name, float defaultValue, float min, float max, float increment, Action<float> onChanged)
         {
-            CustomNumberSetting setting = new CustomNumberSetting(name, defaultValue, min, max, increment, onChanged);
+            CustomFloatSetting setting = new CustomFloatSetting(name, defaultValue, min, max, increment, onChanged);
             customLobbySettings.Add(setting);
             return setting;
         }

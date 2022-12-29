@@ -124,7 +124,7 @@ namespace DillyzRoleApi_Rewritten
                                             //DillyzRoleApiMain.Instance.Log.LogInfo(typeToActaullyGet + " = " + boolsetting.settingValue);
                                             break;
                                         case CustomSettingType.Float:
-                                            CustomNumberSetting intsetting = rolesetting as CustomNumberSetting;
+                                            CustomFloatSetting intsetting = rolesetting as CustomFloatSetting;
                                             intsetting.settingValue = reader.ReadInt32();
                                             //DillyzRoleApiMain.Instance.Log.LogInfo(typeToActaullyGet + " = " + intsetting.settingValue);
                                             break;

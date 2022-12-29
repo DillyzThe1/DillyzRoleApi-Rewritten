@@ -152,7 +152,7 @@ namespace DillyzRoleApi_Rewritten
                             break;
                         case CustomSettingType.Float:
                             {
-                                CustomNumberSetting floatSetting = setting as CustomNumberSetting;
+                                CustomFloatSetting floatSetting = setting as CustomFloatSetting;
 
                                 GameObject ogvaluetmp = ogNumbOpt.transform.Find("Value_TMP").gameObject;
                                 TextMeshPro valueTMP = GameObject.Instantiate(ogvaluetmp).GetComponent<TextMeshPro>();

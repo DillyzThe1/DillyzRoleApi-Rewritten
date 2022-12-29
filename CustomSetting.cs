@@ -8,7 +8,7 @@ namespace DillyzRoleApi_Rewritten
         public string title = "Invalid";
     }
 
-    public class CustomNumberSetting : CustomSetting
+    public class CustomFloatSetting : CustomSetting
     {
         private float _value;
         private float _defaultValue;
@@ -31,7 +31,7 @@ namespace DillyzRoleApi_Rewritten
 
         private Action<float> _onChanged;
 
-        public CustomNumberSetting(string name, float defaultValue, float min, float max, float increment, Action<float> onChanged) {
+        public CustomFloatSetting(string name, float defaultValue, float min, float max, float increment, Action<float> onChanged) {
             this.title = name;
             this.settingType = CustomSettingType.Float;
 
