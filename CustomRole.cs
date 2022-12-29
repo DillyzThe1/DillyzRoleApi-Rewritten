@@ -70,28 +70,93 @@ namespace DillyzRoleApi_Rewritten
                 ShipStatus.Instance.Begin();*/
             switch (roleName) {
                 case "Impostor":
-                    player.RpcSetRole(RoleTypes.Impostor);
+                    if (player.Data.IsDead) {
+                        player.Data.RoleType = RoleTypes.ImpostorGhost;
+                        player.Data.Role = new ImpostorGhostRole();
+                        player.SetRole(RoleTypes.ImpostorGhost);
+                    }
+                    else {
+                        player.Data.RoleType = RoleTypes.Impostor;
+                        player.Data.Role = new ImpostorRole();
+                        player.SetRole(RoleTypes.Impostor);
+                    }
                     break;
                 case "ShapeShifter":
-                    player.RpcSetRole(RoleTypes.Shapeshifter);
+                    if (player.Data.IsDead)
+                    {
+                        player.Data.RoleType = RoleTypes.ImpostorGhost;
+                        player.Data.Role = new ImpostorGhostRole();
+                        player.SetRole(RoleTypes.ImpostorGhost);
+                    }
+                    else
+                    {
+                        player.Data.RoleType = RoleTypes.Shapeshifter;
+                        player.Data.Role = new ShapeshifterRole();
+                        player.SetRole(RoleTypes.Shapeshifter);
+                    }
                     break;
                 case "Scientist":
-                    player.RpcSetRole(RoleTypes.Scientist);
+                    if (player.Data.IsDead)
+                    {
+                        player.Data.RoleType = RoleTypes.CrewmateGhost;
+                        player.Data.Role = new CrewmateGhostRole();
+                        player.SetRole(RoleTypes.CrewmateGhost);
+                    }
+                    else
+                    {
+                        player.Data.RoleType = RoleTypes.Scientist;
+                        player.Data.Role = new ScientistRole();
+                        player.SetRole(RoleTypes.Scientist);
+                    }
                     break;
                 case "Engineer":
-                    player.RpcSetRole(RoleTypes.Engineer);
+                    if (player.Data.IsDead)
+                    {
+                        player.Data.RoleType = RoleTypes.CrewmateGhost;
+                        player.Data.Role = new CrewmateGhostRole();
+                        player.SetRole(RoleTypes.CrewmateGhost);
+                    }
+                    else
+                    {
+                        player.Data.RoleType = RoleTypes.Engineer;
+                        player.Data.Role = new EngineerRole();
+                        player.SetRole(RoleTypes.Engineer);
+                    }
                     break;
                 case "GuardianAngel":
-                    player.RpcSetRole(RoleTypes.GuardianAngel);
+                    if (player.Data.IsDead)
+                    {
+                        player.Data.RoleType = RoleTypes.GuardianAngel;
+                        player.Data.Role = new GuardianAngelRole();
+                        player.SetRole(RoleTypes.GuardianAngel);
+                    }
+                    else {
+                        player.Data.RoleType = RoleTypes.Crewmate;
+                        player.Data.Role = new CrewmateRole();
+                        player.SetRole(RoleTypes.Crewmate);
+                    }
                     break;
                 case "Crewmate":
-                    player.RpcSetRole(RoleTypes.Crewmate);
+                    if (player.Data.IsDead)
+                    {
+                        player.Data.RoleType = RoleTypes.CrewmateGhost;
+                        player.Data.Role = new CrewmateGhostRole();
+                        player.SetRole(RoleTypes.CrewmateGhost);
+                    }
+                    else
+                    {
+                        player.Data.RoleType = RoleTypes.Crewmate;
+                        player.Data.Role = new CrewmateRole();
+                        player.SetRole(RoleTypes.Crewmate);
+                    }
                     break;
                 case "":
                     break;
                 default:
                     CustomRole roleee = CustomRole.getByName(role);
-                    player.RpcSetRole((roleee != null && roleee.switchToImpostor) ? RoleTypes.Impostor : RoleTypes.Crewmate);
+                    bool funnyt = (roleee != null && roleee.switchToImpostor);
+                    DillyzRoleApiMain.Instance.Log.LogInfo(funnyt + " that " + player.name + " is an imp");
+                    player.SetRole(funnyt ? RoleTypes.Impostor : RoleTypes.Crewmate);
                     roleNameMap[playerId] = roleName;
 
                     DillyzRoleApiMain.Instance.Log.LogInfo("role " + roleNameMap[playerId]);

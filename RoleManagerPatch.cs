@@ -63,9 +63,7 @@ namespace DillyzRoleApi_Rewritten
                         PlayerControl selectedPlayer = availablePlayers[roleIndex];
                         availablePlayers.Remove(selectedPlayer);
                         DillyzUtil.RpcSetRole(selectedPlayer, role.name);
-
-                        if (role.switchToImpostor && !selectedPlayer.Data.Role.IsImpostor)
-                            selectedPlayer.RpcSetRole(RoleTypes.Impostor);
+                        selectedPlayer.RpcSetRole(role.switchToImpostor ? RoleTypes.Impostor : RoleTypes.Crewmate);
                     }
                 }
             }

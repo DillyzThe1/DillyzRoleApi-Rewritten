@@ -62,9 +62,8 @@ namespace DillyzRoleApi_Rewritten
                 // if the role is not there or doesn't change color, leave it alone
                 if (theRole == null || !theRole.nameColorChanges)
                 {
-                    if (PlayerControl.LocalPlayer.Data.Role.IsImpostor && player.Data.Role.IsImpostor)
-                        HudManagerPatch.displayColor(__instance, player, (player.Data.RoleType == RoleTypes.Shapeshifter) ?
-                                                                        CustomPalette.ShapeShifterCrimson : CustomPalette.ImpostorRed);
+                    if (DillyzUtil.roleSide(PlayerControl.LocalPlayer) == DillyzUtil.roleSide(player))
+                        HudManagerPatch.displayColor(__instance, player, DillyzUtil.roleColor(player, true));
                     else if (youre)
                         HudManagerPatch.displayColor(__instance, player, DillyzUtil.roleColor(player, true));
                     else
@@ -74,7 +73,7 @@ namespace DillyzRoleApi_Rewritten
 
                 if (theRole.nameColorPublic || youre || // If the name color was public. || if it's you
                                                         // If it's private but you get it.
-                   (theRole.teamCanSeeYou && localRole != null && theRole.name == localRole.name && theRole.side != CustomRoleSide.LoneWolf))
+                   (theRole.teamCanSeeYou && DillyzUtil.roleSide(player) == DillyzUtil.roleSide(PlayerControl.LocalPlayer) && DillyzUtil.roleSide(player) != CustomRoleSide.LoneWolf))
                     HudManagerPatch.displayColor(__instance, player, theRole.roleColor);
                 else
                     HudManagerPatch.displayColor(__instance, player, CustomPalette.White);

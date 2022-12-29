@@ -40,7 +40,7 @@ namespace DillyzRoleApi_Rewritten
                     player.Data.Role = new CrewmateRole();
 
                     if (rpc)
-                        player.RpcSetRole(AmongUs.GameOptions.RoleTypes.Crewmate);
+                        DillyzUtil.RpcSetRole(player, "Crewmate");
                 }
                 else
                 {
@@ -49,7 +49,7 @@ namespace DillyzRoleApi_Rewritten
                     player.Data.Role = new ImpostorRole();
 
                     if (rpc)
-                        player.RpcSetRole(AmongUs.GameOptions.RoleTypes.Impostor);
+                        DillyzUtil.RpcSetRole(player, "Impostor");
 
                     customWinners.Add(player.PlayerId);
                 }
