@@ -37,15 +37,9 @@ namespace DillyzRoleApi_Rewritten
     {
         public static void Postfix(IntroCutscene._ShowTeam_d__32 __instance)
         {
-            CustomRole role = CustomRole.getByName(DillyzUtil.getRoleName(PlayerControl.LocalPlayer));
-            if (role == null)
+            if (DillyzUtil.roleSide(PlayerControl.LocalPlayer) == CustomRoleSide.Crewmate)
                 return;
-
-            if (role.side == CustomRoleSide.Crewmate)
-                return;
-
-            // doing this bc dumb dumb
-            if (role.side == CustomRoleSide.Impostor)
+            if (DillyzUtil.roleSide(PlayerControl.LocalPlayer) == CustomRoleSide.Impostor)
             {
                 string imphex = DillyzUtil.colorToHex(CustomPalette.ImpostorRed);
                 __instance.__4__this.TeamTitle.text = $"<{imphex}>Impostor</color>";
@@ -53,6 +47,11 @@ namespace DillyzRoleApi_Rewritten
                 __instance.__4__this.BackgroundBar.material.color = CustomPalette.ImpostorRed;
                 return;
             }
+
+            CustomRole role = CustomRole.getByName(DillyzUtil.getRoleName(PlayerControl.LocalPlayer));
+            if (role == null)
+                return;
+
 
 
             Color32 intendedColor = (role.side == CustomRoleSide.Independent) ? role.roleColor : CustomPalette.LoneWolfGray;
