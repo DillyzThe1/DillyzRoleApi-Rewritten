@@ -182,7 +182,8 @@ namespace DillyzRoleApi_Rewritten
             if (blockSpr != null)
             {
                 blockSpr.enabled = blockingButton && showIconOnBlocked;
-                killButton.cooldownTimerText.text = "";
+                if (blockSpr.enabled)
+                    killButton.cooldownTimerText.text = "";
             }
 
             if (blockingButton) {
