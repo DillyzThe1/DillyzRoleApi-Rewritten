@@ -161,6 +161,7 @@ namespace DillyzRoleApi_Rewritten
                 AllKillButtons.Add(customKillControl);
 
                 GameObject blockthing = GameObject.Instantiate(abilityButton.commsDown);
+                blockthing.SetActive(true);
                 blockthing.transform.parent = newKill.transform;
                 blockthing.transform.localPosition = new Vector3(0f, 0f, -100f);
                 blockthing.transform.localScale = abilityButton.commsDown.transform.localScale;
