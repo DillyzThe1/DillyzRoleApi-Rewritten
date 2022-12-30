@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using AmongUs.GameOptions;
+using AssemblyUnhollower.Passes;
 using UnityEngine;
 
 namespace DillyzRoleApi_Rewritten
@@ -120,7 +121,9 @@ namespace DillyzRoleApi_Rewritten
         public DateTime lastUse;
         public CustomButton buttonData;
         public KillButton killButton;
+        public SpriteRenderer blockSpr;
         public bool blockingButton = false;
+        public bool showIconOnBlocked = false;
 
         public bool isSetup = false;
 
@@ -175,6 +178,9 @@ namespace DillyzRoleApi_Rewritten
             }
             else
                 this.killButton.SetCoolDown(0f, 1f);
+
+            if (blockSpr != null)
+                blockSpr.enabled = blockingButton && showIconOnBlocked;
 
             if (blockingButton) {
                 if (this.buttonData.targetButton)

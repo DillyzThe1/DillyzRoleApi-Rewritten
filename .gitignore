@@ -2,3 +2,4 @@ bin/*
 obj/*
 *.ini
 UnityEngine.CoreModule.dll
+RECOVER_*.fla

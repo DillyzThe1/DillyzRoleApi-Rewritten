@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using AmongUs.GameOptions;
 using System.Linq;
+using System.Reflection;
 
 namespace DillyzRoleApi_Rewritten
 {
@@ -158,6 +159,13 @@ namespace DillyzRoleApi_Rewritten
                 }
 
                 AllKillButtons.Add(customKillControl);
+
+                GameObject blockthing = GameObject.Instantiate(abilityButton.commsDown);
+                blockthing.transform.parent = newKill.transform;
+                blockthing.transform.localRotation = abilityButton.commsDown.transform.localRotation;
+                blockthing.transform.localScale = abilityButton.commsDown.transform.localScale;
+                customKillControl.blockSpr = blockthing.GetComponent<SpriteRenderer>();
+                customKillControl.blockSpr.sprite = DillyzUtil.getSprite(Assembly.GetExecutingAssembly(), "DillyzRoleApi_Rewritten.Assets.button_disabled.png");
             }
             DillyzRoleApiMain.Instance.Log.LogInfo("bruh moment123456789D");
         }
