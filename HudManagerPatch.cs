@@ -162,7 +162,7 @@ namespace DillyzRoleApi_Rewritten
 
                 GameObject blockthing = GameObject.Instantiate(abilityButton.commsDown);
                 blockthing.transform.parent = newKill.transform;
-                blockthing.transform.localRotation = abilityButton.commsDown.transform.localRotation;
+                blockthing.transform.localPosition = new Vector3(0f, 0f, -100f);
                 blockthing.transform.localScale = abilityButton.commsDown.transform.localScale;
                 customKillControl.blockSpr = blockthing.GetComponent<SpriteRenderer>();
                 customKillControl.blockSpr.sprite = DillyzUtil.getSprite(Assembly.GetExecutingAssembly(), "DillyzRoleApi_Rewritten.Assets.button_disabled.png");
