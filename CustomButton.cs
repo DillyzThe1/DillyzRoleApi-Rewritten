@@ -180,7 +180,10 @@ namespace DillyzRoleApi_Rewritten
                 this.killButton.SetCoolDown(0f, 1f);
 
             if (blockSpr != null)
+            {
                 blockSpr.enabled = blockingButton && showIconOnBlocked;
+                killButton.cooldownTimerText.text = "";
+            }
 
             if (blockingButton) {
                 if (this.buttonData.targetButton)
