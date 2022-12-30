@@ -6,6 +6,7 @@ using UnityEngine;
 using AmongUs.GameOptions;
 using System.Linq;
 using System.Reflection;
+using static Rewired.ButtonLoopSet;
 
 namespace DillyzRoleApi_Rewritten
 {
@@ -139,13 +140,22 @@ namespace DillyzRoleApi_Rewritten
                 pbjsandwich.OnClick.AddListener((UnityEngine.Events.UnityAction)listener);
 
                 void listener() {
-                    DillyzRoleApiMain.Instance.Log.LogInfo("epic clickenining");
+                    //DillyzRoleApiMain.Instance.Log.LogInfo("epic clickenining");
 
                     if (!newKill.isActiveAndEnabled || (newKill.currentTarget == null && customKillControl.buttonData.targetButton) 
-                                                    || newKill.isCoolingDown || (customKillControl.buttonData.caresAboutMoving 
+                                                    /*|| newKill.isCoolingDown*/ || (customKillControl.buttonData.caresAboutMoving 
                             && !PlayerControl.LocalPlayer.CanMove) || !newKill.canInteract)
                     {
-                        customKillControl.buttonData.OnClicked(customKillControl, false);
+                        if (!newKill.isCoolingDown)
+                            customKillControl.buttonData.OnClicked(customKillControl, false);
+                        else if (customKillControl.useTimerMode)
+                        {
+                            if (customKillControl.buttonData.useTimerCallback != null)
+                                customKillControl.buttonData.useTimerCallback(customKillControl, false);
+                            customKillControl.useTimerMode = false;
+                            customKillControl.lastUse = DateTime.UtcNow;
+                            customKillControl.killButton.cooldownTimerText.color = Palette.White;
+                        }
                         return;
                     }
 
@@ -159,7 +169,7 @@ namespace DillyzRoleApi_Rewritten
                 }
 
                 AllKillButtons.Add(customKillControl);
-
+                 
                 GameObject blockthing = GameObject.Instantiate(abilityButton.commsDown);
                 blockthing.SetActive(true);
                 blockthing.transform.parent = newKill.transform;
