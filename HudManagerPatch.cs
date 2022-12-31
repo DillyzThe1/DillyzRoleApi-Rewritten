@@ -143,12 +143,10 @@ namespace DillyzRoleApi_Rewritten
                     //DillyzRoleApiMain.Instance.Log.LogInfo("epic clickenining");
 
                     if (!newKill.isActiveAndEnabled || (newKill.currentTarget == null && customKillControl.buttonData.targetButton) 
-                                                    /*|| newKill.isCoolingDown*/ || (customKillControl.buttonData.caresAboutMoving 
+                                                    || newKill.isCoolingDown || (customKillControl.buttonData.caresAboutMoving 
                             && !PlayerControl.LocalPlayer.CanMove) || !newKill.canInteract)
                     {
-                        if (!newKill.isCoolingDown)
-                            customKillControl.buttonData.OnClicked(customKillControl, false);
-                        else if (customKillControl.useTimerMode)
+                        if (customKillControl.useTimerMode)
                         {
                             if (customKillControl.buttonData.useTimerCallback != null)
                                 customKillControl.buttonData.useTimerCallback(customKillControl, false);
@@ -156,6 +154,8 @@ namespace DillyzRoleApi_Rewritten
                             customKillControl.lastUse = DateTime.UtcNow;
                             customKillControl.killButton.cooldownTimerText.color = Palette.White;
                         }
+                        else
+                            customKillControl.buttonData.OnClicked(customKillControl, false); 
                         return;
                     }
 
