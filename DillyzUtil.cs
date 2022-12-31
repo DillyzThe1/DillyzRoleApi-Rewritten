@@ -8,6 +8,7 @@ using AmongUs.GameOptions;
 using BepInEx.IL2CPP.Utils;
 using Hazel;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 namespace DillyzRoleApi_Rewritten
 {
@@ -273,13 +274,19 @@ namespace DillyzRoleApi_Rewritten
                         Minigame.Instance.Close();
                     } catch { }
                 }
-                DestroyableSingleton<HudManager>.Instance.KillOverlay.ShowKillAnimation(assassinator.Data, target.Data);
+                KillAnimPrank(assassinator.Data, target.Data);
                 DestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(false);
                 target.cosmetics.SetNameMask(false);
                 target.RpcSetScanner(false);
             }
 
             assassinator.MyPhysics.StartCoroutine(DoCustomKill(kil, assassinator, target, tp));
+        }
+
+        // DOING THIS FOR OVERRIDE REASONS
+        public static void KillAnimPrank(GameData.PlayerInfo assassinatorData, GameData.PlayerInfo targetData)
+        {
+            DestroyableSingleton<HudManager>.Instance.KillOverlay.ShowKillAnimation(assassinatorData, targetData);
         }
 
         private static IEnumerator DoCustomKill(KillAnimation killanim, PlayerControl assassinator, PlayerControl target, bool tp) {
@@ -311,12 +318,7 @@ namespace DillyzRoleApi_Rewritten
             target.Die(DeathReason.Kill, true);
 
             if (tp)
-            {
-                yield return assassinator.MyPhysics.Animations.CoPlayCustomAnimation(killanim.BlurAnim);
-
-                assassinator.NetTransform.SnapTo(target.transform.position);
-                assassinator.MyPhysics.Animations.PlayIdleAnimation();
-            }
+                yield return KillSnap(killanim, assassinator, target);
 
             // move
             if (tp)
@@ -331,6 +333,16 @@ namespace DillyzRoleApi_Rewritten
 
             yield break;
         }
+
+        // DOING THIS FOR OVERRIDE REASONS
+        private static IEnumerator KillSnap(KillAnimation killanim, PlayerControl assassinator, PlayerControl target) {
+            yield return assassinator.MyPhysics.Animations.CoPlayCustomAnimation(killanim.BlurAnim);
+
+            assassinator.NetTransform.SnapTo(target.transform.position);
+            assassinator.MyPhysics.Animations.PlayIdleAnimation();
+            yield break;
+        }
+
 
         public static void RpcSetRole(PlayerControl player, string role) {
             DillyzRoleApiMain.Instance.Log.LogInfo($"setting {player.name} as {role}");
