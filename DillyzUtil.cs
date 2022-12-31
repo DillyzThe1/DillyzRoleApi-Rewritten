@@ -217,16 +217,18 @@ namespace DillyzRoleApi_Rewritten
         }
 
         // A workaround for killing.
-        public static void RpcCommitAssassination(PlayerControl assassinator, PlayerControl target)
+        public static void RpcCommitAssassination(PlayerControl assassinator, PlayerControl target) => RpcCommitAssassination(assassinator, target, true);
+        public static void RpcCommitAssassination(PlayerControl assassinator, PlayerControl target, bool tp)
         {
-            commitAssassination(assassinator, target);
+            commitAssassination(assassinator, target, tp);
 
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.Assassinate, Hazel.SendOption.None, -1);
             writer.Write(assassinator.PlayerId);
             writer.Write(target.PlayerId);
+            writer.Write(tp);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
         }
-        public static void commitAssassination(PlayerControl assassinator, PlayerControl target)
+        public static void commitAssassination(PlayerControl assassinator, PlayerControl target, bool tp)
         {
             //DillyzRoleApiMain.Instance.Log.LogInfo(assassinator.KillAnimations.Length + " kill anims");
             ///foreach (KillAnimation killanim in assassinator.KillAnimations)
@@ -277,15 +279,16 @@ namespace DillyzRoleApi_Rewritten
                 target.RpcSetScanner(false);
             }
 
-            assassinator.MyPhysics.StartCoroutine(DoCustomKill(kil, assassinator, target));
+            assassinator.MyPhysics.StartCoroutine(DoCustomKill(kil, assassinator, target, tp));
         }
 
-        private static IEnumerator DoCustomKill(KillAnimation killanim, PlayerControl assassinator, PlayerControl target) {
+        private static IEnumerator DoCustomKill(KillAnimation killanim, PlayerControl assassinator, PlayerControl target, bool tp) {
             FollowerCamera curCamera = Camera.main.GetComponent<FollowerCamera>();
             bool involved = PlayerControl.LocalPlayer.PlayerId == assassinator.PlayerId || PlayerControl.LocalPlayer.PlayerId == target.PlayerId;
 
             // no move
-            KillAnimation.SetMovement(assassinator, false);
+            if (tp)
+                KillAnimation.SetMovement(assassinator, false);
             KillAnimation.SetMovement(target, false);
 
             // ded body
@@ -307,13 +310,17 @@ namespace DillyzRoleApi_Rewritten
 
             target.Die(DeathReason.Kill, true);
 
-            yield return assassinator.MyPhysics.Animations.CoPlayCustomAnimation(killanim.BlurAnim);
+            if (tp)
+            {
+                yield return assassinator.MyPhysics.Animations.CoPlayCustomAnimation(killanim.BlurAnim);
 
-            assassinator.NetTransform.SnapTo(target.transform.position);
-            assassinator.MyPhysics.Animations.PlayIdleAnimation();
+                assassinator.NetTransform.SnapTo(target.transform.position);
+                assassinator.MyPhysics.Animations.PlayIdleAnimation();
+            }
 
             // move
-            KillAnimation.SetMovement(assassinator, true);
+            if (tp)
+                KillAnimation.SetMovement(assassinator, true);
             KillAnimation.SetMovement(target, true);
 
             deadBody.enabled = true;

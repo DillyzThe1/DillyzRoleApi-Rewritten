@@ -65,7 +65,7 @@ namespace DillyzRoleApi_Rewritten
                     GameOverPatch.SetAllToWin(reader.ReadString(), DillyzUtil.findPlayerControl(reader.ReadByte()), false);
                     break;
                 case (byte)CustomRpc.Assassinate:
-                    DillyzUtil.commitAssassination(DillyzUtil.findPlayerControl(reader.ReadByte()), DillyzUtil.findPlayerControl(reader.ReadByte()));
+                    DillyzUtil.commitAssassination(DillyzUtil.findPlayerControl(reader.ReadByte()), DillyzUtil.findPlayerControl(reader.ReadByte()), reader.ReadBoolean());
                     break;
                 case (byte)CustomRpc.SetSettings:
                     if (AmongUsClient.Instance.AmHost)

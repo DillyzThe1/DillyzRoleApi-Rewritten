@@ -15,7 +15,7 @@ namespace DillyzRoleApi_Rewritten
             {
                 DillyzRoleApiMain.Instance.Log.LogWarning($"{__instance.name} tried to kill {target.name} using the normal PlayerControl.MurderPlayer() function!" +
                                                                                                 $" (Did you forget to do DillyzUtil.RpcCommitAssassination()?)");
-                DillyzUtil.commitAssassination(__instance, target);
+                DillyzUtil.commitAssassination(__instance, target, true);
                 return false;
             }
         }
