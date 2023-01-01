@@ -158,7 +158,7 @@ namespace DillyzRoleApi_Rewritten
                     bool funnyt = (roleee != null && roleee.switchToImpostor);
                     //DillyzRoleApiMain.Instance.Log.LogInfo(funnyt + " that " + player.name + " is an imp");
                     player.SetRole(roleee.ghostRole ? (funnyt ? RoleTypes.ImpostorGhost : RoleTypes.CrewmateGhost)  : (funnyt ? RoleTypes.Impostor : RoleTypes.Crewmate));
-                    player.Data.IsDead = roleee.ghostRole;
+                    //player.Data.IsDead = roleee.ghostRole;
                     roleNameMap[playerId] = roleName;
 
                     //DillyzRoleApiMain.Instance.Log.LogInfo("role " + roleNameMap[playerId]);
