@@ -40,6 +40,7 @@
     <Compile Include="CustomRole.cs" />
     <Compile Include="CustomSetting.cs" />
     <Compile Include="GameStartManagerPatch.cs" />
+    <Compile Include="HostLocalGameButtonPatch.cs" />
     <Compile Include="LobbyBehaviourPatch.cs" />
     <Compile Include="LobbyConfigManager.cs" />
     <Compile Include="LogicGameFlowNormalPatch.cs" />
