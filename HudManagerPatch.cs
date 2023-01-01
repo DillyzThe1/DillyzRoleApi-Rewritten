@@ -195,6 +195,7 @@ namespace DillyzRoleApi_Rewritten
 
             if (localRole != null)
             {
+                __instance.AbilityButton.gameObject.SetActive(false);
                 __instance.ImpostorVentButton.gameObject.active = (localRole.ventPrivilege == VentPrivilege.Impostor) && !udiededed;
                 __instance.KillButton.gameObject.SetActive(localRole.canKill && !udiededed);
                 if (__instance.KillButton.gameObject.active)

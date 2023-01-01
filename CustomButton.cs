@@ -161,12 +161,7 @@ namespace DillyzRoleApi_Rewritten
                     this.killButton.SetDisabled();
                     return;
                 }
-
-                if (buttonData.useTimerCallback != null)
-                    buttonData.useTimerCallback(this, false);
-                useTimerMode = false;
-                lastUse = DateTime.UtcNow;
-                killButton.cooldownTimerText.color = Palette.White;
+                InterruptUseTimer();
             }
 
             int timeRemaining = 0;
@@ -238,6 +233,17 @@ namespace DillyzRoleApi_Rewritten
                 return;
             }
             this.killButton.SetDisabled();
+        }
+
+        public void InterruptUseTimer() {
+            if (!useTimerMode)
+                return;
+
+            if (buttonData.useTimerCallback != null)
+                buttonData.useTimerCallback(this, false);
+            useTimerMode = false;
+            lastUse = DateTime.UtcNow;
+            killButton.cooldownTimerText.color = Palette.White;
         }
     }
 }
