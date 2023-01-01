@@ -113,17 +113,17 @@ namespace DillyzRoleApi_Rewritten
                         }
                         else
                         {
-                            int angelmax = GameOptionsManager.Instance.CurrentGameOptions.RoleOptions.GetNumPerGame(AmongUs.GameOptions.RoleTypes.GuardianAngel);
-                            int angelchance = GameOptionsManager.Instance.CurrentGameOptions.RoleOptions.GetChancePerGame(AmongUs.GameOptions.RoleTypes.GuardianAngel);
+                            //int angelmax = GameOptionsManager.Instance.CurrentGameOptions.RoleOptions.GetNumPerGame(AmongUs.GameOptions.RoleTypes.GuardianAngel);
+                            //int angelchance = GameOptionsManager.Instance.CurrentGameOptions.RoleOptions.GetChancePerGame(AmongUs.GameOptions.RoleTypes.GuardianAngel);
 
                             string targetrole = "";
-                            if (DillyzUtil.roleSide(__instance) == CustomRoleSide.Crewmate && (gaurdianAngelAttempts < angelmax || DillyzUtil.InFreeplay()))
+                            /*if (DillyzUtil.roleSide(__instance) == CustomRoleSide.Crewmate && (gaurdianAngelAttempts < angelmax || DillyzUtil.InFreeplay()))
                             {
                                 int rolecahcnde = UnityEngine.Random.Range(0, 100);
                                 if (angelchance != 0 && (angelchance == 100 || angelchance >= rolecahcnde) || DillyzUtil.InFreeplay())
                                     targetrole = "GuardianAngel";
                                 gaurdianAngelAttempts++;
-                            }
+                            }*/
                             DillyzUtil.RpcSetRole(__instance, targetrole);
                         }
                     }
