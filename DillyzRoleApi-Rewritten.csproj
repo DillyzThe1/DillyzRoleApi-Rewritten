@@ -39,6 +39,7 @@
     <Compile Include="CustomPalette.cs" />
     <Compile Include="CustomRole.cs" />
     <Compile Include="CustomSetting.cs" />
+    <Compile Include="GameModeMenuPatch.cs" />
     <Compile Include="GameStartManagerPatch.cs" />
     <Compile Include="HostLocalGameButtonPatch.cs" />
     <Compile Include="LobbyBehaviourPatch.cs" />
