@@ -235,12 +235,14 @@ namespace DillyzRoleApi_Rewritten
             this.killButton.SetDisabled();
         }
 
-        public void InterruptUseTimer() {
+
+        public void InterruptUseTimer() => InterruptUseTimer(false);
+        public void InterruptUseTimer(bool actaullyInterrupted) {
             if (!useTimerMode)
                 return;
 
             if (buttonData.useTimerCallback != null)
-                buttonData.useTimerCallback(this, false);
+                buttonData.useTimerCallback(this, actaullyInterrupted);
             useTimerMode = false;
             lastUse = DateTime.UtcNow;
             killButton.cooldownTimerText.color = Palette.White;

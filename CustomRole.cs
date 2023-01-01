@@ -57,12 +57,7 @@ namespace DillyzRoleApi_Rewritten
                 {
                     button.lastUse = DateTime.UtcNow;
                     if (button.useTimerMode && button.buttonData.allowedRoles.Contains(role))
-                    {
-                        button.useTimerMode = false;
-                        button.killButton.cooldownTimerText.color = Palette.White;
-                        if (button.buttonData.useTimerCallback != null)
-                            button.buttonData.useTimerCallback(button, true);
-                    }
+                        button.InterruptUseTimer(true);
                 }
             }
 
