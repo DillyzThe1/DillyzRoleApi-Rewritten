@@ -30,11 +30,23 @@ namespace DillyzRoleApi_Rewritten
                 the(__instance, rb, buttons);
 
 
-            Transform trans = __instance.ActiveItems[__instance.ActiveItems.Count - 1];
+            int curPoint = __instance.ActiveItems.Count - 1; // tracks the cur position
+            Transform trans = __instance.ActiveItems[curPoint];
             float xc = trans.localPosition.x + __instance.fileWidth, yc = trans.localPosition.y, mh = 0f;
+
+            DillyzRoleApiMain.Instance.Log.LogInfo("start pos " + xc);
+            DillyzRoleApiMain.Instance.Log.LogInfo("max pos " + (__instance.fileWidth * 4.5f));
+            if (xc > __instance.fileWidth * 4.5f)
+            {
+                xc = 0;
+                yc += __instance.fileWidth;
+            }
+
             foreach (CustomRole role in CustomRole.allRoles) {
                 if (role.hiddenFromFreeplay)
                     continue;
+
+                curPoint++;
 
                 TaskAddButton taskbutton = UnityEngine.Object.Instantiate<TaskAddButton>(__instance.RoleButton);
                 taskbutton.SafePositionWorld = __instance.SafePositionWorld;
