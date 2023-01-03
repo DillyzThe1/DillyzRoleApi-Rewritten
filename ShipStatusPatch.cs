@@ -9,7 +9,7 @@ namespace DillyzRoleApi_Rewritten
             //if (DillyzUtil.InGame() && AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Ended)
             //CustomRole.allRoleNames.Clear();
             if (DillyzUtil.InFreeplay())
-                CustomRole.setRoleName(PlayerControl.LocalPlayer.PlayerId, "");
+                DillyzRoleApiMain.ResetStuffForLobby();
         }
     }
 }

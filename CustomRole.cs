@@ -50,16 +50,8 @@ namespace DillyzRoleApi_Rewritten
             PlayerControl player = DillyzUtil.findPlayerControl(playerId);
             string role = DillyzUtil.getRoleName(player);
 
-            if (HudManagerPatch.AllKillButtons != null && playerId == PlayerControl.LocalPlayer.PlayerId)
-            {
-                player.SetKillTimer(GameOptionsManager.Instance.CurrentGameOptions.GetFloat(FloatOptionNames.KillCooldown));
-                foreach (KillButtonCustomData button in HudManagerPatch.AllKillButtons)
-                {
-                    button.lastUse = DateTime.UtcNow;
-                    if (button.useTimerMode && button.buttonData.allowedRoles.Contains(role))
-                        button.InterruptUseTimer(true);
-                }
-            }
+            if (playerId == PlayerControl.LocalPlayer.PlayerId)
+                CustomButton.ResetAllButtons();
 
             /*if (PlayerTask.DestroyTasksOfType<ImportantTextTask>(PlayerControl.LocalPlayer) && !PlayerTask.PlayerHasTaskOfType<NormalPlayerTask>(PlayerControl.LocalPlayer))
                 ShipStatus.Instance.Begin();*/

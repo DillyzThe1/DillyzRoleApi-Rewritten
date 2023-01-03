@@ -150,5 +150,11 @@ namespace DillyzRoleApi_Rewritten
             regions.Insert(0, reg);*/ 
         }
 
+        // override this to laugh very hard at the scren
+        public static void ResetStuffForLobby()
+        {
+            CustomButton.ResetAllButtons();
+            CustomRole.roleNameMap.Clear();
+        }
     }
 }

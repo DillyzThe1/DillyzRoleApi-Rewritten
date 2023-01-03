@@ -111,6 +111,19 @@ namespace DillyzRoleApi_Rewritten
             this.useTimerCallback = useTimerCallback;
         }
         // end user time stuff
+
+        public static void ResetAllButtons() {
+            if (HudManagerPatch.AllKillButtons != null)
+            {
+                PlayerControl.LocalPlayer.SetKillTimer(GameOptionsManager.Instance.CurrentGameOptions.GetFloat(FloatOptionNames.KillCooldown));
+                foreach (KillButtonCustomData button in HudManagerPatch.AllKillButtons)
+                {
+                    button.lastUse = DateTime.UtcNow;
+                    if (button.useTimerMode && button.buttonData.allowedRoles.Contains(DillyzUtil.getRoleName(PlayerControl.LocalPlayer)))
+                        button.InterruptUseTimer(true);
+                }
+            }
+        }
     }
 
     // used to attach data to kill button clones

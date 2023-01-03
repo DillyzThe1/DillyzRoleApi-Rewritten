@@ -45,6 +45,7 @@
     <Compile Include="LobbyBehaviourPatch.cs" />
     <Compile Include="LobbyConfigManager.cs" />
     <Compile Include="LogicGameFlowNormalPatch.cs" />
+    <Compile Include="MeetingHudPatch.cs" />
     <Compile Include="PlayerControlPatch.cs" />
     <Compile Include="RolesSettingsMenuPatch.cs" />
     <Compile Include="CustomRpc.cs" />
