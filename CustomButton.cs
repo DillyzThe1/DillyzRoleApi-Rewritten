@@ -112,10 +112,11 @@ namespace DillyzRoleApi_Rewritten
         }
         // end user time stuff
 
-        public static void ResetAllButtons() {
+        public static void ResetAllButtons()
+        {
+            PlayerControl.LocalPlayer.SetKillTimer(GameOptionsManager.Instance.CurrentGameOptions.GetFloat(FloatOptionNames.KillCooldown));
             if (HudManagerPatch.AllKillButtons != null)
             {
-                PlayerControl.LocalPlayer.SetKillTimer(GameOptionsManager.Instance.CurrentGameOptions.GetFloat(FloatOptionNames.KillCooldown));
                 foreach (KillButtonCustomData button in HudManagerPatch.AllKillButtons)
                 {
                     button.lastUse = DateTime.UtcNow;
