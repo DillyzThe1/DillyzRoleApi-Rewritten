@@ -20,6 +20,7 @@ namespace DillyzRoleApi_Rewritten
     class TaskAddMinigamePatch
     {
         public static bool customTime = false;
+        public static int pageCount = 0, pageIndex = 0;
         public static void Postfix(TaskAdderGame __instance, TaskFolder taskFolder) {
             if (__instance.Hierarchy.Count != 1)
                 return;
@@ -29,18 +30,13 @@ namespace DillyzRoleApi_Rewritten
             foreach (RoleBehaviour rb in DestroyableSingleton<RoleManager>.Instance.AllRoles)
                 the(__instance, rb, buttons);
 
-
-            int curPoint = __instance.ActiveItems.Count - 1; // tracks the cur position
+            int oldcount = __instance.ActiveItems.Count;
+            int curPoint = oldcount - 1; // tracks the cur position
             Transform trans = __instance.ActiveItems[curPoint];
-            float xc = trans.localPosition.x + __instance.fileWidth, yc = trans.localPosition.y, mh = 0f;
+            float xc = trans.localPosition.x + __instance.fileWidth, yc = trans.localPosition.y, mh = 0F;
 
-            DillyzRoleApiMain.Instance.Log.LogInfo("start pos " + xc);
-            DillyzRoleApiMain.Instance.Log.LogInfo("max pos " + (__instance.fileWidth * 4.5f));
-            if (xc > __instance.fileWidth * 4.5f)
-            {
-                xc = 0;
-                yc += __instance.fileWidth;
-            }
+            DillyzRoleApiMain.Instance.Log.LogInfo("base pos [" + xc + ", " + yc + "]");
+            DillyzRoleApiMain.Instance.Log.LogInfo("max pos x " + (__instance.lineWidth));
 
             foreach (CustomRole role in CustomRole.allRoles) {
                 if (role.hiddenFromFreeplay)
@@ -51,7 +47,19 @@ namespace DillyzRoleApi_Rewritten
                 TaskAddButton taskbutton = UnityEngine.Object.Instantiate<TaskAddButton>(__instance.RoleButton);
                 taskbutton.SafePositionWorld = __instance.SafePositionWorld;
                 taskbutton.Text.text = $"Be_{role.name}.exe";
+
+                float smh = 0f;
+                smh = Mathf.Max(smh, taskbutton.Text.bounds.size.y + 1.1f);
+                if (xc > __instance.lineWidth)
+                {
+                    xc = 0;
+                    yc -= smh;
+                    smh = 0f;
+                }
+
                 __instance.AddFileAsChild(__instance.Root, taskbutton, ref xc, ref yc, ref mh);
+                DillyzRoleApiMain.Instance.Log.LogInfo("new pos [" + xc + ", " + yc + "]");
+
                 //taskbutton.Role = null;//DestroyableSingleton<RoleManager>.Instance.AllRoles[0];
                 taskbutton.FileImage.color = role.roleColor;
                 buttons.Add(taskbutton);
@@ -101,7 +109,10 @@ namespace DillyzRoleApi_Rewritten
 
                     HudManager.Instance.SetHudActive(true);
                 }
-            } 
+            }
+
+            pageCount = Mathf.RoundToInt(Mathf.Ceil(__instance.ActiveItems.Count / 25f));
+            DillyzRoleApiMain.Instance.Log.LogInfo("so we have like " + __instance.ActiveItems.Count + " items, which is about " + pageCount + " pages");
         }
 
         public static void the(TaskAdderGame __instance, RoleBehaviour arbys, List<TaskAddButton> buttons) {
