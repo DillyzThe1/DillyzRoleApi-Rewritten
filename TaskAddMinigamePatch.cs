@@ -1,6 +1,8 @@
 ﻿using AmongUs.GameOptions;
 using HarmonyLib;
 using System.Collections.Generic;
+using System.Reflection;
+using System.Text;
 using UnityEngine;
 using UnityEngine.Events;
 using static DillyzRoleApi_Rewritten.PlayerControlPatch;
@@ -54,6 +56,7 @@ namespace DillyzRoleApi_Rewritten
                 {
                     xc = 0;
                     yc -= smh;
+                    DillyzRoleApiMain.Instance.Log.LogInfo(smh + " days tall");
                     smh = 0f;
                 }
 
@@ -113,6 +116,19 @@ namespace DillyzRoleApi_Rewritten
 
             pageCount = Mathf.RoundToInt(Mathf.Ceil(__instance.ActiveItems.Count / 25f));
             DillyzRoleApiMain.Instance.Log.LogInfo("so we have like " + __instance.ActiveItems.Count + " items, which is about " + pageCount + " pages");
+
+            pageIndex = 0;
+
+            if (pageCount > 1)
+            {
+                StringBuilder stringBuilder = new StringBuilder(64);
+                for (int i = 0; i < __instance.Hierarchy.Count; i++)
+                {
+                    stringBuilder.Append(__instance.Hierarchy[i].FolderName);
+                    stringBuilder.Append("\\");
+                }
+                __instance.PathText.text = stringBuilder.ToString() + " (" + (pageIndex + 1) + "/" + pageCount + ")";
+            }
         }
 
         public static void the(TaskAdderGame __instance, RoleBehaviour arbys, List<TaskAddButton> buttons) {
