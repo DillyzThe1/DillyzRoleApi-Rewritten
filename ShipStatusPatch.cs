@@ -12,4 +12,15 @@ namespace DillyzRoleApi_Rewritten
                 DillyzRoleApiMain.ResetStuffForLobby();
         }
     }
+
+
+    // why does this double all cooldowns?!
+    /*[HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.Begin))]
+    class ShipStatusPatch_Begin
+    {
+        public static void Prefix(ShipStatus __instance)
+        {
+            CustomButton.ResetAllButtons();
+        }
+    }*/
 }
