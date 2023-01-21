@@ -47,5 +47,14 @@ namespace DillyzRoleApi_Rewritten
                 __instance.completeString = role.ejectionText.Replace("[0]", exiled.PlayerName);
         }
     }
+
+    [HarmonyPatch(typeof(ExileController), nameof(ExileController.WrapUp))]
+    class ExileController_Destroy
+    {
+        public static void Prefix()
+        {
+            CustomButton.ResetAllButtons();
+        }
+    }
 }
  
