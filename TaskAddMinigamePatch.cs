@@ -175,22 +175,6 @@ namespace DillyzRoleApi_Rewritten
 
             pageIndex = 0;
 
-            if (pageCount > 1)
-            {
-                StringBuilder stringBuilder = new StringBuilder(64);
-                for (int i = 0; i < __instance.Hierarchy.Count; i++)
-                {
-                    stringBuilder.Append(__instance.Hierarchy[i].FolderName);
-                    stringBuilder.Append("\\");
-                }
-                __instance.PathText.text = stringBuilder.ToString() + " (" + (pageIndex + 1) + "/" + pageCount + ")";
-            }
-
-            if (TaskAddMinigamePatchStart.bback != null)
-                TaskAddMinigamePatchStart.bback.gameObject.SetActive(pageCount > 1);
-            if (TaskAddMinigamePatchStart.bfoward != null)
-                TaskAddMinigamePatchStart.bfoward.gameObject.SetActive(pageCount > 1);
-
             ReposAllItems();
         }
 
@@ -207,9 +191,24 @@ namespace DillyzRoleApi_Rewritten
 
             for (int i = 0; i < lastInstance.ActiveItems.Count; i++) {
                 Transform trans = lastInstance.ActiveItems[i];
-                trans.localPosition = new Vector3(trans.localPosition.x, ((-filedist)*Mathf.RoundToInt(Mathf.Floor(i/5f)) + ((filedist*5f)*((float)pageIndex))) + 0.55f, trans.localPosition.z);
+                trans.localPosition = new Vector3(trans.localPosition.x, ((-filedist) * Mathf.RoundToInt(Mathf.Floor(i / 5f)) + ((filedist * 5f) * ((float)pageIndex))) + 0.55f, trans.localPosition.z);
                 trans.gameObject.SetActive(pageIndex == (Mathf.RoundToInt(Mathf.Ceil((i + 1) / 25f)) - 1));
             }
+
+            bool pluralPages = pageCount > 1;
+
+            if (pluralPages)
+            {
+                StringBuilder stringBuilder = new StringBuilder(64);
+                for (int i = 0; i < lastInstance.Hierarchy.Count; i++)
+                {
+                    stringBuilder.Append(lastInstance.Hierarchy[i].FolderName);
+                    stringBuilder.Append("\\");
+                }
+                lastInstance.PathText.text = stringBuilder.ToString() + " (" + (pageIndex + 1) + "/" + pageCount + ")";
+            }
+            TaskAddMinigamePatchStart.bback.gameObject.SetActive(pluralPages);
+            TaskAddMinigamePatchStart.bfoward.gameObject.SetActive(pluralPages);
         }
 
         public static void the(TaskAdderGame __instance, RoleBehaviour arbys, List<TaskAddButton> buttons)
