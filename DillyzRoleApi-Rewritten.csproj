@@ -487,6 +487,8 @@
   <ItemGroup>
     <EmbeddedResource Include="Assets\hitman_kill.png" />
     <EmbeddedResource Include="Assets\button_disabled.png" />
+    <EmbeddedResource Include="Assets\arrowbuttonleft.png" />
+    <EmbeddedResource Include="Assets\arrowbuttonright.png" />
     <Content Include="UnityEngine.CoreModule.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
