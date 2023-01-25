@@ -164,7 +164,7 @@ namespace DillyzRoleApi_Rewritten
 
             if (useTimerMode) {
                 TimeSpan useTimeLeft = DateTime.UtcNow - lastUse;
-                int useTimeRemaining = (int)Math.Ceiling((double)new decimal(this.buttonData.useTime - useTimeLeft.TotalMilliseconds / 1000f));
+                float useTimeRemaining = this.buttonData.useTime - ((float)useTimeLeft.TotalMilliseconds / 1000f);
                 this.killButton.SetCoolDown(useTimeRemaining, this.buttonData.useTime);
                 this.killButton.cooldownTimerText.color = Palette.AcceptedGreen;
 
@@ -178,11 +178,11 @@ namespace DillyzRoleApi_Rewritten
                 InterruptUseTimer();
             }
 
-            int timeRemaining = 0;
+            float timeRemaining = 0;
             if (this.buttonData.cooldown != 0f)
             {
                 TimeSpan timeLeft = DateTime.UtcNow - lastUse;
-                timeRemaining = (int)Math.Ceiling((double)new decimal(maxCooldown - timeLeft.TotalMilliseconds / 1000f));
+                timeRemaining = maxCooldown - ((float)timeLeft.TotalMilliseconds / 1000f);
                 this.killButton.SetCoolDown(timeRemaining < 0f ? 0f : timeRemaining, maxCooldown);
             }
             else
