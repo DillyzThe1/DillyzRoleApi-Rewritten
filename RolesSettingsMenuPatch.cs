@@ -518,12 +518,16 @@ namespace DillyzRoleApi_Rewritten
                 //DillyzRoleApiMain.Instance.Log.LogInfo("gary come home " + __instance.transform.position.y);
                 yOff -= Input.mouseScrollDelta.y/5f;
 
+                float funny = Math.Abs(Math.Max(objsToWorryAbout.Count - 8, 0) * ySpace);
+
                 if (yOff <= 0)
                     yOff = 0;
                 if (objsToWorryAbout.Count < 9)
                     yOff = 0;
-                //else if (yOff >= Math.Max(objsToWorryAbout.Count - 8,0) * ySpace)
-                //    yOff = Math.Max(objsToWorryAbout.Count - 8, 0) * ySpace;
+                else if (yOff >= funny)
+                    yOff = funny;
+
+                //GameSettingMenu.Instance.RoleName.text = yOff + " _ " + funny + " _ " + (objsToWorryAbout.Count - 8) + " _ " + ySpace;
 
                 for (int i = 0; i < objsToWorryAbout.Count; i++)
                 {
