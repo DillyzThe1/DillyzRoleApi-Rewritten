@@ -169,6 +169,7 @@ namespace DillyzRoleApi_Rewritten
 
         public string name = "Role Text";                       // Your role's name.
         public string subtext;                                  // The text that appears under.
+        public string blurb;                                    // A brief description of your role shown in host settings.
         public bool nameColorChanges;                           // Determines if your name color is your role color or just red/white.
         public bool nameColorPublic;                            // Determines if your name color is public to all or not.
         public Color32 roleColor;                               // The current color of your role.
@@ -217,6 +218,7 @@ namespace DillyzRoleApi_Rewritten
                             CustomRoleSide side, VentPrivilege ventPrivilege, bool canKill, bool showEjectText) {
             this.name = name;
             this.subtext = subtext;
+            this.blurb = $"The {this.name} is a role created using DillyzRoleAPI v2\n\ngithub.com/DillyzThe1";
             this.nameColorChanges = nameColor;
             this.nameColorPublic = nameColorPublic;
             this.roleColor = roleColor;

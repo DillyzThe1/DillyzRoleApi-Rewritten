@@ -373,7 +373,7 @@ namespace DillyzRoleApi_Rewritten
                 bgpb.OnMouseOver.AddListener((UnityEngine.Events.UnityAction)bgover);
                 void bgover() {
                     GameSettingMenu.Instance.RoleName.text = role.name; 
-                    GameSettingMenu.Instance.RoleBlurb.text = $"The {role.name} is a role created using DillyzRoleAPI v2\n\ngithub.com/DillyzThe1";
+                    GameSettingMenu.Instance.RoleBlurb.text = role.blurb;
                     GameSettingMenu.Instance.RoleIcon.sprite = RolesSettingsMenuPatch.cachedsprites[role.name];
                 }
                 BoxCollider2D btd5 = settingParent.AddComponent<BoxCollider2D>();

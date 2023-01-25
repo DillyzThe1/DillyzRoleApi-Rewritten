@@ -71,6 +71,7 @@ namespace DillyzRoleApi_Rewritten
                                                                      CustomRoleSide.LoneWolf,  VentPrivilege.Impostor, false, true);
                 CustomRole hitmanRole = CustomRole.getByName("Hitman");
                 hitmanRole.a_or_an = "a";
+                hitmanRole.blurb = "The Hitman is a role in which does not work for the Crewmates nor Impostors.\nThe goal of the Hitman is to win on their own.\n\ngithub.com/DillyzThe1";
                 hitmanRole.SetSprite(Assembly.GetExecutingAssembly(), "DillyzRoleApi_Rewritten.Assets.hitman_kill.png");
                 hitmanRole.returnWinConditionState = delegate () {
                     List<PlayerControl> goobers = hitmanRole.AllPlayersWithRole;
