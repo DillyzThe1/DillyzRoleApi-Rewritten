@@ -469,6 +469,9 @@ namespace DillyzRoleApi_Rewritten
                                     role.setting_countPerGame = 0;
                                 break;
                             case "More Options":
+                                if (role.advancedSettings.Count == 0)
+                                    return;
+
                                 bgover();
                                 RolesSettingsMenuPatch_FNFModderReference.customRoleToSelect = role.name;
                                 GameSettingMenu.Instance.ShowAdvancedRoleOptions(null);
@@ -527,7 +530,7 @@ namespace DillyzRoleApi_Rewritten
                 else if (yOff >= funny)
                     yOff = funny;
 
-                //GameSettingMenu.Instance.RoleName.text = yOff + " _ " + funny + " _ " + (objsToWorryAbout.Count - 8) + " _ " + ySpace;
+                //GameSettingMenu.Instance.RoleName.text = yOff + " _ " + funny + " _ " + (objsToWorryAbout.Count - 8) + " _ " + ySpace; 
 
                 for (int i = 0; i < objsToWorryAbout.Count; i++)
                 {
