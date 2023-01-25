@@ -338,10 +338,10 @@ namespace DillyzRoleApi_Rewritten
                 return distBet2 + lastSetting.transform.position.y + (distBet2*rolesThatUsedY);
             }
 
-            RolesSettingsMenuPatch_Update.xOg = ogSetting.gameObject.transform.position.x;
-            RolesSettingsMenuPatch_Update.yOg = ogSetting.gameObject.transform.position.y;
-            RolesSettingsMenuPatch_Update.zOg = ogSetting.gameObject.transform.position.z;
-            RolesSettingsMenuPatch_Update.ySpace = otherSetting.gameObject.transform.position.y - ogSetting.gameObject.transform.position.y;
+            RolesSettingsMenuPatch_Update.xOg = ogSetting.gameObject.transform.localPosition.x;
+            RolesSettingsMenuPatch_Update.yOg = ogSetting.gameObject.transform.localPosition.y;
+            RolesSettingsMenuPatch_Update.zOg = ogSetting.gameObject.transform.localPosition.z;
+            RolesSettingsMenuPatch_Update.ySpace = otherSetting.gameObject.transform.localPosition.y - ogSetting.gameObject.transform.localPosition.y;
 
             RolesSettingsMenuPatch_Update.objsToWorryAbout.Clear();
 
@@ -528,7 +528,7 @@ namespace DillyzRoleApi_Rewritten
                 for (int i = 0; i < objsToWorryAbout.Count; i++)
                 {
                     Transform t = objsToWorryAbout[i].transform;
-                    t.position = new Vector3(t.position.x, yOg + ySpace * i + yOff, t.position.z);
+                    t.localPosition = new Vector3(t.localPosition.x, yOg + ySpace * i + yOff, t.localPosition.z);
                 }
             }
         }
