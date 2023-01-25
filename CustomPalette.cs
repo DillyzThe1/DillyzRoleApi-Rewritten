@@ -24,7 +24,6 @@ namespace DillyzRoleApi_Rewritten
         // UI
         //public static Color32 GameSettingDeselectedColor = new Color32(255, 255, 255, 255);
         public static Color32 GameSettingSelectedColor = new Color32(0, 255, 0, 255);
-        [Obsolete("This color may not be accurate to the actual game.", false)]
         public static Color32 CheckboxSelectedColor = new Color32(255, 225, 0, 255);
     }
 }

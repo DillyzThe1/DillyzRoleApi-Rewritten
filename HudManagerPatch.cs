@@ -4,9 +4,7 @@ using HarmonyLib;
 using TMPro;
 using UnityEngine;
 using AmongUs.GameOptions;
-using System.Linq;
 using System.Reflection;
-using static Rewired.ButtonLoopSet;
 
 namespace DillyzRoleApi_Rewritten
 {
@@ -43,13 +41,8 @@ namespace DillyzRoleApi_Rewritten
 
         public static void Postfix(HudManager __instance)
         {
-            if (/*AmongUsClient.Instance == null || AmongUsClient.Instance.GameState != InnerNetClient.GameStates.Started ||*/ PlayerControl.LocalPlayer == null ||
-                PlayerControl.LocalPlayer.Data == null || PlayerControl.LocalPlayer.Data.Role == null)
-            {
-                //foreach (PlayerControl player in PlayerControl.AllPlayerControls)
-                //    HudManagerPatch.displayColor(__instance, player, CustomPalette.White);
+            if (PlayerControl.LocalPlayer == null || PlayerControl.LocalPlayer.Data == null || PlayerControl.LocalPlayer.Data.Role == null)
                 return;
-            }
 
             // colorization
             string rnnnmn = DillyzUtil.getRoleName(PlayerControl.LocalPlayer);
@@ -140,8 +133,6 @@ namespace DillyzRoleApi_Rewritten
                 pbjsandwich.OnClick.AddListener((UnityEngine.Events.UnityAction)listener);
 
                 void listener() {
-                    //DillyzRoleApiMain.Instance.Log.LogInfo("epic clickenining");
-
                     if (!newKill.isActiveAndEnabled || (newKill.currentTarget == null && customKillControl.buttonData.targetButton) 
                                                     || newKill.isCoolingDown || (customKillControl.buttonData.caresAboutMoving 
                             && !PlayerControl.LocalPlayer.CanMove) || !newKill.canInteract)

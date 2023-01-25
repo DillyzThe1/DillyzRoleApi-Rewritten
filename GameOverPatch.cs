@@ -87,13 +87,13 @@ namespace DillyzRoleApi_Rewritten
             }
         }
         [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.CoStartGame))]
-        class WadawdawawawfwafPatch
+        class AmongUsClientPath_CoStartGame
         {
             public static void Postfix(EndGameManager __instance)
             {
                 DillyzRoleApiMain.Instance.Log.LogInfo("GAME STARTS NOW?!?!");
-                // waffle_iron.jpeg
 
+                // waffle_iron.jpeg
                 GameOverPatch.customWin = false;
                 GameOverPatch.didwin = false;
                 GameOverPatch.winningRole = "";

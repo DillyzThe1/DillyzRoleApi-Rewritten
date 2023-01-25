@@ -108,8 +108,6 @@ namespace DillyzRoleApi_Rewritten
 
                             CustomRole role = CustomRole.getByName(roleToACTAULLYGet);
 
-                            //DillyzRoleApiMain.Instance.Log.LogInfo("funny " + roleToACTAULLYGet + " with " + typeToActaullyGet);
-
                             if (role == null)
                                 continue;
 
@@ -122,17 +120,14 @@ namespace DillyzRoleApi_Rewritten
                                         case CustomSettingType.Boolean:
                                             CustomBooleanSetting boolsetting = rolesetting as CustomBooleanSetting;
                                             boolsetting.settingValue = reader.ReadBoolean();
-                                            //DillyzRoleApiMain.Instance.Log.LogInfo(typeToActaullyGet + " = " + boolsetting.settingValue);
                                             break;
                                         case CustomSettingType.Float:
                                             CustomFloatSetting intsetting = rolesetting as CustomFloatSetting;
                                             intsetting.settingValue = reader.ReadInt32();
-                                            //DillyzRoleApiMain.Instance.Log.LogInfo(typeToActaullyGet + " = " + intsetting.settingValue);
                                             break;
                                         case CustomSettingType.String:
                                             CustomStringSetting strsetting = rolesetting as CustomStringSetting;
                                             strsetting.settingValue = reader.ReadString();
-                                            //DillyzRoleApiMain.Instance.Log.LogInfo(typeToActaullyGet + " = " + strsetting.settingValue);
                                             break;
                                     }
                                 }
@@ -160,13 +155,6 @@ namespace DillyzRoleApi_Rewritten
 
                     List<string> missingRoles = new List<string>();
                     List<string> extraRoles = new List<string>();
-
-                    /*if (hostRoles.Count != clientRoles.Count) {
-                        AmongUsClient.Instance.LastDisconnectReason = DisconnectReasons.Custom;
-                        AmongUsClient.Instance.LastCustomDisconnect = "Your role's count did <#FF6A00>not match</color> the host's amount.\n(Is a DLL <#FF0000>missing</color>?)";
-                        AmongUsClient.Instance.HandleDisconnect(AmongUsClient.Instance.LastDisconnectReason, AmongUsClient.Instance.LastCustomDisconnect);
-                        return;
-                    }*/
 
                     foreach (string r in hostRoles)
                         if (!clientRoles.Contains(r))

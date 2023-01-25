@@ -4,7 +4,6 @@ namespace DillyzRoleApi_Rewritten
 {
     class LogicGameFlowNormalPatch
     {
-
         [HarmonyPatch(typeof(LogicGameFlowNormal), nameof(LogicGameFlowNormal.IsGameOverDueToDeath))]
         public class LogicGameFlowNormalPatch_IsGameOverDueToDeath
         {

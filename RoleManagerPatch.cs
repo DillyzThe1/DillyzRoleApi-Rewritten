@@ -16,7 +16,6 @@ namespace DillyzRoleApi_Rewritten
             public static void Postfix(RoleManager __instance)
             {
                 DillyzRoleApiMain.Instance.Log.LogInfo("DO I SELECT ROLES NOW?");
-                //DillyzRoleApiMain.Instance.Log.LogInfo(PlayerControl.AllPlayerControls);
 
                 // send reset roles packet
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.ResetRoles, Hazel.SendOption.None, -1);
@@ -63,7 +62,6 @@ namespace DillyzRoleApi_Rewritten
                         PlayerControl selectedPlayer = availablePlayers[roleIndex];
                         availablePlayers.Remove(selectedPlayer);
                         DillyzUtil.RpcSetRole(selectedPlayer, role.name);
-                        //selectedPlayer.RpcSetRole(role.switchToImpostor ? RoleTypes.Impostor : RoleTypes.Crewmate);
                     }
                 }
             }

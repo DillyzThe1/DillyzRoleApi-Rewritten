@@ -14,7 +14,7 @@ namespace DillyzRoleApi_Rewritten
         public static void Postfix(RolesSettingsMenu __instance)
         {
             RolesSettingsMenuPatch.cachedsprites.Clear();
-            RolesSettingsMenuPatch_FNFModderReference.customtabs.Clear();
+            RolesSettingsMenuPatch_ShowAdvancedSettings.customtabs.Clear();
 
             GameObject ogtab = null;
             GameObject shapshiftnumopt = null;
@@ -32,11 +32,11 @@ namespace DillyzRoleApi_Rewritten
             GameObject ogBoolOpt = ogtab.transform.Find("ToggleOption").gameObject;
             GameObject ogNumbOpt = ogtab.transform.Find("NumberOption").gameObject;
 
-            Vector3 ogSettingPos = shapshiftnumopt.transform.position;//new Vector3(-4.35f, 2.875f, -160f);
+            Vector3 ogSettingPos = shapshiftnumopt.transform.position;
             float ySpace = shapshiftnumopt_2.transform.position.y - shapshiftnumopt.transform.position.y;
-            float ymultlol = 0; // ymultlol * -0.475
+            float ymultlol = 0;
 
-            float xoff = 0.25f;//0.75f;
+            float xoff = 0.25f;
 
             foreach (CustomRole role in CustomRole.allRoles)
             {
@@ -56,12 +56,11 @@ namespace DillyzRoleApi_Rewritten
                 roleNameCopy.transform.localScale = Vector3.one;
                 roleNameCopy.transform.position = ogtab.transform.Find("Role Name").position;
 
-                //roleNameCopy.GetComponent<TextMeshPro>().text = role.name;
                 TMPTextForce tmpTextForce = roleNameCopy.AddComponent<TMPTextForce>();
                 tmpTextForce.forcedText = role.name;
                 tmpTextForce.tmp = roleNameCopy.GetComponent<TextMeshPro>();
 
-                RolesSettingsMenuPatch_FNFModderReference.customtabs[role.name] = newTab;
+                RolesSettingsMenuPatch_ShowAdvancedSettings.customtabs[role.name] = newTab;
 
                 DillyzRoleApiMain.Instance.Log.LogInfo("h");
                 foreach (CustomSetting setting in role.advancedSettings)
@@ -71,11 +70,6 @@ namespace DillyzRoleApi_Rewritten
                     newSettingParent.name = setting.title + "Setting";
                     newSettingParent.transform.SetParent(newTab.transform);
                     newSettingParent.transform.position = ogSettingPos + (new Vector3(0, ySpace, 0) * ymultlol);
-
-                    /*System.Action<GameObject> value = delegate (GameObject obj) { 
-                        DillyzRoleApiMain.Instance.Log.LogInfo(obj.name + " child");
-                    };
-                    ogNumbOpt.ForEachChild(value);*/
 
                     GameObject ogbg = ogBoolOpt.transform.Find("Background").gameObject;
                     GameObject newSettingBG = GameObject.Instantiate(ogbg);
@@ -123,11 +117,7 @@ namespace DillyzRoleApi_Rewritten
                                 void checkmarkHover()
                                 {
                                     foreach (AudioSource audioSource in SoundManager.Instance.allSources.Values)
-                                    {
                                         DillyzRoleApiMain.Instance.Log.LogInfo(audioSource.name + " is playing " + audioSource.clip.name);
-                                    }
-
-                                    //SoundManager.Instance.PlaySound(, false, 0.8f, null);
 
                                     checkmarkDupe.GetComponent<SpriteRenderer>().material.SetFloat("_Outline", 1f);
                                     checkmarkDupe.GetComponent<SpriteRenderer>().material.SetColor("_OutlineColor", DillyzUtil.color32ToColor(CustomPalette.CheckboxSelectedColor));
@@ -292,7 +282,7 @@ namespace DillyzRoleApi_Rewritten
     }
 
     [HarmonyPatch(typeof(RolesSettingsMenu), nameof(RolesSettingsMenu.ShowAdvancedSettings))]
-    public class RolesSettingsMenuPatch_FNFModderReference
+    public class RolesSettingsMenuPatch_ShowAdvancedSettings
     {
         public static Dictionary<string, GameObject> customtabs = new Dictionary<string, GameObject>();
         public static List<GameObject> AllCustomTabs => customtabs.Values.ToList();
@@ -325,12 +315,6 @@ namespace DillyzRoleApi_Rewritten
             RoleOptionSetting ogSetting = __instance.AllRoleSettings[0];
             RoleOptionSetting otherSetting = __instance.AllRoleSettings[1];
             RoleOptionSetting lastSetting = __instance.AllRoleSettings[__instance.AllRoleSettings.Count - 1];
-
-            /*ogSetting.transform.Find("Count Plus_TMP").gameObject.GetComponent<PassiveButton>().OnClick.AddListener((UnityEngine.Events.UnityAction)funnny);
-            void funnny() {
-                DillyzRoleApiMain.Instance.Log.LogInfo(ogSetting.transform.Find("Count Plus_TMP").gameObject.GetComponent<TextMeshPro>().color);
-            }*/
-
 
             int rolesThatUsedY = 0;
             float getNewRoleY() {
@@ -428,18 +412,14 @@ namespace DillyzRoleApi_Rewritten
                 for (int i = 0; i < textsToMakeActive.Length; i++)
                 {
                     TextMeshPro curTMP = textsToMakeActive[i];
-                    //DillyzRoleApiMain.Instance.Log.LogInfo("prank");
                     PassiveButton tmpButton = curTMP.gameObject.GetComponent<PassiveButton>();
 
-                    //DillyzRoleApiMain.Instance.Log.LogInfo("prank23");
                     tmpButton.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
                     tmpButton.OnClick.AddListener((UnityEngine.Events.UnityAction)callback);
 
                     tmpButton.OnMouseOver.AddListener((UnityEngine.Events.UnityAction)bgover);
 
                     void callback() {
-                        //DillyzRoleApiMain.Instance.Log.LogInfo(role.name + "'s " + curTMP.name + " was clicked");
-
                         if (!AmongUsClient.Instance.AmHost)
                             return;
 
@@ -473,7 +453,7 @@ namespace DillyzRoleApi_Rewritten
                                     return;
 
                                 bgover();
-                                RolesSettingsMenuPatch_FNFModderReference.customRoleToSelect = role.name;
+                                RolesSettingsMenuPatch_ShowAdvancedSettings.customRoleToSelect = role.name;
                                 GameSettingMenu.Instance.ShowAdvancedRoleOptions(null);
                                 break;
                         }
@@ -495,11 +475,8 @@ namespace DillyzRoleApi_Rewritten
                 }
                 #endregion
 
-
                 settingParent.transform.position = new Vector3(ogSetting.transform.position.x, getNewRoleY(), ogSetting.transform.position.z);
-
                 titleText.transform.localPosition = new Vector3(og_TMP.gameObject.transform.localPosition.x, og_TMP.gameObject.transform.localPosition.y, 0);
-
                 rolesThatUsedY++;
                 settingParent.transform.localScale = Vector3.one;
             }
@@ -518,7 +495,6 @@ namespace DillyzRoleApi_Rewritten
 
             public static List<GameObject> objsToWorryAbout = new List<GameObject>();
             public static void Postfix(RolesSettingsMenu __instance) {
-                //DillyzRoleApiMain.Instance.Log.LogInfo("gary come home " + __instance.transform.position.y);
                 yOff -= Input.mouseScrollDelta.y/6.25f;
 
                 float funny = Math.Abs(Math.Max(objsToWorryAbout.Count - 8, 0) * ySpace);
@@ -529,8 +505,6 @@ namespace DillyzRoleApi_Rewritten
                     yOff = 0;
                 else if (yOff >= funny)
                     yOff = funny;
-
-                //GameSettingMenu.Instance.RoleName.text = yOff + " _ " + funny + " _ " + (objsToWorryAbout.Count - 8) + " _ " + ySpace; 
 
                 for (int i = 0; i < objsToWorryAbout.Count; i++)
                 {

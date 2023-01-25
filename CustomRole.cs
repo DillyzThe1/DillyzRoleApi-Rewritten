@@ -175,7 +175,6 @@ namespace DillyzRoleApi_Rewritten
         public Color32 roleColor;                               // The current color of your role.
         public bool teamCanSeeYou;                              // Determines if your team can see you.
         public CustomRoleSide side;                             // Determines who you work with.
-        //public bool commitsTaxFraud { get; }                  // 192.512.3.62
         public VentPrivilege ventPrivilege;                     // Your vent privelege level.
         public bool canKill;                                    // Are you seriously this blind?
         public string ejectionText;                             // "DillyzThe1 was The Jester"
@@ -233,15 +232,9 @@ namespace DillyzRoleApi_Rewritten
 
             // vs woudn't let me use turnary operators this time >:/
             if (showEjectText)
-            {
                 ejectionText += $"The {name}.";
-                //ejectionText_bad += $"The <${DillyzUtil.colorToHex(this.roleColor)}>{name}.</color>";
-            }
             else
-            {
                 ejectionText += $"{(side == CustomRoleSide.Impostor ? "" : "not ")}The Impostor.";
-                //ejectionText_bad += $"The Impostor.";
-            }
 
             foreach (LobbyRoleSetting setting in LobbyConfigManager.lobbyRoleSettings)
                 if (setting.roleName == this.name)

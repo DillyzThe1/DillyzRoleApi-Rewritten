@@ -35,7 +35,6 @@ namespace DillyzRoleApi_Rewritten
             try
             {
                 RegisterTypeOptions options = new RegisterTypeOptions() { Interfaces = interfaces };
-                //DillyzRoleApiMain.Instance.Log.LogInfo($"Registering Class {type.FullDescription()}");
                 ClassInjector.RegisterTypeInIl2Cpp(type, options);
             }
             catch (Exception e) {
@@ -56,8 +55,6 @@ namespace DillyzRoleApi_Rewritten
                 if (_registeredAssemblies.Contains(pluginAssembly))
                     return;
                 _registeredAssemblies.Add(pluginAssembly);
-
-                //DillyzRoleApiMain.Instance.Log.LogInfo("Loading " + pluginAssembly.GetName().Name + " v" + pluginAssembly.GetName().Version);
 
                 DillyzRoleApiMain.Instance.Log.LogInfo("-- FINDING ASSETS IN " + pluginAssembly.GetName().Name + " --");
                 List<string> assetNames = pluginAssembly.GetManifestResourceNames().ToArray().ToList();

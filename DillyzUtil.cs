@@ -8,7 +8,6 @@ using AmongUs.GameOptions;
 using BepInEx.IL2CPP.Utils;
 using Hazel;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 namespace DillyzRoleApi_Rewritten
 {
@@ -112,10 +111,8 @@ namespace DillyzRoleApi_Rewritten
 
         public static string roleText(PlayerControl player)
         {
-            if (player == null)
-                return "\n\nInvalid Player! (1)";
-            if (player.Data == null)
-                return "\n\nInvalid Player! (2)";
+            if (player == null || player.Data == null)
+                return "\n\nInvalid Player!";
             string rc = colorToHex(roleColor(player, false));
 
             if (CustomRole.getRoleName(player.PlayerId) != "" && CustomRole.getRoleName(player.PlayerId) != null)
@@ -231,9 +228,6 @@ namespace DillyzRoleApi_Rewritten
         }
         public static void commitAssassination(PlayerControl assassinator, PlayerControl target, bool tp)
         {
-            //DillyzRoleApiMain.Instance.Log.LogInfo(assassinator.KillAnimations.Length + " kill anims");
-            ///foreach (KillAnimation killanim in assassinator.KillAnimations)
-            //    DillyzRoleApiMain.Instance.Log.LogInfo("Kill animation " + killanim.name + " found!");
             DillyzRoleApiMain.Instance.Log.LogInfo(assassinator.name + " " + target.name);
 
             bool isKiller = assassinator.PlayerId == PlayerControl.LocalPlayer.PlayerId;
@@ -263,8 +257,6 @@ namespace DillyzRoleApi_Rewritten
                 assassinator.SetKillTimer(GameOptionsManager.Instance.CurrentGameOptions.GetFloat(FloatOptionNames.KillCooldown));
             }
 
-
-            //CustomRoleSide roleSideUrOn = DillyzUtil.roleSide(target);
             KillAnimation kil = assassinator.KillAnimations[UnityEngine.Random.Range(0, assassinator.KillAnimations.Length - 1)];
 
             if (isVictim) {
@@ -328,9 +320,6 @@ namespace DillyzRoleApi_Rewritten
             deadBody.enabled = true;
             if (involved)
                 curCamera.Locked = false;
-
-            //CustomRole.setRoleName(target.PlayerId, "");
-
             yield break;
         }
 
@@ -342,7 +331,6 @@ namespace DillyzRoleApi_Rewritten
             assassinator.MyPhysics.Animations.PlayIdleAnimation();
             yield break;
         }
-
 
         public static void RpcSetRole(PlayerControl player, string role) {
             DillyzRoleApiMain.Instance.Log.LogInfo($"setting {player.name} as {role}");
@@ -448,11 +436,8 @@ namespace DillyzRoleApi_Rewritten
         public static void RPCRevivePlayer(PlayerControl player, string roleto)
         {
             CustomRole role = CustomRole.getByName(roleto);
-            RoleTypes t = (role != null && role.switchToImpostor) ? RoleTypes.Impostor : RoleTypes.Crewmate;
-            //player.RpcSetRole(t);
             RpcSetRole(player, roleto);
             player.Revive();
-
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.RevivePlayer, SendOption.None, -1);
             writer.Write(player.PlayerId);
             AmongUsClient.Instance.FinishRpcImmediately(writer);

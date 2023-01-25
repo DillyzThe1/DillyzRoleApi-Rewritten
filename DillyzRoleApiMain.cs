@@ -8,6 +8,7 @@ using HarmonyLib;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using static DillyzRoleApi_Rewritten.Il2CppItemAttribute;
+using static DillyzRoleApi_Rewritten.PlayerControlPatch;
 
 namespace DillyzRoleApi_Rewritten
 {
@@ -56,10 +57,7 @@ namespace DillyzRoleApi_Rewritten
             {
                 Log.LogInfo("this is so sad can we " + scene.name);
                 if (scene.name == "MainMenu")
-                {
                     ModManager.Instance.ShowModStamp();
-
-                }
             }));
 
             LobbyConfigManager.Load();
@@ -123,9 +121,6 @@ namespace DillyzRoleApi_Rewritten
                 CustomButton.getButtonByName("Hitman Kill Button").textOutlineColor = new Color32(75, 65, 85, 255);
             }
 
-            //foreach (CustomRole role in CustomRole.allRoles)
-            //    Log.LogInfo(role.ToString());
-
             IL2CPPChainloaderPatch.Reg(Assembly.GetExecutingAssembly());
 
             string[] layers = Enumerable.Range(0, 32).Select(index => LayerMask.LayerToName(index)).Where(l => !string.IsNullOrEmpty(l)).ToArray();
@@ -135,20 +130,6 @@ namespace DillyzRoleApi_Rewritten
             Log.LogInfo(outputLayerStr);
 
             Log.LogInfo(BEPINEX_CONFIG_FOLDER);
-
-            /*var regions = ServerManager.DefaultRegions.ToList();
-            string iptouse = "localhost";
-            /*if (Uri.CheckHostName(iptouse).ToString() == "Dns")
-                foreach (IPAddress address in Dns.GetHostAddresses(iptouse))
-                    if (address.AddressFamily == Il2CppSystem.Net.Sockets.AddressFamily.InterNetwork)
-                    {
-                        iptouse = address.ToString();
-                        break;
-                    }*
-
-            IRegionInfo reg = new IRegionInfo() { Name = "" };
-
-            regions.Insert(0, reg);*/ 
         }
 
         // override this to laugh very hard at the scren
@@ -156,6 +137,7 @@ namespace DillyzRoleApi_Rewritten
         {
             CustomButton.ResetAllButtons();
             CustomRole.roleNameMap.Clear();
+            PlayerControlPlayer_Die.gaurdianAngelAttempts = 0;
         }
     }
 }

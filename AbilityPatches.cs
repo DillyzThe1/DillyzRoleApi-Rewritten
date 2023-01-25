@@ -41,16 +41,6 @@ namespace DillyzRoleApi_Rewritten
                 return role.ventPrivilege != VentPrivilege.None;
             }
         }
-        [HarmonyPatch(typeof(Vent), nameof(Vent.SetOutline))]
-        public class VentOutlinePatch
-        {
-            public static void Postfix(Vent __instance, bool on, bool mainTarget)
-            {
-                //__instance.GetComponent<SpriteRenderer>().material.SetFloat("_Outline", on ? 1f: 0f);
-                //__instance.GetComponent<SpriteRenderer>().material.SetColor("_OutlineColor", DillyzUtil.roleColor(PlayerControl.LocalPlayer, false));
-            }
-        }
-
         [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.MurderPlayer))]
         public class MurderPatch {
             public static bool Prefix(PlayerControl __instance, PlayerControl target)
@@ -98,18 +88,6 @@ namespace DillyzRoleApi_Rewritten
         {
             public static bool Prefix(KillButton __instance)
             {
-                /*string rolename = DillyzUtil.getRoleName(PlayerControl.LocalPlayer);
-                CustomRole role = CustomRole.getByName(rolename);
-                if (PlayerControl.LocalPlayer.Data.IsDead || !PlayerControl.LocalPlayer.CanMove || __instance.currentTarget == null || __instance.isCoolingDown 
-                    || (rolename != "Impostor" && rolename != "ShapeShifter" && role == null))
-                    return false;
-
-                if (!role.canKill)
-                    return false;
-
-                PlayerControl.LocalPlayer.CheckMurder(__instance.currentTarget);
-                __instance.SetTarget(null);*/
-
                 if (__instance.gameObject.GetComponent<KillButtonCustomData>() != null)
                     return false;
 

@@ -102,6 +102,7 @@ namespace DillyzRoleApi_Rewritten
 
                 if (!skipNextAssignment)
                 {
+                    GameManager.Instance.OnPlayerDeath(__instance, false);
                     if (AmongUsClient.Instance.AmHost || DillyzUtil.InFreeplay())
                     {
                         CustomRole playerrole = CustomRole.getByName(DillyzUtil.getRoleName(__instance));
@@ -124,12 +125,14 @@ namespace DillyzRoleApi_Rewritten
                                     targetrole = "GuardianAngel";
                                 gaurdianAngelAttempts++;
                             }*/
+
+                            DillyzRoleApiMain.Instance.Log.LogInfo("Consider being the guardian angel.");
+
                             DillyzUtil.RpcSetRole(__instance, targetrole);
                         }
                     }
                     else
                         skipNextAssignment = false;
-                    GameManager.Instance.OnPlayerDeath(__instance, false);
 
                     if (__instance.PlayerId == PlayerControl.LocalPlayer.PlayerId)
                         DestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(false);

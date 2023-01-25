@@ -65,16 +65,8 @@ namespace DillyzRoleApi_Rewritten
     }
 
     //[HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.BeginImpostor))]
-    class IntroCutscenePatch_BeginImpostor
+    class TeamCalculator
     {
-        public static bool Prefix(IntroCutscene __instance, Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam)
-        {
-            DillyzRoleApiMain.Instance.Log.LogInfo("Flabbergasted Impostor");
-            IntroCutscenePatch_BeginImpostor.calcTeam();
-            __instance.ShowTeam(IntroCutscenePatch_BeginImpostor.playersToShow, 3);
-            return false;
-        }
-
         public static Il2CppSystem.Collections.Generic.List<PlayerControl> playersToShow;
         public static void calcTeam() {
             List<PlayerControl> playersToShowww = PlayerControl.AllPlayerControls.ToArray().ToList();
@@ -111,9 +103,9 @@ namespace DillyzRoleApi_Rewritten
             foreach (PlayerControl i in teamToShow)
                 DillyzRoleApiMain.Instance.Log.LogInfo(i.name + " is FLABBERGASTED right now!");
 
-            IntroCutscenePatch_BeginImpostor.calcTeam();
+            TeamCalculator.calcTeam();
 
-            teamToShow = IntroCutscenePatch_BeginImpostor.playersToShow;
+            teamToShow = TeamCalculator.playersToShow;
         }
 
     }
