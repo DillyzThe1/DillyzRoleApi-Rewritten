@@ -516,7 +516,7 @@ namespace DillyzRoleApi_Rewritten
             public static List<GameObject> objsToWorryAbout = new List<GameObject>();
             public static void Postfix(RolesSettingsMenu __instance) {
                 //DillyzRoleApiMain.Instance.Log.LogInfo("gary come home " + __instance.transform.position.y);
-                yOff -= Input.mouseScrollDelta.y/5f;
+                yOff -= Input.mouseScrollDelta.y/6.25f;
 
                 float funny = Math.Abs(Math.Max(objsToWorryAbout.Count - 8, 0) * ySpace);
 
