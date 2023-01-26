@@ -102,37 +102,49 @@ namespace DillyzRoleApi_Rewritten
 
                 if (!skipNextAssignment)
                 {
-                    GameManager.Instance.OnPlayerDeath(__instance, false);
+                    bool ga = false;
                     if (AmongUsClient.Instance.AmHost || DillyzUtil.InFreeplay())
                     {
                         CustomRole playerrole = CustomRole.getByName(DillyzUtil.getRoleName(__instance));
+                        CustomRole newrole = playerrole != null ?  CustomRole.getByName(playerrole.roletoGhostInto) : null;
                         if (playerrole != null && playerrole.roletoGhostInto != "")
                         {
-                            CustomRole newrole = CustomRole.getByName(playerrole.roletoGhostInto);
                             if (newrole == null || !newrole.ghostRole)
                                 DillyzUtil.RpcSetRole(__instance, playerrole.roletoGhostInto);
                         }
                         else
                         {
-                            //int angelmax = GameOptionsManager.Instance.CurrentGameOptions.RoleOptions.GetNumPerGame(AmongUs.GameOptions.RoleTypes.GuardianAngel);
-                            //int angelchance = GameOptionsManager.Instance.CurrentGameOptions.RoleOptions.GetChancePerGame(AmongUs.GameOptions.RoleTypes.GuardianAngel);
+                            int angelmax = DillyzUtil.InFreeplay() ? 127001 : GameOptionsManager.Instance.CurrentGameOptions.RoleOptions.GetNumPerGame(AmongUs.GameOptions.RoleTypes.GuardianAngel);
+                            int angelchance = DillyzUtil.InFreeplay() ? 85 : GameOptionsManager.Instance.CurrentGameOptions.RoleOptions.GetChancePerGame(AmongUs.GameOptions.RoleTypes.GuardianAngel);
 
-                            string targetrole = "";
                             /*if (DillyzUtil.roleSide(__instance) == CustomRoleSide.Crewmate && (gaurdianAngelAttempts < angelmax || DillyzUtil.InFreeplay()))
                             {
                                 int rolecahcnde = UnityEngine.Random.Range(0, 100);
                                 if (angelchance != 0 && (angelchance == 100 || angelchance >= rolecahcnde) || DillyzUtil.InFreeplay())
                                     targetrole = "GuardianAngel";
-                                gaurdianAngelAttempts++;
+                                gaurdianAngelAttempts++; 
                             }*/
 
-                            DillyzRoleApiMain.Instance.Log.LogInfo("Consider being the guardian angel.");
-
-                            DillyzUtil.RpcSetRole(__instance, targetrole);
+                            DillyzRoleApiMain.Instance.Log.LogInfo((newrole == null || (newrole.roletoGhostInto == "" && !newrole.ghostRole)) + " in your house");
+                            DillyzRoleApiMain.Instance.Log.LogInfo((__instance.Data.Role.TeamType == RoleTeamTypes.Crewmate) + " in your house v2");
+                            DillyzRoleApiMain.Instance.Log.LogInfo(gaurdianAngelAttempts + " in your house v" + angelmax);
+                            if ((newrole == null || (newrole.roletoGhostInto == "" && !newrole.ghostRole)) && __instance.Data.Role.TeamType == RoleTeamTypes.Crewmate && gaurdianAngelAttempts < angelmax)
+                            {
+                                int rolecahcnde = UnityEngine.Random.Range(0, 100);
+                                if (angelchance >= rolecahcnde)
+                                    ga = true;
+                                DillyzRoleApiMain.Instance.Log.LogInfo("Consider being the guardian angel.");
+                                gaurdianAngelAttempts++;
+                            }
+                            DillyzUtil.RpcSetRole(__instance, "");
                         }
                     }
                     else
                         skipNextAssignment = false;
+                    GameManager.Instance.OnPlayerDeath(__instance, false);
+
+                    if (ga)
+                        __instance.RpcSetRole(AmongUs.GameOptions.RoleTypes.GuardianAngel);
 
                     if (__instance.PlayerId == PlayerControl.LocalPlayer.PlayerId)
                         DestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(false);
