@@ -39,28 +39,24 @@ namespace DillyzRoleApi_Rewritten
                     return false;
 
                 // SABOTAGE WINS (no force check needed
-                /*ISystemType systemType;
-                if (ShipStatus.Instance.Systems.TryGetValue(SystemTypes.LifeSupp, out systemType))
+                if (SabotageBehaviour.oxygen != null && !SabotageBehaviour.oxygen.WasCollected)
                 {
-                    LifeSuppSystemType lifeSuppSystemType = systemType.TryCast<LifeSuppSystemType>();
-                    if (lifeSuppSystemType.Countdown < 0f)
+                    if (SabotageBehaviour.oxygen.Countdown < 0f)
                     {
                         __instance.EndGameForSabotage();
-                        lifeSuppSystemType.Countdown = 10000f;
+                        SabotageBehaviour.oxygen.Countdown = 10000f;
                         return false;
                     }
                 }
-                ISystemType systemType2;
-                if ((ShipStatus.Instance.Systems.TryGetValue(SystemTypes.Reactor, out systemType2) || ShipStatus.Instance.Systems.TryGetValue(SystemTypes.Laboratory, out systemType2)) && systemType2.TryCast<ICriticalSabotage>() is ICriticalSabotage)
+                if (SabotageBehaviour.reactor != null && !SabotageBehaviour.reactor.WasCollected)
                 {
-                    ICriticalSabotage criticalSabotage = systemType2.TryCast<ICriticalSabotage>();
-                    if (criticalSabotage.Countdown < 0f)
+                    if (SabotageBehaviour.reactor.Countdown < 0f)
                     {
                         __instance.EndGameForSabotage();
-                        criticalSabotage.ClearSabotage();
+                        SabotageBehaviour.reactor.ClearSabotage();
                         return false;
                     }
-                }*/
+                }
 
                 foreach (CustomRole role in CustomRole.allRoles)
                     if (role.returnWinConditionState != null)
