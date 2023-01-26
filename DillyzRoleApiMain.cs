@@ -30,7 +30,7 @@ namespace DillyzRoleApi_Rewritten
     [BepInProcess("Among Us15.exe")]
     public class DillyzRoleApiMain : BasePlugin
     {
-        public const string MOD_NAME = "DillyzRoleApi", MOD_VERSION = "2.0.1-dev", MOD_ID = "com.github.dillyzthe1.dillyzroleapi";
+        public const string MOD_NAME = "DillyzRoleApi", MOD_VERSION = "2.1.0", MOD_ID = "com.github.dillyzthe1.dillyzroleapi";
         public static Harmony harmony = new Harmony(DillyzRoleApiMain.MOD_ID);
 
         public static string BEPINEX_CONFIG_FOLDER => BepInEx.Paths.BepInExConfigPath.Replace("BepInEx.cfg","");
