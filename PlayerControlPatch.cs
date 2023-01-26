@@ -105,8 +105,10 @@ namespace DillyzRoleApi_Rewritten
                     bool ga = false;
                     if (AmongUsClient.Instance.AmHost || DillyzUtil.InFreeplay())
                     {
-                        CustomRole playerrole = CustomRole.getByName(DillyzUtil.getRoleName(__instance));
-                        CustomRole newrole = playerrole != null ?  CustomRole.getByName(playerrole.roletoGhostInto) : null;
+                        string rolename = DillyzUtil.getRoleName(__instance);
+                        CustomRole playerrole = CustomRole.getByName(rolename);
+                        CustomRoleSide side = DillyzUtil.roleSide(__instance);
+                        CustomRole newrole = playerrole != null ? CustomRole.getByName(playerrole.roletoGhostInto) : null;
                         if (playerrole != null && playerrole.roletoGhostInto != "")
                         {
                             if (newrole == null || !newrole.ghostRole)
@@ -115,20 +117,21 @@ namespace DillyzRoleApi_Rewritten
                         else
                         {
                             int angelmax = DillyzUtil.InFreeplay() ? 127001 : GameOptionsManager.Instance.CurrentGameOptions.RoleOptions.GetNumPerGame(AmongUs.GameOptions.RoleTypes.GuardianAngel);
-                            int angelchance = DillyzUtil.InFreeplay() ? 85 : GameOptionsManager.Instance.CurrentGameOptions.RoleOptions.GetChancePerGame(AmongUs.GameOptions.RoleTypes.GuardianAngel);
+                            int angelchance = DillyzUtil.InFreeplay() ? 100 : GameOptionsManager.Instance.CurrentGameOptions.RoleOptions.GetChancePerGame(AmongUs.GameOptions.RoleTypes.GuardianAngel);
 
-                            /*if (DillyzUtil.roleSide(__instance) == CustomRoleSide.Crewmate && (gaurdianAngelAttempts < angelmax || DillyzUtil.InFreeplay()))
+                            DillyzRoleApiMain.Instance.Log.LogInfo((playerrole == null || (playerrole.roletoGhostInto == "" && !playerrole.ghostRole)) + " in your house");
+                            DillyzRoleApiMain.Instance.Log.LogInfo("1. " + (playerrole == null));
+                            if (playerrole != null)
                             {
-                                int rolecahcnde = UnityEngine.Random.Range(0, 100);
-                                if (angelchance != 0 && (angelchance == 100 || angelchance >= rolecahcnde) || DillyzUtil.InFreeplay())
-                                    targetrole = "GuardianAngel";
-                                gaurdianAngelAttempts++; 
-                            }*/
-
-                            DillyzRoleApiMain.Instance.Log.LogInfo((newrole == null || (newrole.roletoGhostInto == "" && !newrole.ghostRole)) + " in your house");
-                            DillyzRoleApiMain.Instance.Log.LogInfo((__instance.Data.Role.TeamType == RoleTeamTypes.Crewmate) + " in your house v2");
+                                DillyzRoleApiMain.Instance.Log.LogInfo("2. " + (playerrole.roletoGhostInto == "" && !playerrole.ghostRole));
+                                DillyzRoleApiMain.Instance.Log.LogInfo("3. " + playerrole.roletoGhostInto);
+                                DillyzRoleApiMain.Instance.Log.LogInfo("4. " + (!playerrole.ghostRole));
+                            }
+                            DillyzRoleApiMain.Instance.Log.LogInfo("5. " + rolename);
+                            DillyzRoleApiMain.Instance.Log.LogInfo(side + " in your house v2");
+                            DillyzRoleApiMain.Instance.Log.LogInfo((__instance.Data.Role.TeamType == RoleTeamTypes.Crewmate) + " in your house v3");
                             DillyzRoleApiMain.Instance.Log.LogInfo(gaurdianAngelAttempts + " in your house v" + angelmax);
-                            if ((newrole == null || (newrole.roletoGhostInto == "" && !newrole.ghostRole)) && __instance.Data.Role.TeamType == RoleTeamTypes.Crewmate && gaurdianAngelAttempts < angelmax)
+                            if ((playerrole == null || (playerrole.roletoGhostInto == "" && !playerrole.ghostRole)) && side == CustomRoleSide.Crewmate && gaurdianAngelAttempts < angelmax)
                             {
                                 int rolecahcnde = UnityEngine.Random.Range(0, 100);
                                 if (angelchance >= rolecahcnde)
