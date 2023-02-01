@@ -112,27 +112,28 @@ namespace DillyzRoleApi_Rewritten
                             if (newrole == null || !newrole.ghostRole)
                                 DillyzUtil.RpcSetRole(__instance, playerrole.roletoGhostInto);
                         }
-                        else
+                        else if ((playerrole != null ? (!playerrole.ghostRole && playerrole.roletoGhostInto == "") : (DillyzUtil.getRoleName(__instance) != "GuardianAngel")) 
+                                    && DillyzUtil.roleSide(__instance) == CustomRoleSide.Crewmate)
                         {
-                            //int angelmax = GameOptionsManager.Instance.CurrentGameOptions.RoleOptions.GetNumPerGame(AmongUs.GameOptions.RoleTypes.GuardianAngel);
-                            //int angelchance = GameOptionsManager.Instance.CurrentGameOptions.RoleOptions.GetChancePerGame(AmongUs.GameOptions.RoleTypes.GuardianAngel);
+                            int angelmax = GameOptionsManager.Instance.CurrentGameOptions.RoleOptions.GetNumPerGame(AmongUs.GameOptions.RoleTypes.GuardianAngel);
+                            int angelchance = GameOptionsManager.Instance.CurrentGameOptions.RoleOptions.GetChancePerGame(AmongUs.GameOptions.RoleTypes.GuardianAngel);
 
                             string targetrole = "";
-                            /*if (DillyzUtil.roleSide(__instance) == CustomRoleSide.Crewmate && (gaurdianAngelAttempts < angelmax || DillyzUtil.InFreeplay()))
+
+                            DillyzRoleApiMain.Instance.Log.LogInfo("Consider being the guardian angel.");
+                            if (gaurdianAngelAttempts < angelmax || DillyzUtil.InFreeplay())
                             {
                                 int rolecahcnde = UnityEngine.Random.Range(0, 100);
                                 if (angelchance != 0 && (angelchance == 100 || angelchance >= rolecahcnde) || DillyzUtil.InFreeplay())
                                     targetrole = "GuardianAngel";
                                 gaurdianAngelAttempts++;
-                            }*/
-
-                            DillyzRoleApiMain.Instance.Log.LogInfo("Consider being the guardian angel.");
+                            }
 
                             DillyzUtil.RpcSetRole(__instance, targetrole);
                         }
+                        else
+                            DillyzUtil.RpcSetRole(__instance, "");
                     }
-                    else
-                        skipNextAssignment = false;
 
                     if (__instance.PlayerId == PlayerControl.LocalPlayer.PlayerId)
                         DestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(false);

@@ -146,8 +146,6 @@ namespace DillyzRoleApi_Rewritten
                         ShipStatus.Instance.Begin();
                         PlayerControl.LocalPlayer.transform.position = __instance.SafePositionWorld;
 
-                        CustomRole.setRoleName(PlayerControl.LocalPlayer.PlayerId, role.name);
-
                         foreach (TaskAddButton button in buttons)
                             sprrend.enabled = false;
                         foreach (Transform trans in __instance.ActiveItems)
@@ -167,7 +165,9 @@ namespace DillyzRoleApi_Rewritten
                         {
                             PlayerControlPlayer_Die.skipNextAssignment = true;
                             PlayerControl.LocalPlayer.Die(DeathReason.Kill, false);
+                            PlayerControlPlayer_Die.skipNextAssignment = false;
                         }
+                        CustomRole.setRoleName(PlayerControl.LocalPlayer.PlayerId, role.name);
                     }
 
                     taskbutton.RolloverHandler.OutColor = role.roleColor;
