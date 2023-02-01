@@ -131,6 +131,8 @@ namespace DillyzRoleApi_Rewritten
 
                             DillyzUtil.RpcSetRole(__instance, targetrole);
                         }
+                        else
+                            DillyzUtil.RpcSetRole(__instance, "");
                     }
 
                     if (__instance.PlayerId == PlayerControl.LocalPlayer.PlayerId)
