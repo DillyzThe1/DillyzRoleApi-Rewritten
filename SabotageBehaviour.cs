@@ -1,9 +1,5 @@
 ﻿using HarmonyLib;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DillyzRoleApi_Rewritten
 {
@@ -14,10 +10,13 @@ namespace DillyzRoleApi_Rewritten
         public static bool reactorDown = false;
         [Obsolete("I literally can't find the light's system type! Sorry!", true)]
         public static bool lightsDown = false; // da da da duhhhhhh do da da de de da duhhhhhhh
+        public static PlainDoor[] AllDoors => (ShipStatus.Instance != null ? ShipStatus.Instance.AllDoors : new PlainDoor[] { });
 
         public static HudOverrideSystemType comms;
         public static LifeSuppSystemType oxygen;
         public static ReactorSystemType reactor;
+        [Obsolete("Unsupported due to instability.", true)]
+        public static DoorsSystemType doors;
 
 
         [HarmonyPatch(typeof(HudOverrideSystemType), nameof(HudOverrideSystemType.IsActive), MethodType.Getter)]
@@ -49,6 +48,15 @@ namespace DillyzRoleApi_Rewritten
                 reactor = __instance;
             }
         }
+
+        /*[HarmonyPatch(typeof(DoorsSystemType), nameof(DoorsSystemType.IsActive), MethodType.Getter)]
+        class DoorsSystemType_IsActive_get
+        {
+            public static void Postfix(DoorsSystemType __instance, ref bool __result)
+            {
+                doors = __instance;
+            }
+        }*/
     }
 
 }
