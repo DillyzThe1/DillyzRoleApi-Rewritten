@@ -24,7 +24,7 @@ Currently, the only rolepackage is just the ClassicRolePackage, which is include
 You may find the source code of the ClassicRolePackage isolated <a href="https://github.com/DillyzThe1/ClassicRolePackage">here</a>.
 
 ## All Versions
-| Among Us<br>Version | DillyzRoleApi<br>Version | BepInEx + DillyzRoleApi<br>+ ClassicRolePack<br>Bundle |  BepInEx<br>Build  | Standalone DLL |
+| Among Us<br>Version | DillyzRoleApi<br>Version | BepInEx + DillyzRoleApi<br>+ All Official Packs |  BepInEx<br>Build  | Standalone DLL |
 |------------------|-----------------------|--------------------------------------------------|-----------------|----------------|
 |**REGULAR BUILDS**| | | | |
 | 2022.12.14 | Latest Commit | Unavailable | [[Download]](https://builds.bepinex.dev/projects/bepinex_be/577/BepInEx_UnityIL2CPP_x86_ec79ad0_6.0.0-be.577.zip) | [[Download]](../../raw/main/notes%20n%20stuff/DillyzRoleApi-Rewritten-Latest-Commit.dll) |
