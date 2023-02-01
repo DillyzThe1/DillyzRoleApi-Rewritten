@@ -167,6 +167,7 @@ namespace DillyzRoleApi_Rewritten
                         {
                             PlayerControlPlayer_Die.skipNextAssignment = true;
                             PlayerControl.LocalPlayer.Die(DeathReason.Kill, false);
+                            PlayerControlPlayer_Die.skipNextAssignment = false;
                         }
                     }
 

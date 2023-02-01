@@ -112,7 +112,8 @@ namespace DillyzRoleApi_Rewritten
                             if (newrole == null || !newrole.ghostRole)
                                 DillyzUtil.RpcSetRole(__instance, playerrole.roletoGhostInto);
                         }
-                        else
+                        else if ((playerrole != null ? !playerrole.ghostRole : (DillyzUtil.getRoleName(__instance) != "GuardianAngel")) 
+                                    && DillyzUtil.roleSide(__instance) == CustomRoleSide.Crewmate)
                         {
                             //int angelmax = GameOptionsManager.Instance.CurrentGameOptions.RoleOptions.GetNumPerGame(AmongUs.GameOptions.RoleTypes.GuardianAngel);
                             //int angelchance = GameOptionsManager.Instance.CurrentGameOptions.RoleOptions.GetChancePerGame(AmongUs.GameOptions.RoleTypes.GuardianAngel);
@@ -131,8 +132,6 @@ namespace DillyzRoleApi_Rewritten
                             DillyzUtil.RpcSetRole(__instance, targetrole);
                         }
                     }
-                    else
-                        skipNextAssignment = false;
 
                     if (__instance.PlayerId == PlayerControl.LocalPlayer.PlayerId)
                         DestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(false);
