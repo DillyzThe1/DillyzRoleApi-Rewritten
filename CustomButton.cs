@@ -68,22 +68,19 @@ namespace DillyzRoleApi_Rewritten
             this.targetButton = isTargetButton;
             this.buttonTargetsGhosts = false;
             this.caresAboutMoving = true;
-            this.allowedRoles = allowedRoles.ToList();
+            if (allowedRoles != null)
+                this.allowedRoles = allowedRoles.ToList();
             this.canTargetSelf = false;
-            this.rolesCantTarget = rolesCantTarget.ToList();
+            if (rolesCantTarget != null)
+                this.rolesCantTarget = rolesCantTarget.ToList();
 
             this.textOutlineColor = this.targetButton ? CustomPalette.KillButtonTextOutline : CustomPalette.PassiveButtonTextOutline;
 
             this._onClicked = onClicked;
         }
 
-        public CustomButton() {
-            allowedRoles = new List<string>();
-            rolesCantTarget = new List<string>();
-        }
-
         public bool RoleAllowed(string role) {
-            return allowedRoles.Contains(role);
+            return allowedRoles == null || allowedRoles.Contains(role);
         }
 
         public void OnClicked(KillButtonCustomData button, bool success) {
@@ -129,7 +126,7 @@ namespace DillyzRoleApi_Rewritten
                 foreach (KillButtonCustomData button in HudManagerPatch.AllKillButtons)
                 {
                     button.lastUse = DateTime.UtcNow;
-                    if (button.useTimerMode && button.buttonData.allowedRoles.Contains(DillyzUtil.getRoleName(PlayerControl.LocalPlayer)))
+                    if (button.useTimerMode && button.buttonData.RoleAllowed(DillyzUtil.getRoleName(PlayerControl.LocalPlayer)))
                         button.InterruptUseTimer(true);
                 }
             }
