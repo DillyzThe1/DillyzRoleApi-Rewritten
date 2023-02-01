@@ -2,7 +2,16 @@
  A full rewrite for DillyzRoleApi, made for v2022.12.14 & up!
  
 # Installation
-## The API itself + 2 Classic Roles
+## Mod Manager
+Head over to the [mod manager's releases page](https://github.com/DillyzThe1/DRAPI-Mod-Manager/releases) & download the installer exe.<br>
+If windows warns you about the program, remember that this is fully open source so you can read what you don't trust. Just hit run anyway.<br>
+Follow through the installation and open up the program (likely through your desktop icon).<br>
+Install the client with the "reinstall" button and browse mods.<br>
+Hit "launch" and wait for the first boot-up procedure to happen.<br>
+Enjoy!<br>
+<br>
+*Note: you must always launch through the launcher to get the modded variant of Among Us running.*
+## Manually
 Clone your Among Us install folder.<br>
 In the clone of the install folder, do either method A or B:<br>
 <br>
