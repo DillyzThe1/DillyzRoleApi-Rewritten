@@ -100,6 +100,16 @@ namespace DillyzRoleApi_Rewritten
         {
             this._canUse = canUse;
         }
+        public Action GetCustomUpdate()
+        {
+            return this._onUpdate;
+        }
+
+        // the bool in the return is representing 
+        public Action<bool> GetCanUse()
+        {
+            return this._canUse;
+        }
 
         // USE TIMER FUNCS AND VARS!!!!!
         public Action<KillButtonCustomData, bool> useTimerCallback; // button - interupted
@@ -153,7 +163,12 @@ namespace DillyzRoleApi_Rewritten
             this.buttonData.GameInstance = this;
         }
 
-        public void Update()
+        public void Update() {
+            buttonData.GetCustomUpdate()?.Invoke();
+            InternalUpdate();
+        }
+
+        private void InternalUpdate()
         {
             if (!isSetup)
                 return;
