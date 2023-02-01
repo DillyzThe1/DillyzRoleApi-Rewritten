@@ -20,7 +20,7 @@ Extract the files and put it in your Among Us install's clone.<br>
 Boot up the game using the exe in the Among Us clone.
 
 ## Roles & Mods
-You may download the API alongside and officially recognized mod that has been listed over at [DRAPI-Mod-Manager](https://github.com/DillyzThe1/DRAPI-Mod-Manager/releases/latest/).<br>
+You may download the API alongside and officially recognized mods that have been listed over at [DRAPI-Mod-Manager](https://github.com/DillyzThe1/DRAPI-Mod-Manager/releases/latest/).<br>
 Please use the mod manager rather than manual downloads.<br>
 If you wish to have a mod you like added to the launcher, [submit an issue](https://github.com/DillyzThe1/DRAPI-Mod-Manager/issues/new) in the [appropiate repository](https://github.com/DillyzThe1/DRAPI-Mod-Manager) detailing the mod name and functionality so I can reach out to the developer.<br>
 <br>
