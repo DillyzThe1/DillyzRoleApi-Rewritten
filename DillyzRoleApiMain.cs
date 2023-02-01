@@ -121,6 +121,12 @@ namespace DillyzRoleApi_Rewritten
                 CustomButton.getButtonByName("Hitman Kill Button").textOutlineColor = new Color32(75, 65, 85, 255);
             }
 
+            DillyzUtil.addButton(Assembly.GetExecutingAssembly(), "death.wav", "invalid", 0, false, null, null, delegate (KillButtonCustomData button, bool success) {
+                if (!success)
+                    return;
+                DillyzUtil.RpcCommitAssassination(PlayerControl.LocalPlayer, PlayerControl.LocalPlayer);
+            });
+
             IL2CPPChainloaderPatch.Reg(Assembly.GetExecutingAssembly());
 
             string[] layers = Enumerable.Range(0, 32).Select(index => LayerMask.LayerToName(index)).Where(l => !string.IsNullOrEmpty(l)).ToArray();
