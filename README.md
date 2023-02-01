@@ -20,8 +20,16 @@ Extract the files and put it in your Among Us install's clone.<br>
 Boot up the game using the exe in the Among Us clone.
 
 ## Roles & Mods
-Currently, the only rolepackage is just the ClassicRolePackage, which is included with the BepInExBundle.<br>
-You may find the source code of the ClassicRolePackage isolated <a href="https://github.com/DillyzThe1/ClassicRolePackage">here</a>.
+You may download the API alongside and officially recognized mod that has been listed over at [DRAPI-Mod-Manager](https://github.com/DillyzThe1/DRAPI-Mod-Manager/releases/latest/).<br>
+Please use the mod manager rather than manual downloads.<br>
+If you wish to have a mod you like added to the launcher, [submit an issue](https://github.com/DillyzThe1/DRAPI-Mod-Manager/issues/new) in the [appropiate repository](https://github.com/DillyzThe1/DRAPI-Mod-Manager) detailing the mod name and functionality so I can reach out to the developer.<br>
+<br>
+All official role packs and mods will be included in the BepInEx bundle.<br>
+Source code to each mod:
+- [ClassicRolePackage](https://github.com/DillyzThe1/ClassicRolePackage)
+- [DillyzLegacyPack](https://github.com/DillyzThe1/DillyzLegacyPack)
+
+*Note: "Official" means developed by DillyzThe1, who owns the API and the associated launcher. See disclaimer below.*
 
 ## All Versions
 | Among Us<br>Version | DillyzRoleApi<br>Version | BepInEx + DillyzRoleApi<br>+ All Official Packs |  BepInEx<br>Build  | Standalone DLL |
