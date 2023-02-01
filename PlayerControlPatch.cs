@@ -112,7 +112,7 @@ namespace DillyzRoleApi_Rewritten
                             if (newrole == null || !newrole.ghostRole)
                                 DillyzUtil.RpcSetRole(__instance, playerrole.roletoGhostInto);
                         }
-                        else if ((playerrole != null ? !playerrole.ghostRole : (DillyzUtil.getRoleName(__instance) != "GuardianAngel")) 
+                        else if ((playerrole != null ? (!playerrole.ghostRole && playerrole.roletoGhostInto == "") : (DillyzUtil.getRoleName(__instance) != "GuardianAngel")) 
                                     && DillyzUtil.roleSide(__instance) == CustomRoleSide.Crewmate)
                         {
                             int angelmax = GameOptionsManager.Instance.CurrentGameOptions.RoleOptions.GetNumPerGame(AmongUs.GameOptions.RoleTypes.GuardianAngel);
@@ -121,7 +121,7 @@ namespace DillyzRoleApi_Rewritten
                             string targetrole = "";
 
                             DillyzRoleApiMain.Instance.Log.LogInfo("Consider being the guardian angel.");
-                            if (DillyzUtil.roleSide(__instance) == CustomRoleSide.Crewmate && (gaurdianAngelAttempts < angelmax || DillyzUtil.InFreeplay()))
+                            if (gaurdianAngelAttempts < angelmax || DillyzUtil.InFreeplay())
                             {
                                 int rolecahcnde = UnityEngine.Random.Range(0, 100);
                                 if (angelchance != 0 && (angelchance == 100 || angelchance >= rolecahcnde) || DillyzUtil.InFreeplay())
