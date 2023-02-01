@@ -163,9 +163,10 @@ namespace DillyzRoleApi_Rewritten
             this.buttonData.GameInstance = this;
         }
 
-        public void Update() {
-            buttonData.GetCustomUpdate()?.Invoke();
+        public void Update()
+        {
             InternalUpdate();
+            buttonData.GetCustomUpdate()?.Invoke();
         }
 
         private void InternalUpdate()
