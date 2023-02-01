@@ -16,7 +16,7 @@ namespace DillyzRoleApi_Rewritten
         public static LifeSuppSystemType oxygen;
         public static ReactorSystemType reactor;
         [Obsolete("Unsupported due to instability.", true)]
-        public static DoorsSystemType doors;
+        public static DoorsSystemType doors = null;
 
 
         [HarmonyPatch(typeof(HudOverrideSystemType), nameof(HudOverrideSystemType.IsActive), MethodType.Getter)]

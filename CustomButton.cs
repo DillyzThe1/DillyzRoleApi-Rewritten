@@ -39,7 +39,7 @@ namespace DillyzRoleApi_Rewritten
 
         private Action<KillButtonCustomData, bool> _onClicked;
         private Action _onUpdate;
-        private Action<bool> _canUse; // the bool is the original return
+        private Func<bool, bool> _canUse; // the bool is the original return
 
         public static Dictionary<string, CustomButton> buttonMap = new Dictionary<string, CustomButton>();
         public static CustomButton getButtonByName(string name) => buttonMap.ContainsKey(name) ? buttonMap[name] : null;
@@ -93,7 +93,7 @@ namespace DillyzRoleApi_Rewritten
         }
 
         // the bool in the return is representing 
-        public void SetCanUse(Action<bool> canUse)
+        public void SetCanUse(Func<bool, bool> canUse)
         {
             this._canUse = canUse;
         }
@@ -101,9 +101,7 @@ namespace DillyzRoleApi_Rewritten
         {
             return this._onUpdate;
         }
-
-        // the bool in the return is representing 
-        public Action<bool> GetCanUse()
+        public Func<bool, bool> GetCanUse()
         {
             return this._canUse;
         }
@@ -233,8 +231,9 @@ namespace DillyzRoleApi_Rewritten
             if (!isSetup)
                 return false;
 
-            PlayerControl lp = PlayerControl.LocalPlayer;
-            return MeetingHud.Instance == null && (buttonData.RoleAllowed(DillyzUtil.getRoleName(lp)));
+            bool ogreturn = (MeetingHud.Instance == null && (buttonData.RoleAllowed(DillyzUtil.getRoleName(PlayerControl.LocalPlayer))));
+            Func<bool, bool> customret = buttonData.GetCanUse();
+            return customret != null ? customret.Invoke(ogreturn) : ogreturn;
         }
 
         public void SetTarget(PlayerControl player)
