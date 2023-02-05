@@ -148,6 +148,13 @@ namespace DillyzRoleApi_Rewritten
             return name == "Impostor" || name == "Crewmate";
         }
 
+        public static bool roleIsGhost(PlayerControl player) {
+            String name = getRoleName(player);
+            CustomRole role = CustomRole.getByName(name);
+            return name == "GuardianAngel" || (role != null && role.ghostRole);
+        }
+
+
         public static PlayerControl findPlayerControl(byte playerId) {
             if (playerId == 255)
                 return null;
