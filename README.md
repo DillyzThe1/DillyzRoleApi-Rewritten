@@ -1,5 +1,6 @@
 # DillyzRoleApi-Rewritten
- A full rewrite for DillyzRoleApi, made for v2022.12.14 & up!
+ A full rewrite for DillyzRoleApi, made for v2022.12.14 & up!<br>
+*NOTE: DillyzRoleApi v2.2.0 for Among Us v2023.2.28 will be in the works by April.*
  
 # Installation
 ## Mod Manager
@@ -21,6 +22,7 @@ Boot up the game using the exe in the Among Us clone.
 
 ## Roles & Mods
 You may download the API alongside and officially recognized mods that have been listed over at [DRAPI-Mod-Manager](https://github.com/DillyzThe1/DRAPI-Mod-Manager/releases/latest/).<br>
+*NOTE: "Official" is relevant to me as the API and mod manager creator, as I state that I am not associated with Innersloth.*
 Please use the mod manager rather than manual downloads.<br>
 If you wish to have a mod you like added to the launcher, [submit an issue](https://github.com/DillyzThe1/DRAPI-Mod-Manager/issues/new) in the [appropiate repository](https://github.com/DillyzThe1/DRAPI-Mod-Manager) detailing the mod name and functionality so I can reach out to the developer.<br>
 <br>
