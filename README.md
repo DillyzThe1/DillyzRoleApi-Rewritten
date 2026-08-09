@@ -1,6 +1,15 @@
+# NOTICE
+AS OF 2023, I HAVE HAD LITTLE TO NO INVOLVEMENT WITH THE AMONG US MODDING COMMUNITY AS A WHOLE. PLANS TO RETURN HAVE SIMPLY NEVER GONE THROUGH AND MY INTEREST IN UNOFFICIAL WORK FOR THIS GAME HAS GONE DONE THE DRAIN. I AM SORRY IF THIS IS DISAPPOINTING TO SOME. THIS API REVISION WAS MOSTLY JUST A NICE WORK TO PUBLISH FOR CHRISTMAS OF 2022.
+
+*(And in all honesty, this community was a gatekeeping hell back when I had worked with it. That was my main motivation for this project.)*
+
+However, if you are an experienced mod developer and not a gatekeeper, you may notice that most of this code likely just manages its own internal systems and basic Unity functionality. It would be totally possible for you to swap out some backend interactions with the game's actual code to get this up and running on newer version. Or not, I haven't actually looked at the code since early 2023. That being said, do not call it official or expect an adoption of it from this account, and all I ask is credit. Thank you.
+
+Additional Note: I have been planning on making some sort of announcement like this since mid-2023, so it is entirely my bad for taking 3 additional years to make a public statement. However, "~4 years ago" should've been a sign I haven't worked on this much, tbh.
+
 # DillyzRoleApi-Rewritten
  A full rewrite for DillyzRoleApi, made for v2022.12.14 & up!<br>
-*NOTE: DillyzRoleApi v2.2.0 for Among Us v2023.2.28 will be in the works by April.*
+~~*NOTE: DillyzRoleApi v2.2.0 for Among Us v2023.2.28 will be in the works by April.*~~
  
 # Installation
 ## Mod Manager
